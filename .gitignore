@@ -1,4 +1,5 @@
 /target/
+*.db
 /WebContent/platform/
 /WebContent/jqgrid_demo40/
 /WebContent/fuelux/
