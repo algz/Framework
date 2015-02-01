@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
@@ -25,26 +26,34 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class DataSourceConfig {
 
 	@Value("${jdbc.driverClass}")
-	public String driverClass;
+	private String driverClass;
 	
 	@Value("${jdbc.url}")
-	public String jdbcUrl;
+	private String url;
 	
 	@Value("${jdbc.username}") 
-	public String username;
+	private String username;
 	
 	@Value("${jdbc.password}")
-	public String password;
-	  
+	private String password;
+	
+	/**
+	 * @PropertySource 必须依赖此配置才有效。
+	 */
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+       return new PropertySourcesPlaceholderConfigurer();
+    }
+	
 	@Bean
 	  public DataSource dataSource() throws PropertyVetoException {
 //	      //JDBC连接
-		  ComboPooledDataSource  dataSource=new ComboPooledDataSource (); //c3p0
-		//BasicDataSource ds = new BasicDataSource(); //bdpm
-		  dataSource.setDriverClass("com.mysql.jdbc.Driver");//(driverClass);
-		  dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1/algz");
-		  dataSource.setUser("root");
-		  dataSource.setPassword("1111");
+		  ComboPooledDataSource  dataSource=new ComboPooledDataSource (); //c3p0 连接池
+		//BasicDataSource ds = new BasicDataSource(); //bdpm （apatch）连接池
+		  dataSource.setDriverClass(driverClass);
+		  dataSource.setJdbcUrl(url);
+		  dataSource.setUser(username);
+		  dataSource.setPassword(password);
 	  	
 	  	return dataSource;
 	  }
