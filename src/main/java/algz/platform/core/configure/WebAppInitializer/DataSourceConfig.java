@@ -46,7 +46,7 @@ public class DataSourceConfig {
     }
 	
 	@Bean
-	  public DataSource dataSource() throws PropertyVetoException {
+	public DataSource dataSource() throws PropertyVetoException {
 //	      //JDBC连接
 		  ComboPooledDataSource  dataSource=new ComboPooledDataSource (); //c3p0 连接池
 		//BasicDataSource ds = new BasicDataSource(); //bdpm （apatch）连接池
@@ -59,7 +59,7 @@ public class DataSourceConfig {
 	  }
 	  
 	  @Bean
-	  public LocalSessionFactoryBean sessionFactory() throws PropertyVetoException{
+	  public LocalSessionFactoryBean sessionFactory(DataSource dataSource) throws PropertyVetoException{
 	    // more configuration...
 	    Properties properties=new Properties();
 	    properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
@@ -73,7 +73,7 @@ public class DataSourceConfig {
 //	    properties.put("hibernate.connection.password", "");
 	    
 	      LocalSessionFactoryBean factoryBean=new LocalSessionFactoryBean();
-	      factoryBean.setDataSource(dataSource());
+	      factoryBean.setDataSource(dataSource);
 //	      factoryBean.setPackagesToScan(new String[]{"algz.platform.test"});
 	      //  sessionFactoryBean.setPackagesToScan("com.coderli.shurnim.*.model");
 	      factoryBean.setHibernateProperties(properties);
@@ -84,9 +84,9 @@ public class DataSourceConfig {
 	  }
 
 		@Bean
-		public HibernateTransactionManager txManager() throws PropertyVetoException {
+		public HibernateTransactionManager txManager(LocalSessionFactoryBean sessionFactory) throws PropertyVetoException {
 			HibernateTransactionManager txManager = new HibernateTransactionManager();
-			txManager.setSessionFactory(sessionFactory().getObject());
+			txManager.setSessionFactory(sessionFactory.getObject());
 			return txManager;
 		}  
 }

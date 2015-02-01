@@ -1,33 +1,23 @@
 package algz.platform.core.configure.WebAppInitializer;
 
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
-import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @EnableWebMvc导入spring_mvc需要的诸多bean，再配合@ComponentScan扫描包里面所有@Component(@Repository @Service  @Constroller)，基本的mvc配置就完成了。
@@ -41,17 +31,17 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 */
 @Configuration
 //@Import(DataSourceConfig.class) //引用一个配置
-//@ImportResource({"classpath:algz/platform/config/xml/SpringSecurity-context.xml"})
+/*
+ * shiro 部分设置必须配置在XML中，不然会出现依赖循环问题：
+二月 01, 2015 4:38:03 下午 org.springframework.beans.factory.support.DefaultListableBeanFactory getTypeForFactoryBean
+警告: Bean creation exception on FactoryBean type check: org.springframework.beans.factory.BeanCurrentlyInCreationException: Error creating bean with name 'shiroFilter': Requested bean is currently in creation: Is there an unresolvable circular reference?
+*/
+@ImportResource({"classpath:algz/platform/core/configure/xml/spring-shiro.xml"})
 @ComponentScan(basePackages = {"algz.platform","com"})//扫描注解组件的包的基础位置(@Controller,@Service...)
 @EnableWebMvc //启用 MVC Java config ，在你的 @Configuration类上增加@EnableWebMvc注解
 @EnableTransactionManagement  //声明式事务管理，通过spring root application context扫描包septem.config.app：
 //@PropertySource("/conf/jdbc.properties")
 public class AppConfig /*extends WebMvcConfigurerAdapter*/ {
-
-//	@Bean
-//	public PlatformTransactionManager transactionManager() throws Exception {
-//		return  new HibernateTransactionManager(sessionFactory().getObject());
-//	}
 
 
 //  //*********************springmvc开始配置*************************

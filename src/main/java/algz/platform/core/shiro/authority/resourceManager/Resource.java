@@ -1,4 +1,4 @@
-package algz.platform.core.shiro.entity;
+package algz.platform.core.shiro.authority.resourceManager;
 import java.io.Serializable;
 
 /**
