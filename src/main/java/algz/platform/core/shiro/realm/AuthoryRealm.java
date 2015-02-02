@@ -18,12 +18,49 @@ import org.springframework.stereotype.Service;
 import algz.platform.core.shiro.authority.userManager.User;
 import algz.platform.core.shiro.authority.userManager.UserService;
 
+/**
+ * UserRealm父类AuthorizingRealm将获取Subject相关信息分成两步：
+ * 获取身份验证信息（doGetAuthenticationInfo）及授权信息（doGetAuthorizationInfo）.
+ * @author algz
+ *
+ */
 @Service  
-//@Transactional  
 public class AuthoryRealm extends AuthorizingRealm {
 
-//    @Autowired
-//    private UserService userService;
+    @Autowired
+    private UserService userService;
+
+
+	/**
+	 * 登录认证
+	 */
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
+//      //UsernamePasswordToken对象用来存放提交的登录信息  
+//      UsernamePasswordToken token=(UsernamePasswordToken) authenticationToken;  
+		String username = (String)token.getPrincipal();
+        User user = userService.findByUsername(username);
+
+        if(user == null) {
+            throw new UnknownAccountException();//没找到帐号
+        }
+
+        if(Boolean.TRUE.equals(user.getLocked())) {
+            throw new LockedAccountException(); //帐号锁定
+        }
+
+        //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+                user.getUsername(), //用户名
+                user.getPassword(), //密码
+                ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+salt
+                getName()  //realm name
+        );
+        
+      //如果身份认证验证成功，返回一个AuthenticationInfo实现；
+        return authenticationInfo; 
+	}
 	
     /**
      * 权限认证 
@@ -33,8 +70,10 @@ public class AuthoryRealm extends AuthorizingRealm {
         String username = (String)principals.getPrimaryPrincipal();
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        authorizationInfo.setRoles(userService.findRoles(username));
-//        authorizationInfo.setStringPermissions(userService.findPermissions(username));
+        //用户的角色集合  
+        authorizationInfo.setRoles(userService.findRoles(username));
+      //用户的角色对应的所有权限
+        authorizationInfo.setStringPermissions(userService.findPermissions(username));
         return authorizationInfo;
         
 //      //获取登录时输入的用户名  
@@ -52,43 +91,6 @@ public class AuthoryRealm extends AuthorizingRealm {
 //              info.addStringPermissions(role.getPermissionsName());  
 //          }  
 //          return info;  
-//      }  
-//      return null;  
-	}
-
-	/**
-	 * 登录认证
-	 */
-	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-
-		String username = (String)token.getPrincipal();
-        User user = null;//userService.findByUsername(username);
-
-        if(user == null) {
-            throw new UnknownAccountException();//没找到帐号
-        }
-
-        if(Boolean.TRUE.equals(user.getLocked())) {
-            throw new LockedAccountException(); //帐号锁定
-        }
-
-        //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user.getUsername(), //用户名
-                user.getPassword(), //密码
-                ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+salt
-                getName()  //realm name
-        );
-        return authenticationInfo;
-        
-//      //UsernamePasswordToken对象用来存放提交的登录信息  
-//      UsernamePasswordToken token=(UsernamePasswordToken) authenticationToken;  
-//      //查出是否有此用户  
-//      User user=userService.findByName(token.getUsername());  
-//      if(user!=null){  
-//          //若存在，将此用户存放到登录认证info中  
-//          return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());  
 //      }  
 //      return null;  
 	}

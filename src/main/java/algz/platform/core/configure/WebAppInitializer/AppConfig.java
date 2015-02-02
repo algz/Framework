@@ -1,11 +1,6 @@
 package algz.platform.core.configure.WebAppInitializer;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +13,8 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import algz.platform.core.exception.ALGZExceptionHandler;
 
 /**
  * @EnableWebMvc导入spring_mvc需要的诸多bean，再配合@ComponentScan扫描包里面所有@Component(@Repository @Service  @Constroller)，基本的mvc配置就完成了。
@@ -95,7 +92,21 @@ public class AppConfig /*extends WebMvcConfigurerAdapter*/ {
               mediaType("xml", MediaType.APPLICATION_XML).  
               mediaType("json", MediaType.APPLICATION_JSON);  
   }  
-
   
   
+//	@Bean
+//	public ExceptionHandlerExceptionResolver exceptionResolver() {
+//	  ExceptionHandlerExceptionResolver er= new ExceptionHandlerExceptionResolver();
+//		return er;
+//	};
+  /**
+   * 配置Spring 处理异常的类,用于捕获@Control产生的异常(需在此类中配置相应处理的异常)
+   * @return
+   */
+	@Bean
+	public ALGZExceptionHandler exceptionHandler() {
+		ALGZExceptionHandler exception= new ALGZExceptionHandler();
+		return exception;
+	};
+//includeFilters
 }

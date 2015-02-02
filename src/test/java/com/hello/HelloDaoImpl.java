@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import algz.platform.core.shiro.entity.User;
+import algz.platform.core.shiro.authority.userManager.User;
 
 
 @Repository

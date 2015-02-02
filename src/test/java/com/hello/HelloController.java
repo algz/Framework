@@ -6,6 +6,9 @@ import java.net.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresGuest;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -119,6 +122,7 @@ public class HelloController {
   	
 
   	@RequestMapping(value="/getIP")
+  	@RequiresAuthentication
     public void getIP(HttpServletRequest request, HttpServletResponse response) {  
   		String ip=null;
 		try {
@@ -140,6 +144,67 @@ public class HelloController {
 			PrintWriter out = null;
 			response.setContentType("application/json");
 			//response.setContentType("text/html;charset=UTF-8");
+
+			out = response.getWriter();
+			out.write(ip);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+     }  
+  	
+ 	@RequestMapping(value="/getGuest")
+ 	@RequiresGuest
+    public void getGuest(HttpServletRequest request, HttpServletResponse response) {  
+  		String ip=null;
+		try {
+			
+			URL url = new URL("http://ip.3322.org");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.connect();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream(), "utf-8"));
+			System.out.println("=============================");
+			System.out.println("Contents of get request for Guest");
+			System.out.println("=============================");
+			String lines;
+			while ((lines = reader.readLine()) != null) {
+				ip = new String(lines.getBytes(), "utf-8");
+				System.out.println(lines);
+			}
+			reader.close();
+			PrintWriter out = null;
+			response.setContentType("application/json");
+			//response.setContentType("text/html;charset=UTF-8");
+
+			out = response.getWriter();
+			out.write(ip);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+     }  
+ 	
+ 	@RequestMapping(value="/getAuth")
+  	@RequiresAuthentication
+    public void getAuth(HttpServletRequest request, HttpServletResponse response) {  
+  		String ip=null;
+		try {
+			
+			URL url = new URL("http://ip.3322.org");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.connect();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream(), "utf-8"));
+			System.out.println("=============================");
+			System.out.println("Contents of get request for getAuth");
+			System.out.println("=============================");
+			String lines;
+			while ((lines = reader.readLine()) != null) {
+				ip = new String(lines.getBytes(), "utf-8");
+				System.out.println(lines);
+			}
+			reader.close();
+			PrintWriter out = null;
+			response.setContentType("application/json");
 
 			out = response.getWriter();
 			out.write(ip);
