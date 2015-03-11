@@ -122,7 +122,7 @@ public class HelloController {
   	
 
   	@RequestMapping(value="/getIP")
-  	@RequiresAuthentication
+  	@RequiresAuthentication //用于表明当前用户需是经过认证的用户。 
     public void getIP(HttpServletRequest request, HttpServletResponse response) {  
   		String ip=null;
 		try {
