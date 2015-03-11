@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import org.springframework.context.annotation.FilterType;
 import algz.platform.core.exception.ALGZExceptionHandler;
 
 /**
@@ -103,10 +104,10 @@ public class AppConfig /*extends WebMvcConfigurerAdapter*/ {
    * 配置Spring 处理异常的类,用于捕获@Control产生的异常(需在此类中配置相应处理的异常)
    * @return
    */
-//	@Bean
-//	public ALGZExceptionHandler exceptionHandler() {
-//		ALGZExceptionHandler exception= new ALGZExceptionHandler();
-//		return exception;
-//	};
+	@Bean
+	public ALGZExceptionHandler exceptionHandler() {
+		ALGZExceptionHandler exception= new ALGZExceptionHandler();
+		return exception;
+	};
 //includeFilters
 }

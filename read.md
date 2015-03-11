@@ -21,3 +21,7 @@ public void createAccount(Account account) {
 4.@RequiresRoles 当前用户需拥有制定角色 
 
 5.@RequiresUser 当前用户需为已认证用户或已记住用户 
+
+二.spring mvc
+1.ModelAndView 对象
+第一个参数是视图名/视图对象,第二个参数为模型属性(即传给用户的K-V对象).此类有很多构造函数,可查源码即可.
