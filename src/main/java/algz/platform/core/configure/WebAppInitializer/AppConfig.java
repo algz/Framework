@@ -33,7 +33,7 @@ import algz.platform.core.exception.ALGZExceptionHandler;
 二月 01, 2015 4:38:03 下午 org.springframework.beans.factory.support.DefaultListableBeanFactory getTypeForFactoryBean
 警告: Bean creation exception on FactoryBean type check: org.springframework.beans.factory.BeanCurrentlyInCreationException: Error creating bean with name 'shiroFilter': Requested bean is currently in creation: Is there an unresolvable circular reference?
 */
-@ImportResource({"classpath:algz/platform/core/configure/xml/spring-shiro.xml"})
+//@ImportResource({"classpath:algz/platform/core/configure/xml/spring-shiro.xml"})
 @ComponentScan(basePackages = {"algz.platform","com"})//扫描注解组件的包的基础位置(@Controller,@Service...)
 @EnableWebMvc //启用 MVC Java config ，在你的 @Configuration类上增加@EnableWebMvc注解
 @EnableTransactionManagement  //声明式事务管理，通过spring root application context扫描包septem.config.app：
