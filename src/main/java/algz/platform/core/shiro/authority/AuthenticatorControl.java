@@ -32,36 +32,42 @@ public class AuthenticatorControl {
     }  
       
     @RequestMapping(value="/login",method=RequestMethod.POST)  
-    public String login(User user,BindingResult bindingResult,RedirectAttributes redirectAttributes){  
-
+    public String login(User user,Model model){  
+        String error = null;
     	try {  
             String username=user.getUsername();
-            if(bindingResult.hasErrors()){  
-                return "/login";  
-            }  
+//            if(bindingResult.hasErrors()){  
+//                return "/login";  
+//            }  
             UsernamePasswordToken token=new UsernamePasswordToken(user.getUsername(), user.getPassword());
             //使用权限工具进行用户登录，登录成功后跳到shiro配置的successUrl中，与下面的return没什么关系！  
             SecurityUtils.getSubject().login(token);  
- 
-        }catch(UnknownAccountException uae){  
-            System.out.println("对用户[" + user.getUsername() + "]进行登录验证..验证未通过,未知账户");  
+
+        }catch(UnknownAccountException uae){
+        	error="对用户[" + user.getUsername() + "]进行登录验证..验证未通过,未知账户";
+            System.out.println(error);  
 //            request.setAttribute("message_login", "未知账户");  
         }catch(IncorrectCredentialsException ice){  
-            System.out.println("对用户[" + user.getUsername() + "]进行登录验证..验证未通过,错误的凭证");  
-//            request.setAttribute("message_login", "密码不正确");  
+        	error="对用户[" + user.getUsername() + "]进行登录验证..验证未通过,错误的凭证";
+        	System.out.println(error); 
+//          request.setAttribute("message_login", "密码不正确");  
         }catch(LockedAccountException lae){  
-            System.out.println("对用户[" + user.getUsername() + "]进行登录验证..验证未通过,账户已锁定");  
+        	error="对用户[" + user.getUsername() + "]进行登录验证..验证未通过,账户已锁定";
+        	System.out.println(error); 
 //            request.setAttribute("message_login", "账户已锁定");  
         }catch(ExcessiveAttemptsException eae){  
-            System.out.println("对用户[" + user.getUsername() + "]进行登录验证..验证未通过,错误次数过多");  
+        	error="对用户[" + user.getUsername() + "]进行登录验证..验证未通过,错误次数过多";
+        	System.out.println(error); 
 //            request.setAttribute("message_login", "用户名或密码错误次数过多");  
         }catch(AuthenticationException ae){  
+        	error="对用户[" + user.getUsername() + "]进行登录验证..验证未通过";
+        	System.out.println(error); 
             //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景  
-            System.out.println("对用户[" + user.getUsername() + "]进行登录验证..验证未通过,堆栈轨迹如下");  
             ae.printStackTrace();  
 //            request.setAttribute("message_login", "用户名或密码不正确");  
         } 
-        return "redirect:/user"; 
+    	model.addAttribute("error", error);
+        return "login"; 
     }  
       
     @RequestMapping(value="/logout",method=RequestMethod.GET)    
