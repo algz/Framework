@@ -78,8 +78,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		//使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤
 		shiroFilter.addMappingForUrlPatterns(null, true, "/*");
 		
-		FilterRegistration siteMeshFilter = servletContext.addFilter("sitemesh",ConfigurableSiteMeshFilter.class);
-		siteMeshFilter.addMappingForUrlPatterns(null, true, "/*");
+//		FilterRegistration siteMeshFilter = servletContext.addFilter("sitemesh",ConfigurableSiteMeshFilter.class);
+//		siteMeshFilter.addMappingForUrlPatterns(null, true, "/*");
 		
 		/** 配置Log4j */
         //Log4jConfigListener  
