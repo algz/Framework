@@ -75,6 +75,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
    */
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //	  logger.info("addResourceHandlers");  
+	  registry.addResourceHandler("/platform/**").addResourceLocations("/platform/");
       registry.addResourceHandler("/se7en/**").addResourceLocations("/se7en/");
   }
   
