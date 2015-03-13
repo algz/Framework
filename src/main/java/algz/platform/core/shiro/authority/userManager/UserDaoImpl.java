@@ -1,6 +1,7 @@
 package algz.platform.core.shiro.authority.userManager;
 
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,8 +22,8 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-//    @Autowired
-//    private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private SessionFactory sf;
     
     public User createUser(final User user) {
         final String sql = "insert into sys_user(organization_id, username, password, salt, role_ids, locked) values(?,?,?,?,?,?)";
@@ -79,11 +80,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByUsername(String username) {
-        String sql = "select id, organization_id, username, password, salt, role_ids as roleIdsStr, locked from sys_user where username=?";
-        List<User> userList = null;//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), username);
-        if(userList.size() == 0) {
-            return null;
-        }
-        return userList.get(0);
+        String sql = "select * from sys_user where username='"+username+"'";
+        return (User)sf.openSession().createSQLQuery(sql)
+        		.addEntity(User.class).setMaxResults(1).uniqueResult();
+        		//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), username);
     }
 }

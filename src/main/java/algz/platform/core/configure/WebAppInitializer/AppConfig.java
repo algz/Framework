@@ -1,9 +1,12 @@
 package algz.platform.core.configure.WebAppInitializer;
 
 
+import java.util.logging.Logger;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -12,9 +15,11 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
 import org.springframework.context.annotation.FilterType;
+
 import algz.platform.core.exception.ALGZExceptionHandler;
 
 /**
@@ -37,10 +42,11 @@ import algz.platform.core.exception.ALGZExceptionHandler;
 //@ImportResource({"classpath:algz/platform/core/configure/xml/spring-shiro.xml"})
 @ComponentScan(basePackages = {"algz.platform","com"})//扫描注解组件的包的基础位置(@Controller,@Service...)
 @EnableWebMvc //启用 MVC Java config ，在你的 @Configuration类上增加@EnableWebMvc注解
-@EnableTransactionManagement  //声明式事务管理，通过spring root application context扫描包septem.config.app：
 //@PropertySource("/conf/jdbc.properties")
-public class AppConfig /*extends WebMvcConfigurerAdapter*/ {
-
+//@EnableAspectJAutoProxy(proxyTargetClass=true)  
+public class AppConfig extends WebMvcConfigurerAdapter {
+//	private static final Logger logger = Logger  
+//            .getLogger(AppConfig.class);  
 
 //  //*********************springmvc开始配置*************************
 //  /**
@@ -54,6 +60,7 @@ public class AppConfig /*extends WebMvcConfigurerAdapter*/ {
 //   */
   @Bean
   public ViewResolver viewResolver(){
+//	  logger.info("ViewResolver");  
       InternalResourceViewResolver resolver =new InternalResourceViewResolver();
       resolver.setPrefix("/");//("/WEB-INF/");
       resolver.setSuffix(".jsp");
@@ -61,17 +68,20 @@ public class AppConfig /*extends WebMvcConfigurerAdapter*/ {
   }
   
   /**
-   * 
-   * <mvc:resources mapping="/resources/**" location="/resources/" /> 
+   * 添加静态资源不拦截.即se7en目录下的文件都不拦截.
+   * 由于类继续WebMvcConfigurerAdapter,所以不用定义为Bean
+   * <mvc:resources mapping="/se7en/**" location="/se7en/" /> 
    * 
    */
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-      registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+//	  logger.info("addResourceHandlers");  
+      registry.addResourceHandler("/se7en/**").addResourceLocations("/se7en/");
   }
   
-  public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {  
-      configurer.enable();  
-  }  
+
+//  public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {  
+//      configurer.enable();  
+//  }  
 
   /**
    * 三种方式都不到mediaType,那只能是默认的json::http://localhost:8080/gradletest-1.0/sample/test
@@ -85,14 +95,14 @@ public class AppConfig /*extends WebMvcConfigurerAdapter*/ {
 
 后缀,url参数都有,后缀优先得到mediaType是xml格式:http://localhost:8080/gradletest-1.0/sample/test.xml?mediaType=json
    */ 
-  public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {  
-      configurer.favorPathExtension(true).useJaf(false)  
-              .favorParameter(true).parameterName("mediaType")  
-              .ignoreAcceptHeader(true).  
-              //defaultContentType(MediaType.APPLICATION_JSON).  
-              mediaType("xml", MediaType.APPLICATION_XML).  
-              mediaType("json", MediaType.APPLICATION_JSON);  
-  }  
+//  public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {  
+//      configurer.favorPathExtension(true).useJaf(false)  
+//              .favorParameter(true).parameterName("mediaType")  
+//              .ignoreAcceptHeader(true).  
+//              //defaultContentType(MediaType.APPLICATION_JSON).  
+//              mediaType("xml", MediaType.APPLICATION_XML).  
+//              mediaType("json", MediaType.APPLICATION_JSON);  
+//  }  
   
   
 //	@Bean

@@ -63,7 +63,7 @@ public class AuthenticatorControl {
         	error="对用户[" + user.getUsername() + "]进行登录验证..验证未通过";
         	System.out.println(error); 
             //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景  
-            ae.printStackTrace();  
+//            ae.printStackTrace();  
 //            request.setAttribute("message_login", "用户名或密码不正确");  
         } 
     	model.addAttribute("error", error);

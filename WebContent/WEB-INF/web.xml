@@ -11,6 +11,15 @@
     <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
   
+  <!-- 不拦截配置
+  <servlet-mapping>  
+    <servlet-name>default</servlet-name>  
+    <url-pattern>/js/*</url-pattern>  
+    <url-pattern>/css/*</url-pattern>  
+    <url-pattern>/images/*</url-pattern>  
+    <url-pattern>/fonts/*</url-pattern>  
+    <url-pattern>/se7en/*</url-pattern>  
+  </servlet-mapping> -->
   <!-- Session超时30分钟(零或负数表示会话永不超时) -->  
     <!--   
     <session-config>  

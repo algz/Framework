@@ -12,6 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -22,6 +23,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 
 @Configuration
+//启用注解事务管理，使用CGLib代理  
+@EnableTransactionManagement(proxyTargetClass = true)  //声明式事务管理，通过spring root application context扫描包septem.config.app：
 @PropertySource("classpath:jdbc.properties")
 public class DataSourceConfig {
 

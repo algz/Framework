@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +31,8 @@ public class User implements Serializable {
 //	@GeneratedValue(generator = "paymentableGenerator")
 //	@GenericGenerator(name = "paymentableGenerator", strategy = "guid")
     private Long id; //编号
+	
+	@Column(name="organization_Id")
     private Long organizationId; //所属公司
     private String username; //用户名
     private String password; //密码
