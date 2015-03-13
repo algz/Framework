@@ -16,6 +16,7 @@ import javax.servlet.ServletRegistration;
 
 
 
+
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
@@ -25,6 +26,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.util.IntrospectorCleanupListener;
+
+import algz.platform.core.configure.ALGZSiteMeshFilter;
 
 /**
  * 
@@ -78,8 +81,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		//使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤
 		shiroFilter.addMappingForUrlPatterns(null, true, "/*");
 		
-//		FilterRegistration siteMeshFilter = servletContext.addFilter("sitemesh",ConfigurableSiteMeshFilter.class);
-//		siteMeshFilter.addMappingForUrlPatterns(null, true, "/*");
+		FilterRegistration siteMeshFilter = servletContext.addFilter("sitemesh",ALGZSiteMeshFilter.class);
+		siteMeshFilter.addMappingForUrlPatterns(null, true, "/*");
 		
 		/** 配置Log4j */
         //Log4jConfigListener  
