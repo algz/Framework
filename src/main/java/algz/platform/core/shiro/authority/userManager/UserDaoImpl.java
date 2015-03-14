@@ -15,9 +15,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
+ * 
+ * @author algz
+ *
  */
 @Repository
 public class UserDaoImpl implements UserDao {

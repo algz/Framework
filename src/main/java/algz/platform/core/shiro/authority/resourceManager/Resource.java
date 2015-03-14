@@ -1,19 +1,43 @@
 package algz.platform.core.shiro.authority.resourceManager;
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 14-1-28
  * <p>Version: 1.0
  */
+
+@Entity
+@Table(name="sys_resource")
 public class Resource implements Serializable {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+//	@GeneratedValue(generator = "paymentableGenerator")
+//	@GenericGenerator(name = "paymentableGenerator", strategy = "guid")
     private Long id; //编号
+	
     private String name; //资源名称
-    private ResourceType type = ResourceType.menu; //资源类型
+    
+    @Column(name="type")
+    private String type ;//= ResourceType.menu; //资源类型
+    
     private String url; //资源路径
+    
     private String permission; //权限字符串
+    
+    @Column(name="parent_Id")
     private Long parentId; //父编号
+    
+    @Column(name="parent_Ids")
     private String parentIds; //父编号列表
+    
     private Boolean available = Boolean.FALSE;
 
     public static enum ResourceType {
@@ -47,11 +71,11 @@ public class Resource implements Serializable {
         this.name = name;
     }
 
-    public ResourceType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ResourceType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -102,6 +126,7 @@ public class Resource implements Serializable {
     public String makeSelfAsParentIds() {
         return getParentIds() + getId() + "/";
     }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

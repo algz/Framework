@@ -11,6 +11,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-    <sitemesh:write property='body' />
+	<div class="modal-shiftfix">
+		<!-- Navigation -->
+		<div class="navbar navbar-fixed-top scroll-hide">
+			<%@ include file="nav/nav-top.jsp" %>
+			<%@ include file="nav/nav-menu.jsp" %>
+		</div>
+      	<!-- End Navigation -->
+
+		<sitemesh:write property='body' />
+	</div>
 </body>
 </html>

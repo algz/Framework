@@ -19,19 +19,19 @@ public class ALGZSiteMeshFilter extends ConfigurableSiteMeshFilter {
 	@Override
 	protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
         // 配置默认的渲染器. 将应用于所有路径.  
-		builder.addDecoratorPath("/platform/*", "/platform/decorators/main.jsp")  
+		builder.addDecoratorPath("/*", "/platform/decorators/main.jsp")  
            // 配置特定路径的渲染器.  
 //           .addDecoratorPath("/*.special.jsp", "/special-decorator.html")  
 //            配置多个渲染器.即一个页面可以被多个装饰器装饰,如platform/*->main->top
 //           .addDecoratorPaths("/platform/*", "/platform/decorators/main.jsp",   
 //                                             "/platform/decorators/top.jsp")  
-           // 不被渲染的路径.  
+           // 不被渲染的URI路径.  
            //.addExcludedPath("/brochures/*")
            .addExcludedPath("/ace/*")
            .addExcludedPath("/jkbb/*")
            .addExcludedPath("/jsTree/*")
            .addExcludedPath("/se7en/*")
-           .addExcludedPath("/platform/login.jsp");  
+           .addExcludedPath("/login");  
 		
 
 	}

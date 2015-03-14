@@ -1,5 +1,9 @@
 package algz.platform.core.shiro.authority;
 
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -23,7 +27,7 @@ import algz.platform.core.shiro.authority.userManager.User;
  */
 
 @Controller  
-public class AuthenticatorControl {
+public class AuthenticatorController {
 
     @RequestMapping(value="/",method=RequestMethod.GET)  
     public String index(Model model){  
@@ -32,8 +36,9 @@ public class AuthenticatorControl {
     }  
 	
     @RequestMapping(value="/login",method=RequestMethod.GET)  
-    public String loginForm(Model model){  
+    public String loginForm(HttpServletRequest request,HttpSession session){  
 //        model.addAttribute("user", new User());  
+    	
         return "platform/login";  
     }  
       
@@ -72,8 +77,13 @@ public class AuthenticatorControl {
 //            ae.printStackTrace();  
 //            request.setAttribute("message_login", "用户名或密码不正确");  
         } 
-    	model.addAttribute("error", error);
-        return "platform/login"; 
+    	if(error==null){
+    		System.out.println("用户[" + user.getUsername() + "]登陆成功"); 
+    		return "redirect:/";
+    	}else{
+    		model.addAttribute("error", error);
+            return "platform/login"; 
+    	}
     }  
       
     @RequestMapping(value="/logout",method=RequestMethod.GET)    
