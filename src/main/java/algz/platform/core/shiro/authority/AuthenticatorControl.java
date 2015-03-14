@@ -25,10 +25,16 @@ import algz.platform.core.shiro.authority.userManager.User;
 @Controller  
 public class AuthenticatorControl {
 
+    @RequestMapping(value="/",method=RequestMethod.GET)  
+    public String index(Model model){  
+//        model.addAttribute("user", new User());  
+        return "platform/index";  
+    }  
+	
     @RequestMapping(value="/login",method=RequestMethod.GET)  
     public String loginForm(Model model){  
 //        model.addAttribute("user", new User());  
-        return "/login";  
+        return "platform/login";  
     }  
       
     @RequestMapping(value="/login",method=RequestMethod.POST)  
@@ -67,7 +73,7 @@ public class AuthenticatorControl {
 //            request.setAttribute("message_login", "用户名或密码不正确");  
         } 
     	model.addAttribute("error", error);
-        return "login"; 
+        return "platform/login"; 
     }  
       
     @RequestMapping(value="/logout",method=RequestMethod.GET)    

@@ -1,7 +1,9 @@
 eclipse.preferences.version=1
-encoding//WebContent/platform/decorators/top.jsp=UTF-8
-encoding//WebContent/platform/demo.html=UTF-8
-encoding//WebContent/platform/index.html=UTF-8
+encoding//WebContent/platform/decorators/common_js.html=UTF-8
+encoding//WebContent/platform/decorators/main.jsp=UTF-8
+encoding//WebContent/platform/index.jsp=UTF-8
+encoding//WebContent/platform/login.jsp=UTF-8
 encoding//WebContent/se7en/404-page.html=UTF-8
 encoding//WebContent/se7en/index.html=UTF-8
+encoding//WebContent/se7en/login2.html=UTF-8
 encoding/<project>=UTF-8
