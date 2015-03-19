@@ -105,7 +105,8 @@ public class SecurityConfig {
 		filterFactory.setSecurityManager(secMan);
 		
 		//登录时的链接(非必须的属性),默认会自动寻找Web工程根目录下的"/login.jsp"页面
-		filterFactory.setLoginUrl("/platform/login");
+		//setLoginUrl()参数为view(即action).发送的是get,调用AuthenticatorController.loginForm方法.
+		filterFactory.setLoginUrl("/login");
 		
 //        <!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后的处理逻辑在LoginController里硬编码为main.jsp了) -->  
 //        <!-- <property name="successUrl" value="/system/main"/> -->  
@@ -127,11 +128,11 @@ public class SecurityConfig {
 //            </value>  
 //        </property>  
 		Map<String,String> filterChainMap=new HashMap<String,String>();
-		filterChainMap.put("/test/login", "anon");
-		filterChainMap.put("/test/getVerifyCodeImage", "anon");
-		filterChainMap.put("/test**", "authc");
-		filterChainMap.put("/test/hello**", "authc");
-		filterChainMap.put("/admin/listUser**", "authc,perms[admin:manage]");
+//		filterChainMap.put("/test/login", "anon");
+//		filterChainMap.put("/test/getVerifyCodeImage", "anon");
+		filterChainMap.put("/test**", "anon");
+//		filterChainMap.put("/test/hello**", "authc");
+//		filterChainMap.put("/admin/listUser**", "authc,perms[admin:manage]");
 		filterFactory.setFilterChainDefinitionMap(filterChainMap);
 		return filterFactory;
 	}

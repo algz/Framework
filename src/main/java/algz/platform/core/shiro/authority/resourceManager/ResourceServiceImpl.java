@@ -63,9 +63,9 @@ public class ResourceServiceImpl implements ResourceService {
         List<Resource> allResources = findAll();
         List<Resource> menus = new ArrayList<>();
         for(Resource resource : allResources) {
-            if(resource.isRootNode()) {
-                continue;
-            }
+//            if(resource.isRootNode()) {
+//                continue;
+//            }
             if(!resource.getType().equals("menu")) {
                 continue;
             }

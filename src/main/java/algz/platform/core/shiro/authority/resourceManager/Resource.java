@@ -17,6 +17,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name="sys_resource")
 public class Resource implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5857094511885283126L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 //	@GeneratedValue(generator = "paymentableGenerator")
@@ -39,7 +44,12 @@ public class Resource implements Serializable {
     private String parentIds; //父编号列表
     
     private Boolean available = Boolean.FALSE;
+    
+    private String ico; //图标
 
+    @Column(name="is_new")
+    private Boolean isNew=false; //是否新功能
+    
     public static enum ResourceType {
         menu("菜单"), button("按钮");
 
@@ -119,6 +129,28 @@ public class Resource implements Serializable {
         this.available = available;
     }
 
+    public String getIco() {
+		return ico;
+	}
+
+	public void setIco(String ico) {
+		this.ico = ico;
+	}
+  
+	
+	
+	public Boolean getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(Boolean isNew) {
+		this.isNew = isNew;
+	}
+
+	/**
+	 * 
+	 * @return true 根结点; false 非根结点
+	 */
     public boolean isRootNode() {
         return parentId == 0;
     }
@@ -127,7 +159,11 @@ public class Resource implements Serializable {
         return getParentIds() + getId() + "/";
     }
     
-    @Override
+    
+    
+
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -25,3 +25,9 @@ public void createAccount(Account account) {
 二.spring mvc
 1.ModelAndView 对象
 第一个参数是视图名/视图对象,第二个参数为模型属性(即传给用户的K-V对象).此类有很多构造函数,可查源码即可.
+
+三.笔记
+1.<c:url>标签会在重新生成的URL中加上当前Web应用的根路径.
+<link href="<c:url value='/stylesheets/bootstrap.min.css'/>" rel="stylesheet" type="text/css" />
+ == http://localhost:8080/algz/stylesheets/bootstrap.min.css (即使当前路径为 algz/user/,也无影响)
+ value值='/'开头,为项目名+绝对路径;value值无"/",则项目名+相对路径,所以建议采用绝对路径,加"/".

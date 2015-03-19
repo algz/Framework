@@ -1,26 +1,26 @@
-<script src="javascripts/jquery.min.js" type="text/javascript"></script>
-<script src="javascripts/jquery-ui.js" type="text/javascript"></script>
-<script src="javascripts/bootstrap.min.js" type="text/javascript"></script>
-<script src="javascripts/raphael.min.js" type="text/javascript"></script>
-<script src="javascripts/selectivizr-min.js" type="text/javascript"></script>
-<script src="javascripts/jquery.mousewheel.js" type="text/javascript"></script>
-<script src="javascripts/jquery.vmap.min.js" type="text/javascript"></script>
-<script src="javascripts/jquery.vmap.sampledata.js" type="text/javascript"></script>
-<script src="javascripts/jquery.vmap.world.js" type="text/javascript"></script>
-<script src="javascripts/jquery.bootstrap.wizard.js" type="text/javascript"></script>
-<script src="javascripts/fullcalendar.min.js" type="text/javascript"></script>
-<script src="javascripts/gcal.js" type="text/javascript"></script>
+<script src="<c:url value='/javascripts/jquery.min.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/javascripts/jquery-ui.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/javascripts/bootstrap.min.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/javascripts/raphael.min.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/javascripts/selectivizr-min.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/javascripts/jquery.mousewheel.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/javascripts/jquery.vmap.min.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/jquery.vmap.sampledata.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/jquery.vmap.world.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/jquery.bootstrap.wizard.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/fullcalendar.min.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/gcal.js" type="text/javascript"></script>
 <script src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <!-- javascripts/jquery.dataTables.min.js -->
 <script type="text/javascript" src="/algz/components/datatable-editable.js"></script>
 <!--<script src="javascripts/datatable-editable.js" type="text/javascript"></script> -->
-<script src="javascripts/jquery.easy-pie-chart.js" type="text/javascript"></script>
-<script src="javascripts/excanvas.min.js" type="text/javascript"></script>
-<script src="javascripts/jquery.isotope.min.js" type="text/javascript"></script>
-<script src="javascripts/isotope_extras.js" type="text/javascript"></script>
-<script src="javascripts/modernizr.custom.js" type="text/javascript"></script>
-<script src="javascripts/jquery.fancybox.pack.js" type="text/javascript"></script>
-<script src="javascripts/select2.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/jquery.easy-pie-chart.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/excanvas.min.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/jquery.isotope.min.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/isotope_extras.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/modernizr.custom.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/jquery.fancybox.pack.js" type="text/javascript"></script>
+<script src="<c:url value='/stylesheets/datatables.css'/>javascripts/select2.js" type="text/javascript"></script>
 <script src="javascripts/styleswitcher.js" type="text/javascript"></script>
 <script src="javascripts/wysiwyg.js" type="text/javascript"></script>
 <script src="javascripts/summernote.min.js" type="text/javascript"></script>
