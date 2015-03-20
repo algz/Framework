@@ -5,6 +5,7 @@ import java.net.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
@@ -15,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
@@ -286,4 +288,17 @@ public class HelloController {
  	    modelAndView.setViewName("regurltest");  
  	    return modelAndView;
  	}
+ 	
+ 	 /** 
+     * 测试返回JSON数据 
+     * @param session 
+     * @return 
+     */  
+    @RequestMapping(value="/testJson")  
+    @ResponseBody  
+    public Object testJson(HttpSession session){  
+          
+        System.out.println("test....................");  
+        return session.getAttribute("permit");  
+    } 
 }
