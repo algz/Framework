@@ -97,6 +97,18 @@
     		<!-- classifier表示在相同版本下针对不同的环境或者jdk使用的jar,如果配置了这个元素，则会将这个classifier值在加在最后,来查找相应的jar -->
     		<classifier>jdk15</classifier> 
 		</dependency>
+		<!-- @ResponseBody/@ResponseBody 响应/请求正文转换适合的HttpMessageConverter对象. 解决JSON返回406错误 -->
+		<dependency>
+        	<groupId>com.fasterxml.jackson.core</groupId>
+        	<artifactId>jackson-core</artifactId>
+        	<version>2.5.1</version>
+    	</dependency>
+    	<dependency>
+       		<groupId>com.fasterxml.jackson.core</groupId>
+        	<artifactId>jackson-databind</artifactId>
+        	<version>2.5.1</version>
+    	</dependency>
+  
   	</dependencies>
   	<build>
   		<pluginManagement>

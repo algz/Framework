@@ -17,15 +17,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
+
 @Entity
 @Table(name="SYS_USER")
 public class User implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3922270833679182694L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 //	@GeneratedValue(generator = "paymentableGenerator")

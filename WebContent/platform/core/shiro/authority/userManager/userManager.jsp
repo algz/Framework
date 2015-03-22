@@ -34,7 +34,10 @@
               <button class="btn btn-xs btn-primary-outline">增加</button>
               <button class="btn btn-xs btn-primary-outline">修改</button>
               <button id='user-del' class="btn btn-xs btn-primary-outline">删除</button>
-                <table class="table table-bordered table-striped" id="dataTable1">
+              <table class="table table-bordered table-striped" id="dataTable2-a">
+              </table>
+               
+                <table class="table table-bordered table-striped" id="dataTable">
                   <thead>
                     <th class="check-header hidden-xs">
                       <label><input id="checkAll" name="checkAll" type="checkbox"><span></span></label>
@@ -409,6 +412,7 @@
                     </tr>
                   </tbody>
                 </table>
+              
               </div>
             </div>
           </div>
@@ -429,6 +433,19 @@
                 } 
             }); 
         });
+        
+        $("#dataTable2-a").dataTable({
+            ajax:"findUsers",//"http://localhost:8080/algz/se7en/array.txt", //"findUsers"
+                              "columns": [
+                                          { "title": "姓名","data":"password"},
+                                          { "title": "登陆名","data":"username"}/* ,
+                                          { "title": "员工编号",name:'usercode'},
+                                          { "title": "性别",name:'sex'},
+                                          { "title": "密级",name:'securitydegree'},
+                                          { "title": "角色",name:'role'},
+                                          { "title": "主要部门"} */
+                                        ] 
+          });
     })
     </script>
   </body>

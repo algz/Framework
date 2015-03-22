@@ -71,7 +71,7 @@ public class ResourceDaoImpl implements ResourceDao {
     @Override
     public List<Resource> findAll() {
         final String sql = "select * from sys_resource ";
-        List<Resource> list= sf.getCurrentSession().createSQLQuery(sql).addEntity(Resource.class).list();
+        List<Resource> list= sf.openSession().createSQLQuery(sql).addEntity(Resource.class).list();
         return list;
         //        return jdbcTemplate.query(sql, new BeanPropertyRowMapper(Resource.class));
     }

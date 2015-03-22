@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.context.annotation.FilterType;
 
@@ -84,7 +87,20 @@ public class AppConfig extends WebMvcConfigurerAdapter {
       registry.addResourceHandler("/font/**").addResourceLocations("/platform/font/");
   }
   
-
+//  @Bean  
+//  public MappingJackson2HttpMessageConverter jacksonMessageConverter() {  
+////      logger.info("RequestMappingHandlerMapping");  
+//	  return new MappingJackson2HttpMessageConverter();
+//  }  
+//  
+ 
+//  @Bean  
+//  public AnnotationMethodHandlerAdapter annotationMethodHandlerAdapter() {  
+////      logger.info("RequestMappingHandlerMapping");  
+//	  AnnotationMethodHandlerAdapter a=new AnnotationMethodHandlerAdapter();
+//	  a.setMessageConverters(new HttpMessageConverter[]{jacksonMessageConverter()});
+//      return a;  
+//  }  
 //  public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {  
 //      configurer.enable();  
 //  }  
