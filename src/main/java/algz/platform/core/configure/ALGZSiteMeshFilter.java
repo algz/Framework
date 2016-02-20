@@ -25,8 +25,10 @@ public class ALGZSiteMeshFilter extends ConfigurableSiteMeshFilter {
            // 配置多个渲染器.即一个页面可以被多个装饰器装饰,如decorator装饰main,然后main在装饰slider
 //           .addDecoratorPaths("/platform/uiExample/uicomponent/*", "/platform/uiExample/main.jsp",   
 //                                             "/platform/decorators/top.jsp")  
-           // 不被渲染的路径.  
-           //.addExcludedPath("/brochures/*")
+           // 不被渲染的url路径.
+		   .addExcludedPath("/manager/*") 
+		   .addExcludedPath("/H+3.0/*") 
+           .addExcludedPath("/algz/*") //http://localhost:8080/algz/algz/algz.jsp 
            .addExcludedPath("/ace/*")
            .addExcludedPath("/jkbb/*")
            .addExcludedPath("/jsTree/*")

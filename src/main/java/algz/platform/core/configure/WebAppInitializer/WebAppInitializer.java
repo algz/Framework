@@ -7,15 +7,8 @@ import java.util.Map;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-
-
-
-
-
-
-
-
-
+import javax.servlet.descriptor.JspPropertyGroupDescriptor;
+import javax.servlet.descriptor.TaglibDescriptor;
 
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.core.annotation.Order;

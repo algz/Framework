@@ -74,7 +74,17 @@ public class AppConfig extends WebMvcConfigurerAdapter {
    * 
    */
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//	  logger.info("addResourceHandlers");  
+//	  logger.info("addResourceHandlers"); 
+	  
+	  /*
+	   指定静态资源路径:访问addResourceHandler 指向 addResourceLocations
+	  addResourceHandler(url).addResourceLocations(webContent下的相对路径)
+	  */
+	  //http://localhost:8080/algz/manager/ ==> /Framework/WebContent/manager
+	  registry.addResourceHandler("/manager/**").addResourceLocations("/manager/"); 
+	  
+	  registry.addResourceHandler("/H+3.0/**").addResourceLocations("/H+3.0/");
+	  registry.addResourceHandler("/algz/**").addResourceLocations("/algz/");
 	  registry.addResourceHandler("/platform/**").addResourceLocations("/platform/");
       registry.addResourceHandler("/se7en/**").addResourceLocations("/se7en/");
   }

@@ -85,6 +85,7 @@ public class HelloController {
 //    	InetAddress addr = InetAddress.getLocalHost();
 //    	ip=addr.getHostAddress().toString;//获得本机IP
 //    	address=addr.getHostName()toString;//获得本机名称 
+		//ModelAndView("WebContent路径/jsp文件名", request作用域的属性名, request作用域的属性值);
         return new ModelAndView("pages/hello", "message", "Hello Spring to "+helloService.printHello()+" !");
     }
     

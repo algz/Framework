@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+  
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"  
+    version="2.0">  
+    <tlib-version>1.0</tlib-version>  
+  	<short-name>mytaglib</short-name>
+  	    <!-- 定义该标签库的URI -->
+    <uri>http://www.algz.org/mytaglib</uri>
+    
+    <tag>  
+        <!-- 定义标签名 -->
+	    <name>hello</name>      <!--表示标签的名字 类似于<jsp:forward>中的forward-->  
+	    <!-- 定义标签处理类 -->
+	    <tag-class>algz.platform.tag.HelloTag</tag-class>  <!--标签所在类 -->  
+	    <!-- 定义标签体为空 -->
+	    <body-content>empty</body-content>      <!--是否存在标签体-->  
+	</tag>  
+	
+</taglib>  
