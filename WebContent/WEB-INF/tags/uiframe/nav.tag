@@ -52,32 +52,31 @@ request.setAttribute("menus", ja);
 <!-- 标签属性 -->
 <%@attribute name="id"  rtexprvalue="true" required="false" description="控件ID,必填" %>
 <%@attribute name="menus"  rtexprvalue="true" required="false" type="net.sf.json.JSONArray" description="菜单集合" %>
+<%@attribute name="headermenu" rtexprvalue="true" required="false" type="net.sf.json.JSONObject" description="header菜单" %>
 
 <!--左侧导航开始-->
+		
 		<nav class="navbar-default navbar-static-side" role="navigation">
             <div class="nav-close"><i class="fa fa-times-circle"></i>
             </div>
             <div class="sidebar-collapse">
             
-            <c:if test="${menus!=null}">
                 <ul class="nav" id="side-menu">
-				<c:forEach var="menu" items="${menus }">
-					<c:choose>
-					<%-- (1)header下拉菜单 --%>
-					    <c:when test="${menu.header!=null}">
+                <c:if test="${header!=null}">
+                	<%-- (1)header下拉菜单 --%>
 					<!-- nav-header -->
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <span><img alt="image" class="img-circle" src="${menu.img }" /></span>
+                            <span><img alt="image" class="img-circle" src="${headermenu.img }" /></span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                               <span class="block m-t-xs"><strong class="font-bold">${menu.header}</strong></span>
-                                <span class="text-muted text-xs block">${menu.text }<b class="caret"></b></span>
+                               <span class="block m-t-xs"><strong class="font-bold">${headermenu.title}</strong></span>
+                                <span class="text-muted text-xs block">${headermenu.text }<b class="caret"></b></span>
                                 </span>
                             </a>
-                            <c:if test="${menu.menus!=null }">
+                            <c:if test="${headermenu.menus!=null }">
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <c:forEach var="submenu" items="${menu.menus }">
+                            <c:forEach var="submenu" items="${headermenu.menus }">
 								<c:choose>
 								    <c:when test="${submenu=='divider' }">
 								 <li class="divider"></li>
@@ -95,7 +94,11 @@ request.setAttribute("menus", ja);
                         <div class="logo-element">Algz+
                         </div>
                     </li>
-					    </c:when>
+                </c:if>
+                
+                <c:if test="${menus!=null}">
+				<c:forEach var="menu" items="${menus }">
+					<c:choose>
 					    <%-- (2)下拉框菜单--%>
 					    <c:when test="${menu.menus!=null}">
 					<li>
@@ -158,9 +161,11 @@ request.setAttribute("menus", ja);
 					    </c:otherwise>
 					</c:choose>
 				</c:forEach>
+				</c:if>
                 </ul>
-            </c:if>
+           
             
             </div>
         </nav>
+         
         <!--左侧导航结束-->
