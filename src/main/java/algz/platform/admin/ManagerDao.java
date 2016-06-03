@@ -1,7 +1,9 @@
 package algz.platform.admin;
 
+import java.util.Map;
+
 import net.sf.json.JSONArray;
 
 public interface ManagerDao {
-	JSONArray getSilderNav();
+	Map<String,?> getSilderNav();
 }

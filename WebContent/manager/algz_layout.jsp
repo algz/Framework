@@ -16,14 +16,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta name="renderer" content="webkit">
     <meta name="keywords" content="">
     <meta name="description" content="">
-<jsp:include  page="common_css.jsp"/> 
+
+    <!--[if lt IE 8]>
+    <script>
+        alert('H+已不支持IE6-8，请使用谷歌、火狐等浏览器\n或360、QQ等国产浏览器的极速模式浏览本页面！');
+    </script>
+    <![endif]-->
+    <link href="<%=basePath %>platform/common/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="<%=basePath %>platform/common/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="<%=basePath %>platform/common/css/animate.min.css" rel="stylesheet">
+    <link href="<%=basePath %>platform/common/css/style.min.css?v=3.0.0" rel="stylesheet">
 
 </head>
 
 <body class="fixed-sidebar full-height-layout gray-bg">
     <div id="wrapper">
         <!--左侧导航开始-->
-        <algz:nav menus="${menu}"></algz:nav>
+        <algz:nav menus="${menus}" headermenu="${headermenu }"></algz:nav>
         <!--左侧导航结束-->
 
         <!--右侧部分开始-->
@@ -623,9 +632,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <!--mini聊天窗口结束-->
     </div>
 
-    <jsp:include  page="common_js.jsp"/> 
-
+        <!-- 全局js -->
+    <script src="<%=basePath %>platform/common/js/jquery-2.1.1.min.js"></script>
+    <script src="<%=basePath %>platform/common/js/bootstrap.min.js?v=3.4.0"></script>
+    <script src="<%=basePath %>platform/common/js/plugins/layer/layer.min.js"></script>
+        
+    <script src="<%=basePath %>platform/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="<%=basePath %>platform/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    
     <!-- 自定义js -->
+    <script src="<%=basePath %>platform/common/js/hplus.min.js?v=3.0.0"></script>
     <script type="text/javascript" src="<%=basePath %>platform/common/js/contabs.min.js"></script>
 
     <!-- 第三方插件 -->

@@ -1,7 +1,8 @@
 package algz.platform.admin;
 
-import net.sf.json.JSONArray;
+import java.util.Map;
+
 
 public interface ManagerService {
-	JSONArray getSilderNav();
+	Map<String,?> getSilderNav();
 }
