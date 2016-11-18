@@ -28,6 +28,9 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @PropertySource("classpath:jdbc.properties")
 public class DataSourceConfig {
 
+	@Value("${org.hibernate.dialect}")
+	private String dialect;
+	
 	@Value("${jdbc.driverClass}")
 	private String driverClass;
 	
@@ -65,7 +68,7 @@ public class DataSourceConfig {
 	  public LocalSessionFactoryBean sessionFactory(DataSource dataSource) throws PropertyVetoException{
 	    // more configuration...
 	    Properties properties=new Properties();
-	    properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+	    properties.put("hibernate.dialect", dialect); //"org.hibernate.dialect.MySQLDialect"
 
 //	    properties.put("hibernate.connection.driver_class", "org.sqlite.JDBC");
 //	    properties.put("hibernate.dialect", "algz.platform.core.configure.database.dialect.SQLiteDialect");
@@ -82,7 +85,7 @@ public class DataSourceConfig {
 	      factoryBean.setHibernateProperties(properties);
 	      
 	    //扫描model类,不然报Caused by: org.hibernate.MappingException: Unknown entity:
-	      factoryBean.setPackagesToScan(new String[] {"algz.platform.core.shiro.*","com.hello.*"});
+	      factoryBean.setPackagesToScan(new String[] {"algz.platform.core.shiro.*","algz.platform.system.*","com.*","com.hello.*"});
 	      return factoryBean;
 	  }
 

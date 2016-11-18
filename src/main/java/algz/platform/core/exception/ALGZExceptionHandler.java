@@ -42,5 +42,4 @@ public class ALGZExceptionHandler implements HandlerExceptionResolver {
 		
 		return model;
 	}
-
 }

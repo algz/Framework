@@ -18,8 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
+ * <p>User: algz
+ * <p>Date: 16-7-18
  * <p>Version: 1.0
  */
 @Entity
@@ -37,7 +37,8 @@ public class User implements Serializable {
     private String username; //用户名
     private String password; //密码
     private String salt; //加密密码的盐
-
+    private String photo; //用户图片
+    
     private Boolean locked = Boolean.FALSE;
 
     @Transient
@@ -97,7 +98,15 @@ public class User implements Serializable {
 
 
     
-    public Boolean getLocked() {
+    public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public Boolean getLocked() {
         return locked;
     }
 

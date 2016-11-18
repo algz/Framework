@@ -7,10 +7,6 @@ import java.util.Map;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-import javax.servlet.descriptor.JspPropertyGroupDescriptor;
-import javax.servlet.descriptor.TaglibDescriptor;
-
-import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -20,7 +16,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
-import algz.platform.core.configure.ALGZSiteMeshFilter;
+import algz.platform.core.configure.siteMesh.ALGZSiteMeshFilter;
 
 /**
  * 
@@ -59,8 +55,9 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		sceMap.put("encoding", "UTF-8");
 		//forceEncoding默认为false,等效于request.setCharacterEncoding("UTF-8")
 		sceMap.put("forceEncoding", "true"); 
+		
 		scefilter.setInitParameters(sceMap);
-		scefilter.addMappingForUrlPatterns(null, true, "/*"); 
+		scefilter.addMappingForUrlPatterns(null, true, "/"); 
 		/**设置servlet编码结束*/
       
 	  /**  配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->  
@@ -74,6 +71,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		//使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤
 		shiroFilter.addMappingForUrlPatterns(null, true, "/*");
 		
+		/** siteMesh */
 		FilterRegistration siteMeshFilter = servletContext.addFilter("sitemesh",ALGZSiteMeshFilter.class);
 		siteMeshFilter.addMappingForUrlPatterns(null, true, "/*");
 		
