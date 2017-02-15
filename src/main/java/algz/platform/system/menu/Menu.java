@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.LazyToOne;
@@ -32,10 +33,9 @@ import org.hibernate.annotations.LazyToOneOption;
 public class Menu {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-//	@GeneratedValue(generator = "paymentableGenerator")
-//	@GenericGenerator(name = "paymentableGenerator", strategy = "guid")
-	private Long  id;
+	@GenericGenerator(name="ALGZGenerator",strategy="guid")
+	@GeneratedValue(generator="ALGZGenerator")
+	private String  id;
 	
 	/**
 	 * 菜单文本
@@ -64,8 +64,8 @@ public class Menu {
 	/**
 	 * 菜单顺序
 	 */
-	@Column(name="ORDER")
-	private Integer order;
+	@Column(name="sequence")
+	private Integer sequence;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@LazyToOne(LazyToOneOption.PROXY)
@@ -77,10 +77,10 @@ public class Menu {
 	 @LazyCollection(LazyCollectionOption.FALSE)
 	private Set<Menu> menus;
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getText() {
@@ -119,12 +119,12 @@ public class Menu {
 	public void setParentMenu(Menu parentMenu) {
 		this.parentMenu = parentMenu;
 	}
-	public Integer getOrder() {
-		return order;
+	public Integer getSequence() {
+		return sequence;
 	}
-	public void setOrder(Integer order) {
-		this.order = order;
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
 	}
-	
+
 	
 }

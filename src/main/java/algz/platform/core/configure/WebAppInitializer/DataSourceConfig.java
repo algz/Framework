@@ -51,6 +51,35 @@ public class DataSourceConfig {
        return new PropertySourcesPlaceholderConfigurer();
     }
 	
+    /**
+     * 
+     * <proxool>
+  <alias>OraclePool</alias>
+  <driver-url>jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = sysware650)))</driver-url>
+  <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+  <driver-properties>
+      <property name="user" value="sysware320"/>
+      <property name="password" value="sysware320"/>
+      <property name="autoreconnect" value="true"/>
+  </driver-properties>
+    <maximum-connection-count>10</maximum-connection-count>
+    <minimum-connection-count>5</minimum-connection-count>
+    <house-keeping-sleep-time>90000</house-keeping-sleep-time>
+  <maximum-new-count>200</maximum-new-count>
+  <simultaneous-build-throttle>20</simultaneous-build-throttle>
+  <prototype-count>5</prototype-count>
+  <maximun-active-time>3600000</maximun-active-time>
+  <maximun-connection-lifetime>180000000</maximun-connection-lifetime>
+  <test-before-use>true</test-before-use>
+  <test-after-use>true</test-after-use>
+  <statistics>1m,15m,1d</statistics>
+  <statistics-log-level>INFO,DEBUG,WARN,ERROR,FATAL</statistics-log-level>
+  <!-- <trace>true</trace>-->
+  <house-keeping-test-sql>select sysdate from dual</house-keeping-test-sql>
+</proxool>
+     * @return
+     * @throws PropertyVetoException
+     */
 	@Bean
 	public DataSource dataSource() throws PropertyVetoException {
 //	      //JDBC连接
@@ -60,7 +89,7 @@ public class DataSourceConfig {
 		  dataSource.setJdbcUrl(url);
 		  dataSource.setUser(username);
 		  dataSource.setPassword(password);
-	  	
+		  
 	  	return dataSource;
 	  }
 	  

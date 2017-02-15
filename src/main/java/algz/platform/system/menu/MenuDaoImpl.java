@@ -29,7 +29,7 @@ public class MenuDaoImpl implements MenuDao {
 
 	@Override
 	public List<Menu> findAll() {
-        String sql = "SELECT * FROM algz_nav_menu m where m.parent_id=0 order by m.order";
+        String sql = "SELECT * FROM algz_nav_menu m where m.parent_id=0 order by m.sequence";
         return sf.getCurrentSession().createSQLQuery(sql).addEntity(Menu.class).list();
         //jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class));
 	}

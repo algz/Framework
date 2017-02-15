@@ -4,6 +4,10 @@
 <%@attribute name="header"  rtexprvalue="true" required="false" description="标题" %>
 <%@attribute name="action"  rtexprvalue="true" required="false" description="提交地址" %>
 
+<form class="form-horizontal" role="form" ${action==null?'':'action="'+action+'"' } method="post">
+	<jsp:doBody/>
+</form>
+<%-- 
 <div>
 	<h3 class="header smaller lighter purple">
 		${header==null?'':header }
@@ -17,3 +21,4 @@
 		</div><!-- /.col -->
 	</div>
 </div>
+--%>

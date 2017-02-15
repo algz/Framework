@@ -2,6 +2,7 @@ package algz.platform.core.shiro.authority.userManager;
 
 
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -23,22 +24,22 @@ import javax.persistence.Transient;
  * <p>Version: 1.0
  */
 @Entity
-@Table(name="SYS_USER")
+@Table(name="ALGZ_USER_PROFILE")
 public class User implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-//	@GeneratedValue(generator = "paymentableGenerator")
-//	@GenericGenerator(name = "paymentableGenerator", strategy = "guid")
-    private Long id; //编号
+	@GenericGenerator(name = "ALGZGenerator", strategy = "guid")
+	@GeneratedValue(generator="ALGZGenerator")
+    private String id; //编号
 	
-	@Column(name="organization_Id")
+	//@Column(name="organization_Id")
+	@Transient
     private Long organizationId; //所属公司
     private String username; //用户名
     private String password; //密码
     private String salt; //加密密码的盐
     private String photo; //用户图片
-    
+    @Transient
     private Boolean locked = Boolean.FALSE;
 
     @Transient
@@ -52,11 +53,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

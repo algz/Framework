@@ -44,7 +44,7 @@ public class UserDaoImpl implements UserDao {
 //            }
 //        }, keyHolder);
 
-        user.setId(keyHolder.getKey().longValue());
+        user.setId(keyHolder.getKey().longValue()+"");
         return user;
     }
 
