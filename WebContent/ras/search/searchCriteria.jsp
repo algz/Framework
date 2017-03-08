@@ -39,6 +39,7 @@
 				
 				<div class="widget-body">
 					<div class="widget-main">
+					<form id="tagForm">
 						<dl class="dl-horizontal " id="dt-list-1">
 						<c:forEach items="${searchTags }" var="searchTag">
 						
@@ -46,27 +47,55 @@
 							<dd>							
 							<c:choose>
 							    <c:when test="${searchTag.ui_type=='checkbox'}">
+							    <!-- 复选框 -->
 							    <div class="btn-group" data-toggle="buttons">
-									<c:forEach items="${searchTag.searchTags }" var="ctag">
-									<label class="btn btn-sm btn-white btn-info">
-										<input type="checkbox" value="1">${ctag.name }
+									<c:forEach items="${searchTag.searchTags }" var="ctag" varStatus="status">
+									<label id="${searchTag.enname }${status.index}" class="btn btn-sm btn-white btn-info">
+										<input type="checkbox" value="${ctag.name }">${ctag.name }
 									</label>
 									</c:forEach>
+									<input name="${searchTag.enname }" type="hidden" value=""/>
+									<script type="text/javascript">
+									$("label[id^='${searchTag.enname}']").on('click ',function(){
+										var jq=$(':hidden[name="${searchTag.enname }"]')
+										var val=jq.val();
+										if(this.className.indexOf('active')>0){
+											jq.val(val.replace(this.innerText.trim(),""));
+											if(jq.val().indexOf(",")==0){
+												jq.val(jq.val().substr(1));
+											}else if(jq.val().lastIndexOf(",")==jq.val().length-1){
+												jq.val(jq.val().substr(0,jq.val().length-1))
+											}
+										}else{
+											jq.val(val+(val!=""?",":"")+this.innerText.trim());
+										}
+										jq.val(jq.val().replace(",,",","));
+									})
+										
+									</script>
 								</div>
 							    </c:when>
-							    
 							    <c:when test="${searchTag.ui_type=='text'}">
+							    <!-- 文本框 -->
 							    <div class="btn-group" data-toggle="buttons">
 									<div >
-										<input class="col-xs-5 input-sm" type="text" >
+										<input name="${searchTag.enname }" class="col-xs-5 input-sm" type="text" >
 									</div>
 								</div>
 							    </c:when>
-							  
-							    <c:when test="${searchTag.ui_type=='region' }">
+							    <c:when test="${searchTag.ui_type=='numberRegion' }">
+							    <!-- 区域框 -->
 							    <div class="form-inline">
-									<input class="input-small" type="text" >
-									- <input class="input-small" type="text" >
+									<input id="${searchTag.enname }start" class="input-small" type="text" >
+									- <input id="${searchTag.enname }end" class="input-small" type="text" >
+									<input name="${searchTag.enname }" type="hidden"/>
+									<script type="text/javascript">
+										$("input[id^='${searchTag.enname}']").on('change',function(){
+											var val=$("#${searchTag.enname }start").val()+"-"+$("#${searchTag.enname }end").val()
+											$(':hidden[name="${searchTag.enname }"]').val(val);
+										})
+										
+									</script>
 								</div>
 							    </c:when>
 							  
@@ -79,13 +108,17 @@
 						</c:forEach>
 						    <dt><span class="label">${searchTag.name}</span></dt>
 							<dd>
-								<div class="col-sm-offset-11">
+								<div class="col-sm-offset-10">
 									<div class="btn-group" data-toggle="buttons">
 										<button id='submitBtn' class="btn btn-primary">提交</button>
+									</div>
+									<div class="btn-group" data-toggle="buttons">
+										<a class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
 									</div>
 								</div>
 							</dd>
 						</dl>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -105,6 +138,7 @@
 						<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 						</table>
 					</div>
+				
 				</div>
 			</div>
 

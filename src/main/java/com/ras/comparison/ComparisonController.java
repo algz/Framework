@@ -3,6 +3,9 @@ package com.ras.comparison;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ras.index.Page;
 import com.ras.search.SearchTagService;
+import com.ras.tool.CommonTool;
+import com.ras.tool.ReturnVo;
+
 import net.sf.json.JSONArray;
 
 
@@ -26,8 +32,8 @@ import net.sf.json.JSONArray;
 @RequestMapping(value="/ras/comparison")
 public class ComparisonController {
 	
-	//@Autowired
-	//private SearchTagService searchTagService;
+	@Autowired
+	private ComparisonService service;
 	
 //	@Autowired
 //	private ExcelService excelService;
@@ -35,8 +41,6 @@ public class ComparisonController {
 
     @RequestMapping(value={"","/"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public ModelAndView  ComparisonIndex() {
-		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-//    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
     	Map<String, Object> map=new HashMap<String, Object>();
     	
     	Page page=new Page();
@@ -47,6 +51,40 @@ public class ComparisonController {
     	//map.put("searchTags", searchTagService.findAll());
     	
         return new ModelAndView("ras/comparison/comparison",map);
+    }
+    
+    @RequestMapping(value={"/findmodelgird"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
+    public void  findModelGird(ComparisonVo vo,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String, Object> map=new HashMap<String, Object>();
+    	String modelName=request.getParameter("modelName");
+    	vo.setData(service.findModelGird(modelName));
+    	CommonTool.writeJSONToPage(response,vo );
+    }
+    
+    
+    @RequestMapping(value={"","/comparisondetail"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
+    public ModelAndView  comparisonDetail(HttpServletRequest request,HttpServletResponse response) {
+    	Map<String, Object> map=new HashMap<String, Object>();
+    	String modelName=request.getParameter("modelName");
+    	map.put("modelName", modelName);
+    	Page page=new Page();
+    	page.setHeader_h1("对比");
+    	page.setHeader_small(modelName);
+    	map.put("page", page);
+    	
+    	map.put("models", modelName.split(","));
+    	
+        return new ModelAndView("ras/comparison/comparisonDetail",map);
+    }
+    
+    @RequestMapping(value={"/findcomparisondetailgrid"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
+    public void  findComparisonDetailGrid(ComparisonVo vo,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String, Object> map=new HashMap<String, Object>();
+    	String modelName=request.getParameter("modelName");
+    	if(modelName!=null){
+    		vo.setData(service.findComparisonDetailGrid(modelName.split(",")));
+    	}
+    	CommonTool.writeJSONToPage(response,vo );
     }
     
 }

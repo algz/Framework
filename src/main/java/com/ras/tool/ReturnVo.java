@@ -10,7 +10,7 @@ public class ReturnVo<T> {
 	
 	private Integer recordsFiltered;
 	
-	private List<T> data;
+	private  List<T> data;
 
 	
 	public Integer getDraw() {
@@ -41,7 +41,7 @@ public class ReturnVo<T> {
 		return data;
 	}
 
-	public void setData(List data) {
+	public final void setData(List data) {
 		this.data = data;
 	}
 	

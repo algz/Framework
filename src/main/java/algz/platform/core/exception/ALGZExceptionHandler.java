@@ -1,5 +1,6 @@
 package algz.platform.core.exception;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +35,14 @@ public class ALGZExceptionHandler implements HandlerExceptionResolver {
 //            model.addObject("exception", "UnauthenticatedException.没有访问权限。");
 //            model.setViewName("unauthorized");
         	return new ModelAndView("login","error","没有访问权限");  
-        }/*else if(ex instanceof ParameterException) {  
+        }else if(e instanceof IOException){
+        	return new ModelAndView("error","error", model);  
+        }else if(e instanceof NullPointerException){
+        	return new ModelAndView("error","error", model); 
+        }else{
+        	//return new ModelAndView("error","error", model); 
+        }
+        /*else if(ex instanceof ParameterException) {  
             return new ModelAndView("parameter_error", model);  
         } else {  
             return new ModelAndView("error", model);  

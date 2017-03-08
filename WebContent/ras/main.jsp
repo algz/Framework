@@ -14,7 +14,9 @@
 <html lang="zh">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="utf-8" />
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		
 		<title><sitemesh:write property='title' /></title>
 
 		<meta name="description" content="top menu &amp; navigation" />

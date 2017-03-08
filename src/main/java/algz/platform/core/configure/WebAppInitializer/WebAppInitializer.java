@@ -57,7 +57,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		sceMap.put("forceEncoding", "true"); 
 		
 		scefilter.setInitParameters(sceMap);
-		scefilter.addMappingForUrlPatterns(null, true, "/"); 
+		scefilter.addMappingForUrlPatterns(null, true, "/*");  //不能设置为"/",不然不会进行匹配,无效指定编码.
 		/**设置servlet编码结束*/
       
 	  /**  配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->  

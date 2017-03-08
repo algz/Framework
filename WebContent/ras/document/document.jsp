@@ -40,14 +40,11 @@
 					<!-- <div class="table-responsive"> -->
 					<div class="btn-group">
 						<a class="btn btn-sm" type="button" href="./addmodel">新增</a>
-						<button class="btn btn-sm" type="button">修改</button>
-						<button class="btn btn-sm" type="button">删除</button>
+						<button id="modifyModel" class="btn btn-sm" type="button">修改</button>
+						<button id="delModel" class="btn btn-sm" type="button">删除</button>
 					</div>
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
-					
-
-										
 						<table id="table-model" class="table table-striped table-bordered table-hover">
 						</table>
 					</div>
@@ -64,9 +61,9 @@
 
 					<!-- <div class="table-responsive"> -->
 					<div class="btn-group">
-						<a class="btn btn-sm" type="button" href="./dataedit">新增</a>
-						<button class="btn btn-sm" type="button">修改</button>
-						<button class="btn btn-sm" type="button">删除</button>
+						<button id="addModelparam" class="btn btn-sm" type="button">新增</button>
+						<button id="modifyModelparam" class="btn btn-sm" type="button">修改</button>
+						<button id="delModelparam" class="btn btn-sm" type="button">删除</button>
 					</div>
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
@@ -79,12 +76,13 @@
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
-		
+
 		<plugin_js>
 			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
 			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
+			
+			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
 		</plugin_js>
-		<script type="text/javascript" src="document.js"></script>		
-
+		<script type="text/javascript" src="document.js"></script>	
 	</body>
 </html>

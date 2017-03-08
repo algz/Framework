@@ -3,6 +3,7 @@ package com.ras.search;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,11 @@ public class SearchTagServiceImpl implements SearchTagService {
 	@Transactional
 	public void save(SearchTag searchTag){
 		dao.save(searchTag);
+	}
+
+	@Override
+	public Map<String, String> searchSummarize(String overviewID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

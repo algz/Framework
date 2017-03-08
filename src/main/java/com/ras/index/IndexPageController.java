@@ -43,16 +43,13 @@ import net.sf.json.JSONObject;
 public class IndexPageController {
 	
 	@Autowired
-	private MenuService menuService;
-	
-	@Autowired
-	private SearchTagService searchTagService;
+	private IndexPageService service;
 	
 //	@Autowired
 //	private ExcelService excelService;
 	
     @RequestMapping(value={"/index","/"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public ModelAndView  index() {
+    public ModelAndView  index(HttpServletRequest request,HttpServletResponse response) {
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
 //    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
     	Map<String, Object> map=new HashMap<String, Object>();
@@ -70,39 +67,21 @@ public class IndexPageController {
 //    	navbar.setIsMessage("1");
 //    	map.put("navbar", navbar);
     	
-    	User user=new User();
-    	user.setUsername("algz");
-    	map.put("user", user);
+//    	User user=new User();
+//    	user.setUsername("algz");
+//    	map.put("user", user);
     	
 //    	Map<String, Object> searchParam=new HashMap<String, Object>();
-    	List<SearchTag> l=searchTagService.findAllParent();
-    	map.put("searchTags", searchTagService.findAllParent());
+    	String modelname=request.getParameter("modelName");
+    	request.setAttribute("modelName", modelname);
+    	
+    	if(modelname!=null){
+        	List list=service.searchIndexPage(modelname);
+            map.put("searchs", list);
+    	}
+
     	
         return new ModelAndView("ras/index",map);
     }
     
-    @RequestMapping(value={"","/query"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public ModelAndView  query() {
-		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-//    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
-    	Map<String, Object> map=new HashMap<String, Object>();
-    	
-    	User user=new User();
-    	user.setUsername("algz");
-    	map.put("user", user);
-    	
-    	map.put("searchTags", searchTagService.findAllParent());
-    	
-        return new ModelAndView("ras/query",map);
-    }
-    
-    
-//    @RequestMapping(value="/login") //@RequestMapping 注解的方法才是真正处理请求的处理器
-//    public ModelAndView  login() {
-//		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-//    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
-//    	Map<String, Object> map=new HashMap();
-//    	map.put("menus", obj);
-//        return new ModelAndView("ras/login",map);
-//    }
 }

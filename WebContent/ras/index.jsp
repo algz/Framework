@@ -32,13 +32,15 @@
 			
 
 			<div class="widget-main">
-					<form class="form-search">
+					<form id="searchForm" class="form-search" >
 						<div class="row">
 							<div class="col-xs-12 col-sm-8">
 								<div class="input-group">
-									<input class="form-control search-query" type="text" placeholder="飞机名称">
+									<input name="modelName" class="form-control search-query" 
+									type="text" placeholder="飞机名称" 
+									value="${modelName }">
 									<span class="input-group-btn">
-										<button class="btn btn-purple btn-sm" type="button">
+										<button id="submitBtn" class="btn btn-purple btn-sm" type="button">
 											查询一下
 											<i class="icon-search icon-on-right bigger-110"></i>
 										</button>
@@ -51,7 +53,8 @@
 
 			
 			<div class="hr hr8 hr-dotted"></div>
-
+<c:if test="${searchs!=null}">
+   <c:forEach var="item"   items="${searchs}" >
 			<div class="row">
 				<div class="widget-box transparent col-xs-3">
 	
@@ -66,7 +69,7 @@
 									</div>
 	
 									<div class="grid2">
-									<p><p>F-15<p>战斗机<p>美国<p>洛克西德马丁
+									<p><p>${item.MODELNAME}<p>${item.AIRCRAFTTYPE}<p>美国<p>洛克西德马丁
 									</div>
 								</div>
 								
@@ -76,13 +79,19 @@
 						
 				</div>
 			</div>
+</c:forEach>
+</c:if>
 			
 
 					
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
-
+<script type="text/javascript">
+$('#submitBtn').click(function(){
+	$('#searchForm').submit();
+})
+</script>
 
 
 	</body>

@@ -38,9 +38,10 @@
 					<div class="col-xs-12">
 						<!-- PAGE CONTENT BEGINS -->
 						<form class="form-horizontal" role="form" action="./savemodel" method="post">
-							<form:form-group id="form-model" label="机型名"/>
-							<form:form-group id="form-cname" label="中文名称"/>
-							<form:form-group id="form-ename" label="英文名称"/>
+							<input name="overviewID" type="hidden" value="${model.overviewID }"/>
+							<form:form-group id="modelName" label="机型名" value="${model.modelName }"/>
+							<form:form-group id="modelCname" label="中文名称" value="${model.modelCname }"/>
+							<form:form-group id="modelEname" label="英文名称" value="${model.modelEname }"/>
 							<form:form-action >
 								<form:form-button buttonType="submit" id="submit" label="提交" icon="fa-check" buttonClass="btn-info"/>
 								<form:form-button id="canle" label="取消" url="./"/>
@@ -54,7 +55,7 @@
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
-		<script type="text/javascript" src="addModel.js"></script>		
+		<!--<script type="text/javascript" src="addModel.js"></script>	-->	
 
 	</body>
 </html>

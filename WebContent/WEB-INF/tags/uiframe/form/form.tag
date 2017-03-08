@@ -3,8 +3,9 @@
 <%@attribute name="id" rtexprvalue="true" required="false" description="ID" %>
 <%@attribute name="header"  rtexprvalue="true" required="false" description="标题" %>
 <%@attribute name="action"  rtexprvalue="true" required="false" description="提交地址" %>
+<%@attribute name="submitType"  rtexprvalue="true" required="false" description="提交方式:post,get"%>
 
-<form class="form-horizontal" role="form" ${action==null?'':'action="'+action+'"' } method="post">
+<form class="form-horizontal" role="form" <%=action==null?"":"action='"+action+"'"%> method="post">
 	<jsp:doBody/>
 </form>
 <%-- 

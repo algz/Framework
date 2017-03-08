@@ -63,7 +63,7 @@
 						<div class="tab-content">
 						
 							<div id="param" class="tab-pane fade in active">
-								<jsp:include page="./searchSummarize_param.jsp"></jsp:include>
+								<jsp:include page="../document/addModelParam_param.jsp"></jsp:include>
 							</div>
 							<div id="picture" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_picture.jsp"></jsp:include>

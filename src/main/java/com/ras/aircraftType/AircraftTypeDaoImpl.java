@@ -14,7 +14,7 @@ public class AircraftTypeDaoImpl implements AircraftTypeDao {
 	
 	@Override
 	public List<AircraftType> findAll() {
-		String sql="select * from ras_aircraft_type";
+		String sql="select * from RAS_AIRCRAFTKIND";
 		return sf.getCurrentSession().createSQLQuery(sql).addEntity(AircraftType.class).list();
 	}
 

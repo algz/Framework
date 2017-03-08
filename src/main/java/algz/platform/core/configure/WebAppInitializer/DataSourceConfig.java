@@ -31,6 +31,9 @@ public class DataSourceConfig {
 	@Value("${org.hibernate.dialect}")
 	private String dialect;
 	
+	@Value("${org.hibernate.show_sql}")
+	private String show_sql;
+	
 	@Value("${jdbc.driverClass}")
 	private String driverClass;
 	
@@ -102,7 +105,7 @@ public class DataSourceConfig {
 //	    properties.put("hibernate.connection.driver_class", "org.sqlite.JDBC");
 //	    properties.put("hibernate.dialect", "algz.platform.core.configure.database.dialect.SQLiteDialect");
 	   // properties.setProperty("hibernate.max_fetch_depth", "3");
-	    //properties.setProperty("hibernate.show_sql", "false");
+	    properties.setProperty("hibernate.show_sql", show_sql); //是否显示SQL语句
 	    //    properties.put("hibernate.connection.url", "jdbc:sqlite:c:/sample.db");
 //	    properties.put("hibernate.connection.username", "");
 //	    properties.put("hibernate.connection.password", "");
