@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface SearchTagDao {
     
+	public void findAll(SearchTagVo<SearchTag> vo);
+	
 	public List<SearchTag> findAllParent();
 	
 	public List<SearchTag> findAllByIds(String[] ids);

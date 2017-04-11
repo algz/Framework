@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -73,8 +74,9 @@ public class Menu {
 	 private Menu parentMenu;
 	
 	//@Transient
+	@OrderBy(value = "sequence asc") //OrderBy参数值要对应Bean中的属性名
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "parentMenu")
-	 @LazyCollection(LazyCollectionOption.FALSE)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private Set<Menu> menus;
 	
 	public String getId() {

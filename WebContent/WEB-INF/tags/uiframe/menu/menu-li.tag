@@ -1,7 +1,7 @@
 <%@tag pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="menu" tagdir="/WEB-INF/tags/uiframe/menu" %> 
-
+ <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 
 	String path = request.getContextPath(); //项目名称  
@@ -13,9 +13,9 @@
 <c:choose>
 <c:when test="${menu.menus.size()==0 }">
 	<li class="${menu.active=='1'?'active':''} ${hover} ">
-		<a href="<%=path %>${menu.url }" >
+		<a href="<%=path %>${fn:split(menu.url, ',')[0]}" >
 			<i class="menu-icon fa ${menu.icon }"></i>
-			<span class="menu-text"> ${menu.text} </span>
+			<span class="menu-text"> ${menu.text }</span>
 		</a>
 		<b class="arrow"></b>
 
@@ -27,7 +27,7 @@
 		<a href="#" class="dropdown-toggle" >
 			<i class="menu-icon fa ${menu.icon }"></i>
 			<span class="menu-text"> ${menu.text} </span>
-			<b class="arrow fa fa-angle-down"></b>
+			<i class="ace-icon fa fa-angle-down bigger-110"></i>
 		</a>
 		<b class="arrow"></b>
 		<menu:menu-ul menus="${menu.menus }" hover="${hover }"/>

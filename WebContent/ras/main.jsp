@@ -13,14 +13,15 @@
 <!DOCTYPE html>
 <html lang="zh">
 	<head>
+		<title><sitemesh:write property='title' /></title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
-		<title><sitemesh:write property='title' /></title>
+		
 
 		<meta name="description" content="top menu &amp; navigation" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 		<jsp:include  page="common/common_css.jsp">
 			<jsp:param value="<sitemesh:write property='plugin_css' />" name="plugins_css"/>
@@ -49,7 +50,7 @@
 
 		
 
-		<!-- inline scripts related to this page -->
+		<!-- inline scripts related to this page 
 		<script type="text/javascript">
 			jQuery(function($) {
 			 var $sidebar = $('.sidebar').eq(0);
@@ -106,6 +107,6 @@
 			
 			});
 		</script>
-		
+		-->
 	</body>
 </html>

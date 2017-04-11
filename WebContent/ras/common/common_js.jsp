@@ -5,8 +5,8 @@
 %>
 		<!-- inline styles related to this page -->
 
-		<!-- ace settings handler -->
-		<script src="<%=basePath%>ras/common/js/ace-extra.js"></script>
+		<!-- ace settings handler 
+		<script src="<%=basePath%>ras/common/js/ace-extra.js"></script>-->
 
 		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
@@ -43,17 +43,17 @@
 		<!-- plugins -->
         ${param.plugins_js }
 		
-<!-- 	<script src="<%=basePath%>ras/common/js/jquery-ui.custom.js"></script>
+<%-- 	<script src="<%=basePath%>ras/common/js/jquery-ui.custom.js"></script>
 		<script src="<%=basePath%>ras/common/js/jquery.ui.touch-punch.js"></script>
 		<script src="<%=basePath%>ras/common/js/jquery.easypiechart.js"></script>
 		<script src="<%=basePath%>ras/common/js/jquery.sparkline.js"></script>
 		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.js"></script>
 		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.pie.js"></script>
-		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.resize.js"></script>  --> 	
+		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.resize.js"></script>   --%>	
 
 
 
-		<!-- ace scripts -->
+		<%--  ace scripts
 		<script src="<%=basePath%>ras/common/js/ace/elements.scroller.js"></script>
 		<script src="<%=basePath%>ras/common/js/ace/elements.colorpicker.js"></script>
 		<script src="<%=basePath%>ras/common/js/ace/elements.fileinput.js"></script>
@@ -83,5 +83,5 @@
 		<script src="<%=basePath%>ras/common/docs/assets/js/language/html.js"></script>
 		<script src="<%=basePath%>ras/common/docs/assets/js/language/css.js"></script>
 		<script src="<%=basePath%>ras/common/docs/assets/js/language/javascript.js"></script>
-		
+		 --%>
 

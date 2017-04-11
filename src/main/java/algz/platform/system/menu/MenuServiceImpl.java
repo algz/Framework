@@ -35,13 +35,38 @@ public class MenuServiceImpl implements MenuService {
      */
     public List<Menu> findAll(String requestPath) {
     	List<Menu> menuList=findAll();
-    	PathMatcher matcher = new AntPathMatcher();  
-    	for(Menu m:menuList){
-    		if(m.getUrl()!=null&&matcher.match(m.getUrl()+"**", requestPath)){
-    			m.setActive("1");
-    			break;
+    	setMenuActive(menuList,requestPath);
+//    	for(Menu m:menuList){
+//    		if(setMenuActive(menuList,requestPath)){
+//    			m.setActive("1");
+//    		}
+//    		if(m.getUrl()!=null&&matcher.match(m.getUrl()+"**", requestPath)){
+//    			m.setActive("1");
+//    			break;
+//    		}
+//    	}
+        return menuList;
+    }
+    
+    private boolean setMenuActive(Collection<Menu> menus,String requestPath){
+    	PathMatcher matcher = new AntPathMatcher(); 
+    	for(Menu m:menus){
+    		if(m.getMenus().size()!=0){
+    			if(setMenuActive(m.getMenus(),requestPath)){
+    				m.setActive("1");
+    				return true;
+    			}
+    		}else if(m.getUrl()!=null){ 
+    			String[] url=m.getUrl().split(",");
+    			for(String u:url){
+        			if(url.equals(requestPath)||matcher.match(u+"**", requestPath)){//matcher.match(u+"**", requestPath)
+        				m.setActive("1");
+        				return true;
+        			}
+    			}
+
     		}
     	}
-        return menuList;
+    	return false;
     }
 }

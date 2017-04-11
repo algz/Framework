@@ -40,6 +40,7 @@ strBackUrl=httpRequest.getAttribute("javax.servlet.include.request_uri")+"111";
 				</script>
 
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				    <!-- 屏幕大窗口状态 -->
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<button class="btn btn-success">
 							<i class="ace-icon fa fa-signal"></i>
@@ -60,7 +61,7 @@ strBackUrl=httpRequest.getAttribute("javax.servlet.include.request_uri")+"111";
 
 						<!-- /section:basics/sidebar.layout.shortcuts -->
 					</div>
-
+					<!-- 屏幕小窗口状态 -->
 					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
 						<span class="btn btn-success"></span>
 

@@ -29,4 +29,14 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 		return dao.findComparisonDetailGrid(modelNames);
 	}
 
+	@Override
+	public List<?> findModelForTypeahead(String modelName) {
+		return dao.findModelForTypeahead(modelName);
+	}
+
+	@Override
+	public List<?> analyzeChart(String[] modelNames, String[] axis) {
+		return dao.analyzeChart(modelNames, axis);
+	}
+
 }

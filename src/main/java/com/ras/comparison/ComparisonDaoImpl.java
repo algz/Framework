@@ -25,7 +25,8 @@ public class ComparisonDaoImpl implements ComparisonDao {
 										  .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
 										  .list();
 		if(mapList.size()!=0){
-			sql="select u.comments,u.column_name from user_col_comments u where u.table_name='AIRCRAFTALLPARAM' and u.comments is not null";
+			//sql="select u.comments,u.column_name from user_col_comments u where u.table_name='AIRCRAFTALLPARAM' and u.comments is not null";
+			sql="SELECT TAG.NAME,TAG.ENNAME FROM RAS_SEARCH_TAG TAG where tag.parent_id!=0 and tag.enname is not null";
 			List<Object[]> colList=sf.getCurrentSession().createSQLQuery(sql).list();
 			for(Object[] objs:colList){
 				String[] arr=new String[mapList.size()+1];
@@ -34,8 +35,9 @@ public class ComparisonDaoImpl implements ComparisonDao {
 				for(int i=0;i<mapList.size();i++){
 					for(Iterator<String> it=mapList.get(i).keySet().iterator();it.hasNext();){
 						String s=it.next();
-						if(objs[1].toString().equals(s)){
-							arr[i+1]=mapList.get(i).get(s);
+						if(objs[1].toString().toUpperCase().equals(s)){
+							Object obj=mapList.get(i).get(s);
+							arr[i+1]=obj.toString();
 							break;
 						}
 					}

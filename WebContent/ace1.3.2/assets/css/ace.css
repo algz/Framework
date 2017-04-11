@@ -5331,7 +5331,7 @@ body.mob-safari .sidebar.sidebar-fixed {
   font-size: 12px;
 }
 button.btn:active {
-  top: 1px;
+  /*top: 1px;*/
 }
 .btn,
 .btn-default,
@@ -6431,8 +6431,8 @@ fieldset[disabled] .btn-white.btn-grey.active {
 }
 .btn.disabled:active,
 .btn[disabled]:active {
-  top: 0;
-  left: 0;
+  /*top: 0;
+  left: 0;*/
 }
 .btn.active {
   color: #efe5b5;
@@ -17323,7 +17323,7 @@ input.tt-hint,
   background-color: #FFF !important;
   color: #B0B0B0 !important;
 }
-.tt-dropdown-menu {
+.tt-dropdown-menu,.tt-menu {
   text-align: left;
   position: absolute;
   left: 0 !important;
@@ -17343,6 +17343,11 @@ input.tt-hint,
   font-size: 16px;
   line-height: 24px;
 }
+.tt-suggestion:hover {
+  cursor: pointer;
+  color: #fff;
+  background-color: #0097cf;
+}
 .tt-suggestion.tt-cursor {
   color: #FFF;
   background-color: #4F99C6;
@@ -17351,7 +17356,7 @@ input.tt-hint,
 .tt-suggestion p {
   margin: 0;
 }
-input.typeahead.scrollable ~ .tt-dropdown-menu {
+input.typeahead.scrollable ~ .tt-dropdown-menu,tt-menu {
   max-height: 200px;
   overflow-y: auto;
 }

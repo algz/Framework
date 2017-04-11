@@ -69,7 +69,8 @@
 									</div>
 	
 									<div class="grid2">
-									<p><p>${item.MODELNAME}<p>${item.AIRCRAFTTYPE}<p>美国<p>洛克西德马丁
+									<p><p>
+									<a href="../search/searchsummarize?overviewID=${item.OVERVIEWID }">${item.MODELNAME}</a><p>${item.AIRCRAFTTYPE}<p>${item.PRODUCER_COUNTRIES }<p>${item.MANUFACTURER }
 									</div>
 								</div>
 								

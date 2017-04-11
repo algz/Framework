@@ -12,4 +12,5 @@ public interface SearchTagService {
 	public void save(SearchTag searchTag);
 	
 	public Map<String,String> searchSummarize(String overviewID);
+	
 }

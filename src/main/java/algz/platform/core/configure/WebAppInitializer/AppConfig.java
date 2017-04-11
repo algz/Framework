@@ -1,17 +1,26 @@
 package algz.platform.core.configure.WebAppInitializer;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
+import com.ras.tool.CommonTool;
 
 import algz.platform.core.exception.ALGZExceptionHandler;
 
@@ -45,12 +54,14 @@ public class AppConfig extends WebMvcConfigurerAdapter {
   /**
    * Resolve logical view names to .jsp resource in the /WEB-INF/views directory
    * 解析所有视图为前缀(/WEB-INF/)+视图名称+后缀(.jsp)的文件.
+   * 
    springmvc XML:
+   	   <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->  
        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix">WEB-INF/views/</property>
         <property name="suffix">.jsp</property>
       </bean>
-   */
+   
   @Bean
   public ViewResolver viewResolver(){
 //	  logger.info("ViewResolver");  
@@ -58,15 +69,26 @@ public class AppConfig extends WebMvcConfigurerAdapter {
       resolver.setPrefix("/");//("/WEB-INF/");
       resolver.setSuffix(".jsp");
       return resolver;
-  }
-  
+  }*/
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setViewClass(JstlView.class);
+		viewResolver.setPrefix("/");//("/WEB-INF/views/");
+		viewResolver.setSuffix(".jsp");
+		registry.viewResolver(viewResolver);
+	}
+	
+	
   /**
    * 添加静态资源不拦截.即se7en目录下的文件都不拦截.
    * 由于类继续WebMvcConfigurerAdapter,所以不用定义为Bean
    * <mvc:resources mapping="/se7en/**" location="/se7en/" /> 
    * 
    */
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //	  logger.info("addResourceHandlers"); 
 	  
 	  /*
@@ -104,7 +126,24 @@ public class AppConfig extends WebMvcConfigurerAdapter {
       
   }
   
-
+	/**
+	 *  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">  
+        <property name="basename">  
+            <value>messages</value>  
+        	</property>  
+    	</bean>  
+	 * 
+	 * src/main/resources/messages.properties
+	 * @return
+	 
+	@Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("messages");
+		return messageSource;
+	}
+*/
+	
   /**
    * <mvc:default-servlet-handler /> 
    * 在springMVC-servlet.xml中配置<mvc:default-servlet-handler />后，
@@ -140,6 +179,18 @@ public class AppConfig extends WebMvcConfigurerAdapter {
               .mediaType("js", MediaType.ALL)
               .mediaType("json", MediaType.APPLICATION_JSON);  
   }  
+  
+  
+  /**
+   * <!-- 支持上传文件 -->  
+   * <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+   * Servlet3.0及以后，可以用这个StandardServletMultipartResolver来处理上传文件
+   * 而3.0之前的版本通常用的是CommonsMultipartResolver来处理 
+   */
+  @Bean
+  public MultipartResolver multipartResolver(){
+	return new StandardServletMultipartResolver();
+  }
   
   
 //	@Bean

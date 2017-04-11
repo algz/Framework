@@ -25,12 +25,15 @@
 		</jsp:include>
 		
 		<jsp:include  page="../common/common_js.jsp"/> 
+	
 	</head>
 	
 	<body >
 	
 	<!-- 需加载到CSS的插件 -->
-	<plugin_css><link rel="stylesheet" href="<%=basePath%>ras/common/css/ui.jqgrid.css " /></plugin_css>
+	<plugin_css>
+	
+	</plugin_css>
 	
 		<page:page page="${page }">
 		
@@ -41,8 +44,6 @@
 					<div class="table-header">
 						参数：
 					</div>
-					<div>
-
 					<div class="row">
 						<div class="col-xs-12">
 							<table id="sample-table-1" class="table table-striped table-bordered table-hover">
@@ -50,64 +51,36 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td>
+										<td width="150">
 											<a href="#">机型</a>
 										</td>
-										<td class="hidden-480">
-											<span id="modelName" class="label label-sm label-warning">Expiring</span>
-										</td>
-
-										<td>
-											<div class="hidden-sm hidden-xs btn-group">
-
-												<button class="btn btn-xs btn-info">
-													<i class="ace-icon fa fa-pencil bigger-120"></i>
-												</button>
-
-											</div>
-
+										<td class="hidden1-480">
+											<input name="modelName" type="hidden">
+											<input id="modelNameBtn" class="typeahead scrollable" type="text" placeholder="机型名称" />
+											<span id="modelNameContent"></span>
 										</td>
 									</tr>
 
 									<tr>
-
 										<td>
 											<a href="#">X轴</a>
 										</td>
-
-										<td class="hidden-480">
-											<span id="xAxis" class="label label-sm label-success">Registered</span>
-										</td>
-
-										<td>
-											<div class="hidden-sm hidden-xs btn-group">
-
-												<button class="btn btn-xs btn-info">
-													<i class="ace-icon fa fa-pencil bigger-120"></i>
-												</button>
-
-											</div>
-
+										<td class="hidden1-480">
+											<input name="xAxis" type="hidden">
+											<input id="xAxisTxt" disabled="disabled" type="text" placeholder="" />
+											<button id="xAxisBtn" class="btn">选择</button>
 										</td>
 									</tr>
 
 									<tr>
-
 										<td>
 											<a href="#">Y轴</a>
 										</td>
-
-										<td class="hidden-480">
-											<span id="yAxis" class="label label-sm label-warning">Expiring</span>
-										</td>
-
-										<td>
-											<div class="hidden-sm hidden-xs btn-group">
-												<button class="btn btn-xs btn-info">
-													<i class="ace-icon fa fa-pencil bigger-120"></i>
-												</button>
-											</div>
-
+										<td class="hidden1-480">
+											<input name="yAxis" type="hidden">
+											<input id="yAxisTxt" disabled="disabled" type="text" placeholder="" />
+											<button id="yAxisBtn" class="btn">选择</button>
+											<!-- <span class="label label-sm label-warning">Expiring</span> -->
 										</td>
 									</tr>
 
@@ -115,8 +88,6 @@
 							</table>
 						</div><!-- /.span -->
 					</div><!-- /.row -->
-
-					</div>
 				</div>
 			</div>
 			
@@ -129,134 +100,57 @@
 					</div>
 				</div>
 			</div>
-<div class="hr hr8 hr-dotted"></div>
+			<div class="hr hr8 hr-dotted"></div>
 			<div id="highchart" ></div>
 
-<div id="modal-table" class="modal fade" tabindex="-1">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header no-padding">
-												<div class="table-header">
-													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-														<span class="white">&times;</span>
-													</button>
-													Results for "Latest Registered Domains
-												</div>
-											</div>
+<div id="modal-form" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">        
+            	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            	<span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title">...</h4>
+        	</div>
+            <div class="modal-body">            
+          		<dl class="dl-horizontal " id="dt-list-1">
+				<c:forEach items="${searchTags }" var="searchTag">
+				
+				<dt><span class="label" data_id="${searchTag.id }">${searchTag.name}</span></dt>
+					<dd>
+						<div class="btn-group" data-toggle="buttons">
+						<c:forEach items="${searchTag.searchTags }" var="ctag">
+							<label class="btn btn-sm btn-white btn-info">
+								<input type="checkbox" name="${ctag.enname }" value="${ctag.id }" ><span>${ctag.name }</span>
+							</label>
+						</c:forEach>
+						</div>
+					</dd>
+					<p/>
+				</c:forEach>
+				</dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+    			<button id="confirmBtn" type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-											<div class="modal-body no-padding">
-												<table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
-													<thead>
-														<tr>
-															<th>Domain</th>
-															<th>Price</th>
-															<th>Clicks</th>
-
-															<th>
-																<i class="ace-icon fa fa-clock-o bigger-110"></i>
-																Update
-															</th>
-														</tr>
-													</thead>
-
-													<tbody>
-														<tr>
-															<td>
-																<a href="#">ace.com</a>
-															</td>
-															<td>$45</td>
-															<td>3,330</td>
-															<td>Feb 12</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">base.com</a>
-															</td>
-															<td>$35</td>
-															<td>2,595</td>
-															<td>Feb 18</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">max.com</a>
-															</td>
-															<td>$60</td>
-															<td>4,400</td>
-															<td>Mar 11</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">best.com</a>
-															</td>
-															<td>$75</td>
-															<td>6,500</td>
-															<td>Apr 03</td>
-														</tr>
-
-														<tr>
-															<td>
-																<a href="#">pro.com</a>
-															</td>
-															<td>$55</td>
-															<td>4,250</td>
-															<td>Jan 21</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-
-											<div class="modal-footer no-margin-top">
-												<button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
-													<i class="ace-icon fa fa-times"></i>
-													Close
-												</button>
-
-												<ul class="pagination pull-right no-margin">
-													<li class="prev disabled">
-														<a href="#">
-															<i class="ace-icon fa fa-angle-double-left"></i>
-														</a>
-													</li>
-
-													<li class="active">
-														<a href="#">1</a>
-													</li>
-
-													<li>
-														<a href="#">2</a>
-													</li>
-
-													<li>
-														<a href="#">3</a>
-													</li>
-
-													<li class="next">
-														<a href="#">
-															<i class="ace-icon fa fa-angle-double-right"></i>
-														</a>
-													</li>
-												</ul>
-											</div>
-										</div><!-- /.modal-content -->
-									</div><!-- /.modal-dialog -->
-								</div><!-- PAGE CONTENT ENDS -->
-							
-			
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		<plugin_js>
-			<!-- dataTable.js -->
+			<!-- dataTable.js 表格-->
 			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
 			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
+			<!-- highcharts.js 图表-->
 			<script src="<%=basePath%>ras/common/js/highcharts/highcharts.js"></script>
 
+			<script src="<%=basePath%>ras/common/js/typeahead.jquery.js"></script>
+			
 		</plugin_js>
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript" src="analyze.js"></script>
 
-		
 	</body>
 </html>

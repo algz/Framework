@@ -31,7 +31,7 @@ ${param.plugins_css }
 		  <link rel="stylesheet" href="<%=basePath%>ras/common/css/ace-ie.css" />
 		<![endif]-->
 
-<!-- the following scripts are used in demo only for onpage help and you don't need them -->
+<!-- the following scripts are used in demo only for onpage help and you don't need them 
 <link rel="stylesheet" href="<%=basePath%>ras/common/css/ace.onpage-help.css" />
-<link rel="stylesheet" href="<%=basePath%>ras/common/docs/assets/js/themes/sunburst.css" />
+<link rel="stylesheet" href="<%=basePath%>ras/common/docs/assets/js/themes/sunburst.css" />-->
 

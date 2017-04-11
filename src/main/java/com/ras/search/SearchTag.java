@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
@@ -50,17 +51,27 @@ WARN: HHH000113: GUID identifier generated: 55E39EEA498647AD80CB79A5EF78EC9D
 	@Column(name="UI_VALUE")
 	private String ui_value;
 	
+	@Column(name="SEQUENCE")
+	private Integer sequence;
+	
+	@Column(name="ONLYREAD")
+	private String onlyRead;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 //	@LazyToOne(LazyToOneOption.PROXY)
-	@JoinColumn(name="PARENT_ID")
+	@JoinColumn(name="PARENT_ID",updatable=false,insertable=false)
 	private SearchTag parentTag;
 	
-	
+	//延时加载:fetch = FetchType.LAZY
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "parentTag")
 	@OrderBy(value = "id asc") //对@OneToMany获取的关联列表排序,在@OneToMany下面加个@OrderBy,参数值要对应Bean中的属性名
 //	 @LazyCollection(LazyCollectionOption.FALSE)
 	private Set<SearchTag> searchTags;
 
+	//@Transient
+	@Column(name="parent_id")
+	private String parent_id;
+	
 	public Long getId() {
 		return id;
 	}
@@ -102,6 +113,27 @@ WARN: HHH000113: GUID identifier generated: 55E39EEA498647AD80CB79A5EF78EC9D
 		this.ui_value = ui_value;
 	}
 
+	
+	
+	public Integer getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(Integer sequence) {
+		this.sequence = sequence;
+	}
+
+	
+	
+	
+	public String getOnlyRead() {
+		return onlyRead;
+	}
+
+	public void setOnlyRead(String onlyRead) {
+		this.onlyRead = onlyRead;
+	}
+
 	public SearchTag getParentTag() {
 		return parentTag;
 	}
@@ -116,6 +148,14 @@ WARN: HHH000113: GUID identifier generated: 55E39EEA498647AD80CB79A5EF78EC9D
 
 	public void setSearchTags(Set<SearchTag> searchTags) {
 		this.searchTags = searchTags;
+	}
+
+	public String getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(String parent_id) {
+		this.parent_id = parent_id;
 	}
 
 

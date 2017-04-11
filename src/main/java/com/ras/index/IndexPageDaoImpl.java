@@ -14,7 +14,7 @@ public class IndexPageDaoImpl implements IndexPageDao {
 	private SessionFactory sf;
 	
 	public List<?> searchIndexPage(String modelname) {
-		String sql="select * from searchindexpage s where s.modelname like '%"+modelname+"%'";
+		String sql="select * from searchindexpage s where lower(s.modelname) like '%"+modelname.toLowerCase()+"%'";
 		return sf.getCurrentSession().createSQLQuery(sql)
 				 .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 	}

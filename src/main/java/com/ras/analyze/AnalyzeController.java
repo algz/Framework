@@ -7,6 +7,7 @@
  */
 package com.ras.analyze;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import com.ras.index.Page;
+import com.ras.search.SearchTagService;
 import com.ras.tool.CommonTool;
+
+import net.sf.json.JSONArray;
 
 /*
  *  对比功能
@@ -37,6 +41,8 @@ public class AnalyzeController {
 	@Autowired
 	private AnalyzeService service;
 	
+	@Autowired
+	private SearchTagService searchTagService;
 	
 
     @RequestMapping(value={"","/"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
@@ -48,6 +54,7 @@ public class AnalyzeController {
     	page.setHeader_small("分析");
     	map.put("page", page);
     	
+    	map.put("searchTags", searchTagService.findAllParent());
     	
         return new ModelAndView("ras/analyze/analyze",map);
     }
@@ -61,29 +68,39 @@ public class AnalyzeController {
     }
     
     
-    @RequestMapping(value={"","/comparisondetail"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public ModelAndView  comparisonDetail(HttpServletRequest request,HttpServletResponse response) {
-    	Map<String, Object> map=new HashMap<String, Object>();
+//    @RequestMapping(value={"/findcomparisondetailgrid"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
+//    public void  findComparisonDetailGrid(AnalyzeVo vo,HttpServletRequest request,HttpServletResponse response) {
+//    	Map<String, Object> map=new HashMap<String, Object>();
+//    	String modelName=request.getParameter("modelName");
+//    	if(modelName!=null){
+//    		vo.setData(service.findComparisonDetailGrid(modelName.split(",")));
+//    	}
+//    	CommonTool.writeJSONToPage(response,vo );
+//    }
+    
+    @RequestMapping(value={"/findmodelfortypeahead"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
+    public void  findModelForTypeahead(HttpServletRequest request,HttpServletResponse response) {
+//    	Map<String, Object> map=new HashMap<String, Object>();
     	String modelName=request.getParameter("modelName");
-    	map.put("modelName", modelName);
-    	Page page=new Page();
-    	page.setHeader_h1("对比");
-    	page.setHeader_small(modelName);
-    	map.put("page", page);
-    	
-    	map.put("models", modelName.split(","));
-    	
-        return new ModelAndView("ras/comparison/comparisonDetail",map);
+    	try {
+    		JSONArray ja=JSONArray.fromObject(service.findModelForTypeahead(modelName));
+			response.getWriter().print(ja);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
-    @RequestMapping(value={"/findcomparisondetailgrid"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public void  findComparisonDetailGrid(AnalyzeVo vo,HttpServletRequest request,HttpServletResponse response) {
-    	Map<String, Object> map=new HashMap<String, Object>();
+    @RequestMapping(value={"/analyzechart"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
+    public void  analyzeChart(HttpServletRequest request,HttpServletResponse response) {
     	String modelName=request.getParameter("modelName");
-    	if(modelName!=null){
-    		vo.setData(service.findComparisonDetailGrid(modelName.split(",")));
-    	}
-    	CommonTool.writeJSONToPage(response,vo );
+    	String[] axis=new String[2];
+    	axis[0]=request.getParameter("xAxis");
+    	axis[1]=request.getParameter("yAxis");
+    	try {
+    		JSONArray ja=JSONArray.fromObject(service.analyzeChart(modelName.split(","), axis));
+			response.getWriter().print(ja);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
-    
 }

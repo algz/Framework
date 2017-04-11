@@ -37,6 +37,7 @@ public class ALGZSiteMeshFilter extends ConfigurableSiteMeshFilter {
            .addExcludedPath("/se7en/*")
 //           .addExcludedPath("/ras/*")
            .addExcludedPath("/platform/login.jsp")
+           .addExcludedPath("/*.jsp")
            .addExcludedPath("/*.html")
            .addExcludedPath("/ras/login");  
 		

@@ -65,7 +65,7 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 				f.setAccessible(true); 
 				Object obj = f.get(ao);
 				if(obj!=null){
-					str.append(" and "+f.getName()+"='"+obj+"'");
+					str.append(" and LOWER("+f.getName()+") like '%"+obj.toString().toLowerCase()+"%'");
 				}
 				
 			}

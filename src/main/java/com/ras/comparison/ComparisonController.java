@@ -1,6 +1,7 @@
 package com.ras.comparison;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +56,7 @@ public class ComparisonController {
     
     @RequestMapping(value={"/findmodelgird"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public void  findModelGird(ComparisonVo vo,HttpServletRequest request,HttpServletResponse response) {
-    	Map<String, Object> map=new HashMap<String, Object>();
+    	//Map<String, Object> map=new HashMap<String, Object>();
     	String modelName=request.getParameter("modelName");
     	vo.setData(service.findModelGird(modelName));
     	CommonTool.writeJSONToPage(response,vo );

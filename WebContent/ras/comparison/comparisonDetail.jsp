@@ -34,7 +34,7 @@
 					<table id="comparisonDetail-table" class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th class="center">
+								<th class="center" width="130">
 								</th>
 							<c:forEach items="${models}" var="model">
 								<th  class="center">
@@ -45,10 +45,15 @@
 							</c:forEach>
 							</tr>
 						</thead>
-					
-					
 					</table>
 				</div><!-- /.col -->	
+			</div>
+			<div class="row">
+				<div class="col-sm-offset-11">
+					<div class="btn-group" >
+						<a class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
+					</div>
+				</div>
 			</div>
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>

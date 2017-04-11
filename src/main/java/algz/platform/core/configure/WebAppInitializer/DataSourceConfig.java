@@ -25,7 +25,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @Configuration
 //启用注解事务管理，使用CGLib代理  
 @EnableTransactionManagement(proxyTargetClass = true)  //声明式事务管理，通过spring root application context扫描包septem.config.app：
-@PropertySource("classpath:jdbc.properties")
+@PropertySource({"classpath:jdbc.properties","classpath:algz_config.properties"}) //定义后,任何扫描到的类(用@Component等注解)都可以直接使用@Value("${org.hibernate.dialect}").
 public class DataSourceConfig {
 
 	@Value("${org.hibernate.dialect}")

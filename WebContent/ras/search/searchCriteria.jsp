@@ -113,7 +113,7 @@
 										<button id='submitBtn' class="btn btn-primary">提交</button>
 									</div>
 									<div class="btn-group" data-toggle="buttons">
-										<a class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
+										<input type="button" class="btn btn-primary" value="返回" onclick="history.go(-1)">
 									</div>
 								</div>
 							</dd>

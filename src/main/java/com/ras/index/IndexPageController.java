@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
+import com.ras.documnet.data.DataService;
 import com.ras.search.SearchTag;
 import com.ras.search.SearchTagService;
 
@@ -44,6 +45,9 @@ public class IndexPageController {
 	
 	@Autowired
 	private IndexPageService service;
+	
+	@Autowired
+	private DataService dataService;
 	
 //	@Autowired
 //	private ExcelService excelService;

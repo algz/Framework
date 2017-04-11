@@ -51,19 +51,20 @@
 									文档
 								</a>
 							</li>
+							<%-- 
 							<li>
 								<a data-toggle="tab" href="#discuss">
 									评论
 									<span class="badge badge-danger">4</span>
 								</a>
 							</li>
-	
+							--%>
 						</ul>
 	
 						<div class="tab-content">
 						
 							<div id="param" class="tab-pane fade in active">
-								<jsp:include page="../document/addModelParam_param.jsp"></jsp:include>
+								<jsp:include page="../document/data/addModelParam_param.jsp"></jsp:include>
 							</div>
 							<div id="picture" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_picture.jsp"></jsp:include>
@@ -71,6 +72,7 @@
 							<div id="docment" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_document.jsp"></jsp:include>
 							</div>
+							
 							<div id="discuss" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_discuss.jsp"></jsp:include>
 							</div>
@@ -83,13 +85,16 @@
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
-		
+		<plugin_css>
+			<!-- 图片放大查看(jquery弹出层插件jquery.ColorBox) -->
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/colorbox.css" />
+		</plugin_css>
 		<plugin_js>
 			<!-- dataTable.js -->
 			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
 			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
 			
-			<!-- 图片放大查看 -->
+			<!-- 图片放大查看(jquery弹出层插件jquery.ColorBox)  -->
 			<script src="<%=basePath%>ras/common/js/jquery.colorbox.js"></script>
 			
 			<!-- JS编辑器 -->

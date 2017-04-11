@@ -14,8 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ras.documnet.DocumentService;
-import com.ras.documnet.DocumentVo;
+import com.ras.documnet.data.DataService;
+import com.ras.documnet.data.DataVo;
 import com.ras.index.Page;
 import com.ras.search.SearchTagService;
 import com.ras.search.searchCriteria.SearchCriteriaService;
@@ -47,7 +47,7 @@ public class SearchTagController {
 	private SearchCriteriaService searchCriteriaService;
 	
 	@Autowired
-	private DocumentService documentService;
+	private DataService dataService;
 	
 //	@Autowired
 //	private ExcelService excelService;
@@ -131,7 +131,7 @@ public class SearchTagController {
      * @param request
      * @param response
      * @return
-     */
+     
     @RequestMapping(value={"","/searchsummarize"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public ModelAndView  searchSummarize(HttpServletRequest request, HttpServletResponse response) {
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
@@ -139,9 +139,9 @@ public class SearchTagController {
     	String overviewID=request.getParameter("overviewID");
     	Map<String, Object> map=new HashMap<String, Object>();
     	
-    	DocumentVo<?> vo=new DocumentVo();
+    	DataVo<?> vo=new DataVo();
     	vo.setOverviewID(overviewID);
-    	Map<String,String> dataMap=documentService.addModelParamPage(vo);
+    	Map<String,String> dataMap=dataService.addModelParamPage(vo);
     	if(dataMap!=null){
     		map.putAll(dataMap);
         	Page page=new Page();
@@ -151,5 +151,5 @@ public class SearchTagController {
     	}
     	
         return new ModelAndView("ras/search/searchSummarize",map);
-    }
+    }*/
 }

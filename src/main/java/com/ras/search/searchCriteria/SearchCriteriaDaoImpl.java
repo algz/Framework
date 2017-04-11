@@ -28,7 +28,7 @@ public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
 				if(arr[0].toString().equals(keys[i])){
 					switch (arr[1].toString()){
 						case "text":
-							sql.append(" and "+keys[i]+"='"+val+"' ");
+							sql.append(" and Upper("+keys[i].toString().toUpperCase()+") like '%"+val.toUpperCase()+"%' ");
 							break;
 						case "checkbox":
 							String[] str=val.split(",");

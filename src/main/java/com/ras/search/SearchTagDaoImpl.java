@@ -1,5 +1,6 @@
 package com.ras.search;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,23 @@ public class SearchTagDaoImpl implements SearchTagDao {
 	@Autowired
 	private SessionFactory sf;
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void findAll(SearchTagVo<SearchTag> vo) {
+		String sql=" from ras_search_tag tag where 1=1 ";
+		if(vo.getOnlyRead()!=null&&!vo.getOnlyRead().equals("1")){
+			sql+= " and tag.onlyRead='"+vo.getOnlyRead()+"' ";
+		}
+		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select count(1) "+sql).uniqueResult();
+		vo.setRecordsTotal(count.intValue());
+		List<SearchTag> list=sf.getCurrentSession().createSQLQuery("select * "+sql+" order by tag.sequence,tag.id")
+				.addEntity(SearchTag.class)
+				.setFirstResult(vo.getStart())
+				.setMaxResults(vo.getLength())
+				.list();
+		vo.setData(list);
+	}
+
 	@Override
 	public List<SearchTag> findAllParent() {
 		String sql="select * from ras_search_tag tag where tag.parent_id=0 order by tag.id";
@@ -50,4 +68,6 @@ public class SearchTagDaoImpl implements SearchTagDao {
 				.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
 				.uniqueResult();
 	}
+
+
 }
