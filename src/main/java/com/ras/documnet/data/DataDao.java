@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.ras.aircraftOverview.AircraftOverview;
 
+import net.sf.json.JSONObject;
+
 public interface DataDao {
 	
 	public AircraftOverview findModel(String overviewID);
@@ -12,6 +14,8 @@ public interface DataDao {
 	public void FindTableModelParamGrid(DataVo vo);
 	
 	public Map<String,String> addModelParamPage(DataVo vo);
+	
+	public JSONObject findModelParam(DataVo vo);
 	
 	public void delModel(String[] ids);
 	

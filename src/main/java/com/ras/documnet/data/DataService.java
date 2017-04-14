@@ -15,6 +15,7 @@ import com.ras.aircraftPhoto.AircraftPhoto;
 import com.ras.tool.file.UploadFile;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 
 
@@ -30,7 +31,7 @@ public interface DataService {
 	
 	public void findTableModelParamGrid(DataVo vo);
 	
-	public Map<String,String>  addModelParamPage(DataVo vo);
+	public JSONObject  addModelParamPage(DataVo vo);
 	
 	public JSONArray findModelImageParam(String category,String basicID);
 	

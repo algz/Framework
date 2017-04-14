@@ -22,6 +22,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name="ras_search_tag")
@@ -64,6 +65,7 @@ WARN: HHH000113: GUID identifier generated: 55E39EEA498647AD80CB79A5EF78EC9D
 	
 	//延时加载:fetch = FetchType.LAZY
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "parentTag")
+	@Where(clause="enname is not null") //clause:值为属性名字段
 	@OrderBy(value = "id asc") //对@OneToMany获取的关联列表排序,在@OneToMany下面加个@OrderBy,参数值要对应Bean中的属性名
 //	 @LazyCollection(LazyCollectionOption.FALSE)
 	private Set<SearchTag> searchTags;

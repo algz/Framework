@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,7 @@ import com.ras.tool.CommonTool;
 import com.ras.tool.file.UploadFile;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * @author algz
@@ -94,24 +96,31 @@ public class DataServiceImpl implements DataService {
 	@Override
 	@Transactional
 	public void saveModelParam(Map<String, String[]> map) throws Exception {
-			AircraftBasic ab=new AircraftBasic();
-			CommonTool.mapToBean(map, ab);
-			ab.setModifyDate(new Date());
-			aircraftBasicDao.saveOrUpdate(ab);
-			
-			AircraftCapability ac=new AircraftCapability();
-			ac.setBasicID(ab.getBasicID());
-			CommonTool.mapToBean(map, ac);
-			aircraftCapabilityDao.saveOrUpdate(ac);
-			
-			AircraftWeight aw=new AircraftWeight();
-			CommonTool.mapToBean(map, aw);
-			//aircraftBasicDao.saveOrUpdate(ab);
+		Map<String,String> tem=new CaseInsensitiveMap();
+		
+		for (Map.Entry<String, String[]> entry : map.entrySet()) {
+			tem.put(entry.getKey(), entry.getValue().length == 0 ||entry.getValue()[0].equals("null")? null : entry.getValue()[0]);
+		}
+		
+		AircraftBasic ab = new AircraftBasic();
+		//CommonTool.mapToBean(map, ab);
+		//ab.setModifyDate(new Date());
+		aircraftBasicDao.saveOrUpdateMap(tem);
+
+		//AircraftCapability ac = new AircraftCapability();
+//		ac.setBasicID(ab.getBasicID());
+//		CommonTool.mapToBean(map, ac);
+//		aircraftCapabilityDao.saveOrUpdate(ac);
+//
+//		AircraftWeight aw = new AircraftWeight();
+//		CommonTool.mapToBean(map, aw);
+		// aircraftBasicDao.saveOrUpdate(ab);
 	}
 	
 	@Override
-	public Map<String,String>  addModelParamPage(DataVo vo) {
-		return dao.addModelParamPage(vo);
+	public JSONObject addModelParamPage(DataVo vo) {
+//		return dao.addModelParamPage(vo);
+		return dao.findModelParam(vo);
 	}
 
 	@Override

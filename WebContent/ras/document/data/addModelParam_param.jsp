@@ -1,4 +1,5 @@
 <%@page language="Java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>   
 <%@taglib prefix="form" tagdir="/WEB-INF/tags/uiframe/form" %> 
 
 <form action="./savemodelparam" method="post">
@@ -12,9 +13,13 @@
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
 				<div class="form-horizontal" role="form">
-					<input name="basicID" type="hidden" value="${BASICID}"/>
+					<input name="basicID" type="hidden" value="<%=request.getParameter("basicID") %>"/>
 					<input name="editor" type="hidden" value="${EDITOR}"/>
-					<form:form-group id="modelName" label="型号" value="${ MODELNAME}" readonly="true"/>
+					
+					<c:forEach var="basicItem" items="${basicMap }">
+						<form:form-group id="${basicItem.elID }" label="${basicItem.elLabel }" value="${basicItem.elValue}" readonly="${basicItem.readonly}"/>   
+					</c:forEach>  
+					<%--<form:form-group id="modelName" label="型号" value="${ MODELNAME}" readonly="true"/>
 					<form:form-group id="modelCname" label="中文名称" value="${ MODELCNAME}" readonly="true"/>
 					<form:form-group id="modelEname" label="英文名称" value="${ MODELENAME}" readonly="true"/>
 					<form:form-group id="dataSources" label="数据来源" value="${DATASOURCES }"/>
@@ -26,11 +31,12 @@
 					<form:form-group id="serviceYear" label="服役年份" value="${SERVICEYEAR }"/>
 					<form:form-group id="crewNumber" label="机组人员数量" value="${CREWNUMBER }"/>
 					<form:form-group id="passengerCapacity" label="最大载客量" value="${PASSENGERCAPACITY }"/>
-					<form:form-group id="price" label="单价" value="${PRICE }"/>
+					<form:form-group id="price" label="单价" value="${PRICE }"/> --%>
 				</div>
 			</div><!-- /.col -->
 		</div>
 	</div>
+	<%--
 	<div>
 		<h3 class="header smaller lighter purple">
 			重量
@@ -143,7 +149,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 	<%if(request.getAttribute("isModify")!=null&&request.getAttribute("isModify").equals("true")){ %>
 	<div class="row">
 		<div class="col-sm-offset-6">

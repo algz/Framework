@@ -42,7 +42,6 @@
 					<form id="tagForm">
 						<dl class="dl-horizontal " id="dt-list-1">
 						<c:forEach items="${searchTags }" var="searchTag">
-						
 						<dt><span class="label">${searchTag.name}</span></dt>
 							<dd>							
 							<c:choose>

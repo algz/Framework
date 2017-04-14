@@ -58,7 +58,15 @@ public class SearchTagServiceImpl implements SearchTagService {
 							t.setName(a.getName());
 							tag.getSearchTags().add(t);
 						}
-					};
+					}else{
+						String[] vals=tag.getUi_value().split(",");
+						for(String v:vals){
+							SearchTag t=new SearchTag();
+							t.setId(null);
+							t.setName(v);
+							tag.getSearchTags().add(t);
+						}
+					}
 
 					break;
 			}

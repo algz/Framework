@@ -59,20 +59,24 @@ public class SearchSummarizeController {
     	
     	DataVo<?> vo=new DataVo();
     	vo.setOverviewID(overviewID);
-    	Map<String,String> dataMap=dataService.addModelParamPage(vo);
-    	if(dataMap!=null){
-    		map.putAll(dataMap);
+    	JSONObject jo=dataService.addModelParamPage(vo);
+    	if(jo!=null){
+    		JSONArray ja=(JSONArray)jo.get("basicMap");
+    		
+    		map.putAll(jo);
         	Page page=new Page();
         	page.setHeader_h1("查询");
-        	page.setHeader_small(map.get("MODELNAME").toString());
+        	page.setHeader_small(jo.getString("modelName"));//(map.get("MODELNAME").toString());
         	map.put("page", page);
+        	
+//        	String test="[{url:'/upload/photo/Chrysanthemum.jpg',title:'整体图1'},{url:'/upload/photo/Desert.jpg'},{url:'/upload/photo/Hydrangeas.jpg'}]";
+//        	JSONArray ja=JSONArray.fromObject(test);
+        	map.put("integralGraph",dataService.findModelImageParam("整体图",vo.getBasicID()));
+        	map.put("threeGraph",dataService.findModelImageParam("三面图",vo.getBasicID()));
+        	map.put("surfaceGraph",dataService.findModelImageParam("外观图",vo.getBasicID()));
     	}
     	
-//    	String test="[{url:'/upload/photo/Chrysanthemum.jpg',title:'整体图1'},{url:'/upload/photo/Desert.jpg'},{url:'/upload/photo/Hydrangeas.jpg'}]";
-//    	JSONArray ja=JSONArray.fromObject(test);
-    	map.put("integralGraph",dataService.findModelImageParam("整体图",map.get("BASICID").toString()));
-    	map.put("threeGraph",dataService.findModelImageParam("三面图",map.get("BASICID").toString()));
-    	map.put("surfaceGraph",dataService.findModelImageParam("外观图",map.get("BASICID").toString()));
+
     	
         return new ModelAndView("ras/search/searchSummarize",map);
     }

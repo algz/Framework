@@ -42,7 +42,7 @@
 					
 						<dl class="dl-horizontal " id="dt-list-1">
 						<c:forEach items="${searchTags }" var="searchTag">
-						
+						<c:if test="${searchTag.searchTags.size()!=0 }">
 						<dt><span class="label" data_id="${searchTag.id }">${searchTag.name}</span></dt>
 							<dd>
 								<div class="btn-group" data-toggle="buttons">
@@ -54,6 +54,7 @@
 								</div>
 							</dd>
 							<p/>
+							</c:if>
 						</c:forEach>
 						
 						</dl>

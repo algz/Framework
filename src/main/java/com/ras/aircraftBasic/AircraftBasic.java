@@ -5,7 +5,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,7 +23,7 @@ public class AircraftBasic {
     /**
      * 外键
      */
-    @Column(name="OVERVIEW_ID")
+    @Column(name="OVERVIEWID")
     private String overviewID;
 	
     /**
@@ -36,31 +35,31 @@ public class AircraftBasic {
     /**
      * 飞机类型
      */
-	@Column(name="AIRCRAFT_TYPE")
+	@Column(name="AIRCRAFTTYPE")
 	private String aircraftType;
 	
 	/**
 	 * 首飞年份
 	 */
-	@Column(name="FIRST_FLIGHT_YEAR")
+	@Column(name="FIRSTFLIGHTYEAR")
 	private String firstFlightYear;
 	
 	/**
 	 * 服役年份
 	 */
-	@Column(name="SERVICE_YEAR")
-	private String serviceYear;
+	@Column(name="SERVICEYEAR")
+	private Integer serviceYear;
 	
 	/**
 	 * 机组人员数量
 	 */
-	@Column(name="CREW_NUMBER")
+	@Column(name="CREWNUMBER")
 	private Integer crewNumber;
 	
 	/**
 	 * 最大载客量
 	 */
-	@Column(name="PASSENGER_CAPACITY")
+	@Column(name="PASSENGERCAPACITY")
 	private Integer passengerCapacity;
 	
 	/**
@@ -72,7 +71,7 @@ public class AircraftBasic {
 	/**
 	 * 数据来源
 	 */
-	@Column(name="DATA_SOURCES")
+	@Column(name="DATASOURCES")
 	private String dataSources;
 	
 	/**
@@ -90,13 +89,13 @@ public class AircraftBasic {
 	/**
 	 * 研发国别
 	 */
-	@Column(name="PRODUCER_COUNTRIES")
+	@Column(name="PRODUCERCOUNTRIES")
 	private String producerCountries;
 	
 	/**
 	 * 使用国别
 	 */
-	@Column(name="USING_COUNTRIES")
+	@Column(name="USINGCOUNTRIES")
 	private String usingCountries;
 
 	public String getBasicID() {
@@ -139,11 +138,11 @@ public class AircraftBasic {
 		this.firstFlightYear = firstFlightYear;
 	}
 
-	public String getServiceYear() {
+	public Integer getServiceYear() {
 		return serviceYear;
 	}
 
-	public void setServiceYear(String serviceYear) {
+	public void setServiceYear(Integer serviceYear) {
 		this.serviceYear = serviceYear;
 	}
 

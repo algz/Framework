@@ -55,20 +55,14 @@ import com.ras.tool.file.UploadFile;
 
 import algz.platform.core.shiro.authority.userManager.User;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/ras/document/data")
 public class DataController{
-	
-
-	
+		
 	@Autowired
 	private DataService service;
-	
-	@Autowired
-	private FileService fileService;
-	
-
 	
 	@RequestMapping({"","/"})
 	public ModelAndView DocumentIndex(){
@@ -141,9 +135,9 @@ public class DataController{
     	
     	map.put("isModify", "true");
     	
-    	Map<String,String> dataMap=service.addModelParamPage(vo);
-    	if(dataMap!=null){
-    		map.putAll(dataMap);
+    	JSONObject jo=service.addModelParamPage(vo);
+    	if(jo!=null){
+    		map.putAll(jo);
     	}else{
     		//map.put("overviewID", vo.getOverviewID());
     	}

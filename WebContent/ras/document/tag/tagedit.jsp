@@ -73,6 +73,7 @@
 								<form:form-group id="ui_type" label="类型" type='select' >
 									<option value="text">文本框</option>
 									<option value="checkbox" >多选框</option>
+									<option value="number" >数值框</option>
 									<option value="numberRegion" >数值区</option>
 								</form:form-group>						
 								<form:form-group id="ui_value" label="类型值" value="${ui_value}"/>

@@ -40,10 +40,12 @@ public class TagEditDaoImpl implements TagEditDao {
 		StringBuilder sql=new StringBuilder("ALTER TABLE RAS_AIRCRAFT_"+ename);
 		sql.append(" ADD ( "+tag.getName());
 		switch(tag.getUi_type()){
+		case "checkbox":
 		case "text":
 			//文本
 			sql.append(" VARCHAR2("+(tag.getUi_value().equals("")?"32":tag.getUi_value())+") NULL  )");
 			break;
+		case "number":
 		case "numberRegion":
 			//数值
 			sql.append(" NUMBER("+(tag.getUi_value().equals("")?"10":tag.getUi_value())+") NULL  )");
@@ -52,6 +54,9 @@ public class TagEditDaoImpl implements TagEditDao {
 		sf.getCurrentSession().createSQLQuery(sql.toString()).executeUpdate();
 	}
 	
+	/**
+	 * 修改数据标签
+	 */
 	@Override
 	public void modifyTag(SearchTag tag) {
 		if(tag.getOnlyRead()!=null&&tag.getOnlyRead().equals("0")){
@@ -62,6 +67,9 @@ public class TagEditDaoImpl implements TagEditDao {
 		}
 	}
 
+	/**
+	 * 删除数据标签
+	 */
 	@Override
 	public void delTag(String[] ids) {
 		for(String id:ids){

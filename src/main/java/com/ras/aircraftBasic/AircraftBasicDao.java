@@ -1,6 +1,7 @@
 package com.ras.aircraftBasic;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AircraftBasicDao {
 
@@ -13,4 +14,6 @@ public interface AircraftBasicDao {
 	public Integer count(AircraftBasic ab);
 	
 	public void saveOrUpdate(AircraftBasic ab);
+	
+	public void saveOrUpdateMap(Map<String, String> m);
 }

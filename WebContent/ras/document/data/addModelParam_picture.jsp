@@ -181,6 +181,8 @@ jQuery(function($) {
 			});
 			$(id).on("fileuploaded",
 					function(event, data, previewId, index) {
+						//createFileinput(id,integralPhoto);//整体图
+						//$(id).fileinput("refresh", {showUpload: false});
 						alert("上传成功!");
 						/*$("#excelImport").modal("hide");
 						//后台处理后返回的经纬度坐标json数组，
