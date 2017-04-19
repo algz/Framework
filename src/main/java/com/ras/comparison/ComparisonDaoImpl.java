@@ -40,12 +40,12 @@ public class ComparisonDaoImpl implements ComparisonDao {
 			}
 		}
 		StringBuilder paramSQL=new StringBuilder("select distinct "+field.toString()+" from ras_aircraft_overview ao ");
-		paramSQL.append(" inner join ras_aircraft_basic ab on ab.overviewid=ao.id");
-		paramSQL.append(" left join ras_aircraft_weight aw on aw.basic_id=ab.id ");
-		paramSQL.append(" left join ras_aircraft_layout al on al.basic_id=ab.id ");
-		paramSQL.append(" left join ras_aircraft_capability ac on ac.basic_id=ab.id ");
-		paramSQL.append(" left join ras_aircraft_dynamic ad on ad.basic_id=ab.id ");
-		paramSQL.append(" left join ras_aircraft_system asys on asys.basic_id=ab.id ");
+		paramSQL.append(" inner join ras_aircraft_basic ab on ab.overviewid=ao.id and ab.maininfo=1 ");
+		paramSQL.append(" left join ras_aircraft_weight aw on aw.basicid=ab.id ");
+		paramSQL.append(" left join ras_aircraft_layout al on al.basicid=ab.id ");
+		paramSQL.append(" left join ras_aircraft_capability ac on ac.basicid=ab.id ");
+		paramSQL.append(" left join ras_aircraft_dynamic ad on ad.basicid=ab.id ");
+		paramSQL.append(" left join ras_aircraft_system asys on asys.basicid=ab.id ");
 		paramSQL.append(" where ao.modelname in (:params)");
 		List<Map<String,String>> mapList=sf.getCurrentSession().createSQLQuery(paramSQL.toString())
 										  .setParameterList("params", modelNames)

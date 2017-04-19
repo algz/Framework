@@ -42,7 +42,16 @@
 						<a class="btn btn-sm" type="button" href="./addmodel">新增</a>
 						<button id="modifyModel" class="btn btn-sm" type="button">修改</button>
 						<button id="delModel" class="btn btn-sm" type="button">删除</button>
+						<span class="input-icon">
+							<input type="text" id="modelNameTxt" placeholder="机型名">
+							<i class="ace-icon fa fa-fighter-jet  blue"></i>
+							</span>
+						<button id="modelSearch" class="btn btn-purple btn-sm" type="button">
+							<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+								查询
+						</button>
 					</div>
+					
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
 						<table id="table-model" class="table table-striped table-bordered table-hover">
@@ -64,6 +73,8 @@
 						<button id="addModelparam" class="btn btn-sm" type="button">新增</button>
 						<button id="modifyModelparam" class="btn btn-sm" type="button">修改</button>
 						<button id="delModelparam" class="btn btn-sm" type="button">删除</button>
+						<button id="setMainModelparam" class="btn btn-sm" type="button">设置为主要</button>
+						<button id="mergeMainModelparam" class="btn btn-sm" type="button">合并</button>
 					</div>
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
@@ -82,6 +93,7 @@
 			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
 			
 			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
+			
 		</plugin_js>
 		<script type="text/javascript" src="document.js"></script>	
 	</body>

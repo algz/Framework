@@ -113,20 +113,21 @@
         	</div>
             <div class="modal-body">            
           		<dl class="dl-horizontal " id="dt-list-1">
-				<c:forEach items="${searchTags }" var="searchTag">
-				
-				<dt><span class="label" data_id="${searchTag.id }">${searchTag.name}</span></dt>
-					<dd>
-						<div class="btn-group" data-toggle="buttons">
-						<c:forEach items="${searchTag.searchTags }" var="ctag">
-							<label class="btn btn-sm btn-white btn-info">
-								<input type="checkbox" name="${ctag.enname }" value="${ctag.id }" ><span>${ctag.name }</span>
-							</label>
-						</c:forEach>
-						</div>
-					</dd>
-					<p/>
-				</c:forEach>
+					<c:forEach items="${searchTags }" var="searchTag">
+					<c:if test="${searchTag.searchTags.size()!=0 }">
+					<dt><span class="label" data_id="${searchTag.id }">${searchTag.name}</span></dt>
+						<dd>
+							<div class="btn-group" data-toggle="buttons">
+							<c:forEach items="${searchTag.searchTags }" var="ctag">
+								<label class="btn btn-sm btn-white btn-info">
+									<input type="checkbox" name="${ctag.enname }" value="${ctag.id }" >${ctag.name }
+								</label>
+							</c:forEach>
+							</div>
+						</dd>
+						<p/>
+						</c:if>
+					</c:forEach>
 				</dl>
             </div>
             <div class="modal-footer">
@@ -146,6 +147,7 @@
 			<!-- highcharts.js 图表-->
 			<script src="<%=basePath%>ras/common/js/highcharts/highcharts.js"></script>
 
+			<!-- 文本框扩展查询 -->
 			<script src="<%=basePath%>ras/common/js/typeahead.jquery.js"></script>
 			
 		</plugin_js>

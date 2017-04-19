@@ -1,31 +1,30 @@
 <%@page language="Java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="form" tagdir="/WEB-INF/tags/uiframe/form" %> 
 <%
-
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
 
-
+<form enctype="multipart/form-data">
 <div>
 	<h3 class="header smaller lighter purple">
 		整体图
 	</h3>
 	<div class="row">
 		<div class="col-xs-12">
-			<input id="integral-graph" name="file" type="file" multiple >
+			<input id="integral-graph" name="file" type="file"  >
 		</div>
 	</div>
 </div>
-
+</form>
 <div>
 	<h3 class="header smaller lighter purple">
 		三面图
 	</h3>
 	<div class="row">
 		<div class="col-xs-12">
-			<input id="three-graph" name="file" type="file" >
+			<input id="three-graph" name="file" type="file" multiple >
 		</div>
 	</div>
 </div>
@@ -45,21 +44,21 @@
 jQuery(function($) {
 
 	var imgData=eval('(${img})');
-	
+	var basicID=$(":hidden[name=basicID]").val();
 	var integralPhoto={};
 	integralPhoto.uploadExtraData={};
 	integralPhoto.uploadExtraData.photoCategory="整体图";
-	integralPhoto.uploadExtraData.basicID=$(":hidden[name=basicID]").val();
+	integralPhoto.uploadExtraData.basicID=basicID;
 	
 	var threePhoto={};
 	threePhoto.uploadExtraData={};
 	threePhoto.uploadExtraData.photoCategory="三面图";
-	threePhoto.uploadExtraData.basicID=$(":hidden[name=basicID]").val();
+	threePhoto.uploadExtraData.basicID=basicID;
 	
 	var surfacePhoto={};
 	surfacePhoto.uploadExtraData={};
 	surfacePhoto.uploadExtraData.photoCategory="外观图";
-	surfacePhoto.uploadExtraData.basicID=$(":hidden[name=basicID]").val();
+	surfacePhoto.uploadExtraData.basicID=basicID;
 	
 	var initPhotoUrl=new Array();
 	for(var i=0;i<imgData.length;i++){
@@ -68,20 +67,18 @@ jQuery(function($) {
 		case '整体图':
 			loadFileinputParams(img,integralPhoto);
 			break;
-		case '三观图':
+		case '三面图':
 			loadFileinputParams(img,threePhoto);
 			break;
 		case '外观图':
 			loadFileinputParams(img,surfacePhoto);
 			break;
 		}
-		
 	}
 	
-
-		
-
-	
+	/**
+	*img加载到obj.
+	*/
 	function loadFileinputParams(img,obj){
 		if(obj.photoUrl==null){
 			obj.photoUrl=new Array();
@@ -90,7 +87,7 @@ jQuery(function($) {
 		obj.photoUrl.push(img.photoUrl);
 		obj.photoConfig.push({
 			caption:img.photoName,
-			key:1,
+			key:img.photoID,
 			extra:{
 				photoID:img.photoID
 			}
@@ -103,10 +100,6 @@ jQuery(function($) {
 	createFileinput("#integral-graph",integralPhoto);//整体图
 	createFileinput("#three-graph",threePhoto);//三观图
 	createFileinput("#surface-graph",surfacePhoto);//外观图
-	
-	
-	
-
 	
 	/**
 	创建fileinput
@@ -178,91 +171,36 @@ jQuery(function($) {
 			                 }
 			                 return {"excelType": extraValue};
 			             }*/
-			});
-			$(id).on("fileuploaded",
-					function(event, data, previewId, index) {
-						//createFileinput(id,integralPhoto);//整体图
-						//$(id).fileinput("refresh", {showUpload: false});
+			}).on("fileuploaded",function(event, data, previewId, index) {
+						//{"basicID":"5DEBD7F5C1F54CAD8BF6E1C234DC8720","photoCategory":"整体图","photoDesc":"","photoFile":null,"photoID":"FEE09A0FD6E7452C9C0731137D7B10BD","photoName":"Tulips.jpg","photoUrl":"/upload/photo/1492351809778.jpeg"}
+						loadFileinputParams(data.response,photo);
+						$(id).fileinput('refresh',{
+							initialPreview : photo.photoUrl,
+							initialPreviewConfig : photo.photoConfig
+						});
+						$(id).fileinput('enable');
 						alert("上传成功!");
-						/*$("#excelImport").modal("hide");
-						//后台处理后返回的经纬度坐标json数组，
-						var array = data.response;
-						console.dir(array);
-						//jquery循环取经纬度坐标
-						$.each(array,function(index,latAndLon){
-							var lon = latAndLon.lon;
-							var lat = latAndLon.lat;
-							var point =  new Point(lon, lat, map.spatialReference);
-							var symbol = new esri.symbol.SimpleMarkerSymbol().setStyle(
-								    SimpleMarkerSymbol.STYLE_CIRCLE).setColor(
-								    new Color([255,255,0,0.5]));
-							var attr = {"address": "addressName" };
-							var infoTemplate = new esri.InfoTemplate("标题", "地址 :${address}");
-							var graphic = new Graphic(point,symbol,attr,infoTemplate);
-							map.graphics.add(graphic);
-						});*/
+				}).on("filedeleted",function(event, key,data,extra) {
+						//{"basicID":"5DEBD7F5C1F54CAD8BF6E1C234DC8720","photoCategory":"整体图","photoDesc":"","photoFile":null,"photoID":"FEE09A0FD6E7452C9C0731137D7B10BD","photoName":"Tulips.jpg","photoUrl":"/upload/photo/1492351809778.jpeg"}
+						for(var i=0;i<photo.photoConfig.length;i++){
+							if(photo.photoConfig[i].key==key){
+								photo.photoConfig.splice(i,1);
+								photo.photoUrl.splice(i,1);
+								break;
+							}
+						}
+						if(photo.photoUrl.length==0){
+							$(id).fileinput('reset')
+						}else{
+							$(id).fileinput('refresh',{
+								initialPreview : photo.photoUrl,
+								initialPreviewConfig : photo.photoConfig
+							});
+						}
 
+						$(id).fileinput('enable');
+						alert("删除成功!");
 					});
 		}
-
-
-<%--
-	var colorbox_params = {
-		reposition:true,
-		scalePhotos:true,
-		scrolling:false,
-		previous:'<i class="icon-arrow-left"></i>',
-		next:'<i class="icon-arrow-right"></i>',
-		close:'&times;',
-		current:'{current} of {total}',
-		maxWidth:'100%',
-		maxHeight:'100%',
-		onOpen:function(){
-			document.body.style.overflow = 'hidden';
-		},
-		onClosed:function(){
-			document.body.style.overflow = 'auto';
-		},
-		onComplete:function(){
-			$.colorbox.resize();
-		}
-	};
-
-	$('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
-	$("#cboxLoadingGraphic").append("<i class='icon-spinner orange'></i>");//let's add a custom loading icon
-
-	/**$(window).on('resize.colorbox', function() {
-		try {
-			//this function has been changed in recent versions of colorbox, so it won't work
-			$.fn.colorbox.load();//to redraw the current frame
-		} catch(e){}
-	});*/--%>
 })
-
-
-	/* $('#textBtn').on('click',function(){
-		$("#kv-explorer").fileinput('addToStack','<img width="150" height="150" alt="150x150" src="/upload/photo/Desert.jpg" />')
-		return ;
-		$.ajax({
-	        url: './upfile',
-	        type: 'POST',
-	        dataType: 'json',
-	        data: new FormData($( "#uploadForm" )[0]),
-	        cache: false,
-	        processData: false,
-	        contentType: false,
-	        beforeSend: function(){
-	        	alert('beforeSend')
-	        },
-	        success:function(){
-	        	alert('success')
-	        },
-	        complete:function(){
-	        	alert('complete')
-	        },
-	        error:function(){
-	        	alert('error')
-	        }
-	    })
-	}) */
 		</script> 

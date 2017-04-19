@@ -93,7 +93,6 @@
 
 			<!-- 文件上传 -->
 			<script src="<%=basePath%>ras/common/js/fileinput/fileinput.js"></script>
-			<script src="<%=basePath%>ras/common/js/fileinput/themes1/explorer/theme.js"></script>
 
 		</plugin_js>
 			

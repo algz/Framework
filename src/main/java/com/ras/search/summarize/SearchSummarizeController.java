@@ -54,23 +54,22 @@ public class SearchSummarizeController {
     public ModelAndView  searchSummarize(HttpServletRequest request, HttpServletResponse response) {
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
 //    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
-    	String overviewID=request.getParameter("overviewID");
     	Map<String, Object> map=new HashMap<String, Object>();
     	
     	DataVo<?> vo=new DataVo();
-    	vo.setOverviewID(overviewID);
+    	vo.setOverviewID(request.getParameter("overviewID"));
+    	vo.setBasicID(request.getParameter("basicID"));
+    	vo.setOption("load");
     	JSONObject jo=dataService.addModelParamPage(vo);
     	if(jo!=null){
-    		JSONArray ja=(JSONArray)jo.get("basicMap");
-    		
     		map.putAll(jo);
-        	Page page=new Page();
+        	
+    		Page page=new Page();
         	page.setHeader_h1("查询");
-        	page.setHeader_small(jo.getString("modelName"));//(map.get("MODELNAME").toString());
+        	page.setHeader_small(jo.getString("modelName"));
         	map.put("page", page);
         	
 //        	String test="[{url:'/upload/photo/Chrysanthemum.jpg',title:'整体图1'},{url:'/upload/photo/Desert.jpg'},{url:'/upload/photo/Hydrangeas.jpg'}]";
-//        	JSONArray ja=JSONArray.fromObject(test);
         	map.put("integralGraph",dataService.findModelImageParam("整体图",vo.getBasicID()));
         	map.put("threeGraph",dataService.findModelImageParam("三面图",vo.getBasicID()));
         	map.put("surfaceGraph",dataService.findModelImageParam("外观图",vo.getBasicID()));

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -198,15 +199,15 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 //	  ExceptionHandlerExceptionResolver er= new ExceptionHandlerExceptionResolver();
 //		return er;
 //	};
-  /**
-   * 配置Spring 处理异常的类,用于捕获@Control产生的异常(需在此类中配置相应处理的异常)
-   * @return
-   */
-	@Bean
-	public ALGZExceptionHandler exceptionHandler() {
-		ALGZExceptionHandler exception= new ALGZExceptionHandler();
-		return exception;
-	};
+//  /**
+//   * 配置Spring 处理异常的类,用于捕获@Control产生的异常(需在此类中配置相应处理的异常)
+//   * @return
+//   */
+//	@Bean
+//	public ALGZExceptionHandler exceptionHandler() {
+//		ALGZExceptionHandler exception= new ALGZExceptionHandler(); //自定义类添加@Component注解,不用配置Bean.
+//		return exception;
+//	};
 //includeFilters
 
 }

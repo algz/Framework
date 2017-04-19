@@ -43,11 +43,13 @@ public interface DataService {
 	 * 保存 机型概述
 	 * @see com.ras.documnet.data.DataService#saveModel(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void saveModel(Map<String,String[]> map) throws Exception;
+	public void saveModel(Map<String,String> map) throws Exception;
 	
-	public void saveModelParam(Map<String,String[]> map) throws Exception ;
+	public void saveModelParam(Map<String,String> map) throws Exception ;
 	
 	public void delModel(String[] ids);
 	
-	public void delModelParam(String[] ids);
+	public void delModelParam(String[] ids,String overviewID);
+	
+	public void setMainModelParam(String basicID,String overviewID);
 }

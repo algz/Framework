@@ -1,5 +1,6 @@
 package com.ras.aircraftBasic;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -16,4 +17,10 @@ public interface AircraftBasicDao {
 	public void saveOrUpdate(AircraftBasic ab);
 	
 	public void saveOrUpdateMap(Map<String, String> m);
+	
+	public BigDecimal countMaininfo(String overviewID);
+	
+	public void setMaininfo(String basicID,String overviewID);
+	
+	public AircraftBasic getMainAircraftBasic(String overviewID);
 }

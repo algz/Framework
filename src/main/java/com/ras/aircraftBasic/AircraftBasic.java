@@ -4,11 +4,16 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.ras.aircraftOverview.AircraftOverview;
 
 @Entity
 @Table(name="ras_aircraft_basic")
@@ -19,12 +24,6 @@ public class AircraftBasic {
     @GeneratedValue(generator = "ALGZGenerator")
     @GenericGenerator(name = "ALGZGenerator", strategy = "guid")
 	private String basicID;
-    
-    /**
-     * 外键
-     */
-    @Column(name="OVERVIEWID")
-    private String overviewID;
 	
     /**
      * 研发厂商
@@ -97,7 +96,22 @@ public class AircraftBasic {
 	 */
 	@Column(name="USINGCOUNTRIES")
 	private String usingCountries;
+	
+	/**
+	 * 是否主要信息
+	 */
+	@Column(name="MAININFO")
+	private String mainInfo;
 
+    
+    /**
+     * 外键
+     */
+    @Column(name="overviewid")
+    private String overviewID;
+	
+
+	
 	public String getBasicID() {
 		return basicID;
 	}
@@ -209,6 +223,16 @@ public class AircraftBasic {
 	public void setUsingCountries(String usingCountries) {
 		this.usingCountries = usingCountries;
 	}
+
+	public String getMainInfo() {
+		return mainInfo;
+	}
+
+	public void setMainInfo(String mainInfo) {
+		this.mainInfo = mainInfo;
+	}
+
+
 	
 	
 }

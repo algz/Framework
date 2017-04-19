@@ -112,10 +112,10 @@ $('#modelNameBtn').keydown(function(event){
             				//zoomType: 'xy'
 	        				},
 					    title: {
-					        text: '我是标题'
+					        text: ""//'我是标题'
 					    },
 					    subtitle: {
-					        text: '我是副标题'
+					        //text: '我是副标题'
 					    },
 					    xAxis:{
 					        title:{

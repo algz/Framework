@@ -8,7 +8,7 @@ public interface AircraftOverviewDao {
 	
 	public List<AircraftOverview> findByProperty(AircraftOverview ao);
 	
-	public Integer count();
+	public Integer count(AircraftOverview ao);
 	
 	public void save(AircraftOverview ab);
 	

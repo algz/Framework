@@ -19,5 +19,9 @@ public interface DataDao {
 	
 	public void delModel(String[] ids);
 	
-	public void delModelParam(String[] ids);
+	public void delModelParam(String[] ids,String overviewID);
+	
+	public void setMainModelParam(String basic,String OverviewID);
+	
+	public void saveModelParam(String tableName,Map<String, String> map,boolean isCreate);
 }

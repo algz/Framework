@@ -31,6 +31,11 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<input id="modelName" type="hidden" value="${modelName }" />
+					<label>
+						<small class="smaller-90">隐藏空数据:</small>
+						<input class="ace ace-switch ace-switch-5" id="closeSpaceBtn" type="checkbox">
+						<span class="lbl middle"></span>
+					</label>
 					<table id="comparisonDetail-table" class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
@@ -48,6 +53,7 @@
 					</table>
 				</div><!-- /.col -->	
 			</div>
+			<p>
 			<div class="row">
 				<div class="col-sm-offset-11">
 					<div class="btn-group" >

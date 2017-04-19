@@ -4,6 +4,7 @@
 package com.ras.aircraftBasic;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import org.hibernate.id.GUIDGenerator;
 import org.hibernate.id.UUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.ras.aircraftOverview.AircraftOverview;
 
 /**
  * @author algz
@@ -62,14 +65,18 @@ public class AircraftBasicDaoImpl implements AircraftBasicDao {
 		StringBuilder param=new StringBuilder();
 
 		String basicID=m.get("basicID");
+		String overviewID=m.get("overviewID");
 		if(basicID==null||basicID.toString().equals("")){
-			//保存
+			//新建
 			param.append("INSERT INTO RAS_AIRCRAFT_BASIC ");
 			sql="select rawtohex(sys_guid()) from dual";
 			String idVal=(String)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
 			
-			StringBuilder c=new StringBuilder("id,dataSources,");
-			StringBuilder v=new StringBuilder("'"+idVal+"',"+"'"+m.get("datasources")+"'");
+			StringBuilder c=new StringBuilder("id,MAININFO");
+			//maininfo字段
+			sql="select count(1) from RAS_AIRCRAFT_BASIC t where t.overviewid='"+overviewID+"' and t.maininfo is not null";
+			BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
+			StringBuilder v=new StringBuilder("'"+idVal+"',"+(count.compareTo(BigDecimal.ZERO)!=0?"null":"'1'"));
 			for(int i=0;i<cols.size();i++){
 				String col=cols.get(i)[0].toString();
 				String val=m.get(col);
@@ -96,6 +103,7 @@ public class AircraftBasicDaoImpl implements AircraftBasicDao {
 			param.append("("+c.toString()+") values ("+v.toString()+")");
 			sf.getCurrentSession().createSQLQuery(param.toString()).executeUpdate();
 		}else{
+			//修改
 			param.append("update RAS_AIRCRAFT_BASIC ab set ");
 			boolean flag=false;
 			for(int i=0;i<cols.size();i++){
@@ -131,11 +139,28 @@ public class AircraftBasicDaoImpl implements AircraftBasicDao {
 	
 	@Override
 	public List<AircraftBasic> find(AircraftBasic ab) {
-		String hql="from AircraftBasic where overviewID=:overviewID";
+		String hql="from AircraftBasic where overviewID=:overviewID order by maininfo";
 		Query query= sf.getCurrentSession().createQuery(hql);
 		List list= query.setProperties(ab).list();//.setEntity("ab", ab).list();
 		return list;
 	}
 
+	@Override
+	public BigDecimal countMaininfo(String overviewID) {
+		String sql="select count(1) from RAS_AIRCRAFT_BASIC t where t.overviewid='"+overviewID+"' and t.maininfo is not null";
+		return (BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
+	}
+
+	public void setMaininfo(String basicID,String overviewID) {
+		String prefix=" update ras_aircraft_basic ab set ";
+		//所有数据置空.
+		sf.getCurrentSession().createSQLQuery(prefix+"maininfo=''"+" where ab.overviewid='"+overviewID+"'").executeUpdate();
+		//设置.
+		sf.getCurrentSession().createSQLQuery(prefix+"maininfo='1'"+" where ab.id='"+basicID+"'").executeUpdate();
+	}
 	
+	public AircraftBasic getMainAircraftBasic(String overviewID){
+		String sql="select * from ras_aircraft_basic where maininfo='1' and overviewid='"+overviewID+"'";
+		return (AircraftBasic)sf.getCurrentSession().createSQLQuery(sql).addEntity(AircraftBasic.class).setMaxResults(1).uniqueResult();
+	}
 }

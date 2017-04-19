@@ -25,8 +25,13 @@
         </h1>
     </div>
     <form enctype="multipart/form-data">
+    <input id="integral-graph" name="file" type="file"  >
+    
+    	<input id="file-0a" class="file" type="file" multiple data-min-file-count="1">
+    	
         <input id="kv-explorer" type="file" multiple>
         <br>
+        
         <input id="file-0a" class="file" type="file" multiple data-min-file-count="1">
         <br>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -170,7 +175,7 @@
      });
      */
     $(document).ready(function () {
-        $("#test-upload").fileinput({
+        $("#test-upload1").fileinput({
             'showPreview': false,
             'allowedFileExtensions': ['jpg', 'png', 'gif'],
             'elErrorContainer': '#errorBlock'
@@ -191,6 +196,80 @@
                 {caption: "nature-3.jpg", size: 632762, width: "120px", url: "{$url}", key: 3},
             ]
         });
+        
+        
+        var photo={}
+        photo.uploadExtraData={'basicID':'1111'}
+    	createFileinput("#integral-graph",photo);//整体图
+    	
+    	/**
+    	创建fileinput
+    	*/
+    	function createFileinput(id, photo) {
+    		
+    			$(id).fileinput({
+    				uploadUrl : 'http://localhost:8080/algz/ras/document/data/upimagefile', //上传的地址
+    				deleteUrl : './delimagefile',//删除URL.string, the URL for deleting the image/content in the initial preview via AJAX post response. This will be overridden by the initialPreviewConfig['url'] property.
+    				overwriteInitial : false,//boolean, whether you wish to overwrite the initial preview content and caption setup. This defaults to true, whereby, any initialPreview content set will be overwritten, when new file is uploaded or when files are cleared. Setting it to false will help displaying a saved image or file from database always - useful especially when using the multiple file upload feature.
+    				initialCaption: "请选择...",
+    				//initialPreviewShowDelete:false,
+    				initialPreviewAsData : true,//boolean, whether the initial preview content set is to be parsed as data instead of raw markup. Defaults to false for backward compatibility (prior to v4.3.2).
+    				initialPreview : photo.photoUrl,
+    				initialPreviewConfig : photo.photoConfig,
+    				previewSettings : {
+    					image : {
+    						width : "150px",
+    						height : "150px"
+    					},
+    				},
+    				uploadExtraData : photo.uploadExtraData
+    			/*,
+    			             uploadExtraData: function() {
+    			                 var extraValue = null;
+    			                 var radios = document.getElementsByName('excelType');
+    			                 for(var i=0;i<radios.length;i++){
+    			                     if(radios[i].checked){
+    			                         extraValue = radios[i].value;
+    			                     }
+    			                 }
+    			                 return {"excelType": extraValue};
+    			             }*/
+    			});
+    			$(id).on("fileuploaded",function(event, data, previewId, index) {
+    						//createFileinput(id,integralPhoto);//整体图
+    						//$(id).fileinput("refresh", {showUpload: false});
+    						//createFileinput(id,integralPhoto,"refresh");//整体图
+    /* 						$(id).fileinput("refresh",{
+    							uploadUrl : './upimagefile', //上传的地址
+    							deleteUrl : './delimagefile',//删除URL.string, the URL for deleting the image/content in the initial preview via AJAX post response. This will be overridden by the initialPreviewConfig['url'] property.
+    							overwriteInitial : false,//boolean, whether you wish to overwrite the initial preview content and caption setup. This defaults to true, whereby, any initialPreview content set will be overwritten, when new file is uploaded or when files are cleared. Setting it to false will help displaying a saved image or file from database always - useful especially when using the multiple file upload feature.
+    							initialCaption: "请选择...",
+    							//initialPreviewShowDelete:false,
+    							initialPreviewAsData : true//,//boolean, whether the initial preview content set is to be parsed as data instead of raw markup. Defaults to false for backward compatibility (prior to v4.3.2).
+
+    						});
+    						$(id).fileinput('enable'); */
+    						alert("上传成功!");
+    						/*$("#excelImport").modal("hide");
+    						//后台处理后返回的经纬度坐标json数组，
+    						var array = data.response;
+    						console.dir(array);
+    						//jquery循环取经纬度坐标
+    						$.each(array,function(index,latAndLon){
+    							var lon = latAndLon.lon;
+    							var lat = latAndLon.lat;
+    							var point =  new Point(lon, lat, map.spatialReference);
+    							var symbol = new esri.symbol.SimpleMarkerSymbol().setStyle(
+    								    SimpleMarkerSymbol.STYLE_CIRCLE).setColor(
+    								    new Color([255,255,0,0.5]));
+    							var attr = {"address": "addressName" };
+    							var infoTemplate = new esri.InfoTemplate("标题", "地址 :${address}");
+    							var graphic = new Graphic(point,symbol,attr,infoTemplate);
+    							map.graphics.add(graphic);
+    						});*/
+
+    					});
+    		}
         /*
          $("#test-upload").on('fileloaded', function(event, file, previewId, index) {
          alert('i = ' + index + ', id = ' + previewId + ', file = ' + file.name);

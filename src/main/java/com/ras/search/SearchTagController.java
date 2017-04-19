@@ -41,7 +41,7 @@ import net.sf.json.JsonConfig;
 public class SearchTagController {
 	
 	@Autowired
-	private SearchTagService searchTagService;
+	private SearchTagService service;
 	
 	@Autowired
 	private SearchCriteriaService searchCriteriaService;
@@ -68,61 +68,27 @@ public class SearchTagController {
     	page.setHeader_small("查询");
     	map.put("page", page);
     	
-    	map.put("searchTags", searchTagService.findAllParent());
+    	map.put("searchTags", service.findAllParent());
     	
         return new ModelAndView("ras/search/search",map);
     }
     
-    /**
-     * 查询搜索标签表格
-     * @param vo
-     * @param request
-     * @param response
-     */
-    @RequestMapping(value={"","/searchcriteriagird"})
-    public void SearchCriteriaGird(SearchTagVo vo,HttpServletRequest request,HttpServletResponse response){
-    	Map<String,String[]> map=request.getParameterMap();
-//    	vo.setDraw(Integer.parseInt(request.getParameter("draw")));
-//    	vo.setRecordsTotal(2);
-//    	rtvo.setRecordsFiltered(2);
-    	String s=java.net.URLDecoder.decode(map.get("data")[0]);
-    	Map m=CommonTool.stringFormToJson(s.split("&"),false);
-    	if(m.keySet().size()!=0){
-        	vo.setData(searchCriteriaService.SearchCriteriaGird(m));
-    	}else{
-    		vo.setData(null);
+    @RequestMapping(value={"/addnotefortaginput"})
+    public void addNoteForTagInput(HttpServletRequest request,HttpServletResponse response){
+    	String overviewID=request.getParameter("overviewID");
+    	String inputNames=request.getParameter("inputName");
+    	if(overviewID==null||inputNames==null){
+    		//return "{\"success\":false}";
     	}
-		CommonTool.writeJSONToPage(response, vo);
-		
+    	JSONObject jo=service.addNoteForTagInput(overviewID, inputNames.split(","));
+    	jo.put("\"success\"", true);
+//    	String msg="{\"success\":true,"
+//    			+ "inputs:[{name:'aircraftType',vals:[{dataSource:'飞机手册1',inputValue:'美国1'},{dataSource:'飞机手册2',inputValue:'美国2'}]}]}";
+		CommonTool.writeJSONToPage(response, jo);
+    	//return msg;//"{\"success\":true}";
     }
     
     
     
     
-    /**
-     * 查询关键字
-     * @param request
-     * @param response
-     * @return
-     
-    @RequestMapping(value={"","/searchsummarize"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public ModelAndView  searchSummarize(HttpServletRequest request, HttpServletResponse response) {
-		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-//    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
-    	String overviewID=request.getParameter("overviewID");
-    	Map<String, Object> map=new HashMap<String, Object>();
-    	
-    	DataVo<?> vo=new DataVo();
-    	vo.setOverviewID(overviewID);
-    	Map<String,String> dataMap=dataService.addModelParamPage(vo);
-    	if(dataMap!=null){
-    		map.putAll(dataMap);
-        	Page page=new Page();
-        	page.setHeader_h1("查询");
-        	page.setHeader_small(map.get("MODELNAME").toString());
-        	map.put("page", page);
-    	}
-    	
-        return new ModelAndView("ras/search/searchSummarize",map);
-    }*/
 }

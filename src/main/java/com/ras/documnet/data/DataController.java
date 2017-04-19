@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -83,12 +85,12 @@ public class DataController{
 //    	navbar.setIsMessage("1");
 //    	map.put("navbar", navbar);
     	
-    	User user=new User();
-    	user.setUsername("algz");
-    	map.put("user", user);
+//    	User user=new User();
+//    	user.setUsername("algz");
+//    	map.put("user", user);
     	
     	
-    	Map<String, Object> searchParam=new HashMap<String, Object>();
+    	//Map<String, Object> searchParam=new HashMap<String, Object>();
 //    	List<SearchTag> l=searchTagService.findAllParent();
 //    	map.put("searchTags", searchTagService.findAllParent());
 		return new ModelAndView("/ras/document/data/document",map);
@@ -133,16 +135,13 @@ public class DataController{
     	page.setHeader_small("机型参数编辑");
     	map.put("page", page);
     	
+    	//开启UI参数控制
     	map.put("isModify", "true");
     	
-    	JSONObject jo=service.addModelParamPage(vo);
-    	if(jo!=null){
-    		map.putAll(jo);
-    	}else{
-    		//map.put("overviewID", vo.getOverviewID());
-    	}
-
-    	
+    	//加载参数
+    	map.putAll(service.addModelParamPage(vo));//paramMap
+   	
+    	//加载图片
     	map.put("img",service.findModelImageParam(null,vo.getBasicID()));
     	
     	return new ModelAndView("/ras/document/data/addModelParam",map);
@@ -178,11 +177,16 @@ public class DataController{
 	@RequestMapping({"/savemodel"})
 	public ModelAndView saveModel(HttpServletRequest request,HttpServletResponse response){
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-		
+		Map<String,String> map=new HashMap<String,String>();
+		Enumeration<String> paramEnum = request.getParameterNames();
+		while (paramEnum.hasMoreElements()) {
+			String key=paramEnum.nextElement();
+			String value=request.getParameter(key);
+			map.put(key, value);
+		}
 		try {
-			service.saveModel(request.getParameterMap());
+			service.saveModel(map);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -195,11 +199,20 @@ public class DataController{
 	@RequestMapping({"/savemodelparam"})
 	public ModelAndView saveModelParam(HttpServletRequest request,HttpServletResponse response)throws Exception{
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-//		String model=request.getParameter("aircraftType");
-//		String cname=request.getParameter("form-cname");
-		Map<String,String[]> map=request.getParameterMap();
+		Map<String,String> map=new CaseInsensitiveMap();
+		Enumeration<String> paramEnum = request.getParameterNames();
+		while (paramEnum.hasMoreElements()) {
+			String key=paramEnum.nextElement();
+			String value=request.getParameter(key);
+			if(!value.equals("null")){
+				map.put(key, value);
+			}
+		}
+		if(map.get("overviewID")==null){
+			return null;
+		}
 		service.saveModelParam(map);
-		//return null;
+
 		return new ModelAndView("redirect:");
 	}
 	
@@ -223,10 +236,11 @@ public class DataController{
 	@RequestMapping({"/delmodelparam"})
 	public void delModelParam(HttpServletRequest request,HttpServletResponse response)throws Exception{
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-		String id=request.getParameter("basicID");
+		String basicID=request.getParameter("basicID");
+		String overviewID=request.getParameter("overviewID");
 		String s="";
-		if(!id.equals("")){
-			service.delModelParam(id.split(","));
+		if(!basicID.equals("")){
+			service.delModelParam(basicID.split(","),overviewID);
 			s="删除成功!";
 		}
 		
@@ -234,18 +248,47 @@ public class DataController{
 		CommonTool.writeJSONToPage(response, s);
 	}
 	
-	
+	/**
+	 * 设置此机型参数为主要信息
+	 */
+	@RequestMapping({"/setMainModelparam"})
+	public void setMainModelParam(HttpServletRequest request,HttpServletResponse response)throws Exception{
+		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
+		String basicID=request.getParameter("basicID");
+		String overviewID=request.getParameter("overviewID");
+		
+		String s="";
+		if(!basicID.equals("")){
+			service.setMainModelParam(basicID,overviewID);
+			s="设置成功!";
+		}
+		
+		CommonTool.writeJSONToPage(response, s);
+	}
 	
 	@RequestMapping({"/upimagefile"})
 	public void upImageFile(@RequestParam("file") MultipartFile file, AircraftPhoto photo,HttpServletRequest request, HttpServletResponse response){
         String msg="{\"success\":true}";
-        photo.setPhotoFile(file);
-        service.saveImageFile(photo);
+        if(photo.getBasicID()==null||photo.getBasicID().equals("null")){
+        	msg="{\"success\":false}";
+        	//msg="{\"id\":\"ff8081814cdf6f22014cdf6fafb40000\"}";
+        	CommonTool.writeJSONToPage(response,msg ); 
+        }else{
+            photo.setPhotoFile(file);
+            service.saveImageFile(photo);
+        }
+
 
       //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
-        CommonTool.writeJSONToPage(response,msg ); 
+        CommonTool.writeJSONToPage(response,photo ); 
 	}
 	
+	/**
+	 * 删除图片
+	 * @param photo
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping({"/delimagefile"})
 	public void delImageFile(AircraftPhoto photo,HttpServletRequest request, HttpServletResponse response){
         String msg="{\"success\":true}";

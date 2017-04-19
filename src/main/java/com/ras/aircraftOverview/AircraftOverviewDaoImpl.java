@@ -36,9 +36,24 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 	}
 
 	@Override
-	public Integer count() {
-		String sql = "select count(1) from ras_aircraft_overview";
-		return Integer.parseInt(sf.getCurrentSession().createSQLQuery(sql).uniqueResult() + "");
+	public Integer count(AircraftOverview ao) {
+		StringBuilder str=new StringBuilder("select count(1) from AircraftOverview where 1=1 ");
+		Field[] fs = ao.getClass().getDeclaredFields();
+		for (Field f : fs) {
+			f.setAccessible(true); 
+			Object obj=null;
+			try {
+				obj = f.get(ao);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(obj!=null){
+				str.append(" and LOWER("+f.getName()+") like '%"+obj.toString().toLowerCase()+"%'");
+			}
+			
+		}
+		return Integer.parseInt(sf.getCurrentSession().createQuery(str.toString()).uniqueResult() + "");
 	}
 
 	@Override

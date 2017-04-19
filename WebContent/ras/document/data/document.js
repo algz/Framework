@@ -1,5 +1,12 @@
 $(function() {
-
+	$("#modelSearch").on('click',function(){
+		var modelName=$("#modelNameTxt").val();
+		if(modelName){
+			tablemodel.settings()[0].ajax.data={modelName:modelName};
+			tablemodel.ajax.reload();
+		}
+	})
+	
 			// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
 			var tablemodel = $('#table-model')
 					// .wrap("<div class='dataTables_borderWrap' />") 
@@ -29,16 +36,6 @@ $(function() {
 									"title" : "机型名", 
 									data:'modelName',
 									sorting : false
-//									render:function(data, type, row, meta){
-//									    //个人理解  --以及参数的应用场景
-//									    //data:当前cell的值  --主要是操作这个参数来做渲染
-//									    //type:数据类型,枚举类型dt内置定义的  --用处不大
-//									    //row:当前行的所有数据  --可以做来用级联(没办法更改其他cell的渲染)
-//									    //meta:它下面有三个参数
-//									    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
-//									    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
-//									    return "<a href='./searchSummarize'>"+data+"</a>";
-//									}
 								}, {
 									"title" : "中文名", 
 									data:'modelCname',
@@ -114,13 +111,6 @@ $(function() {
 //									type:'date',
 									sorting : false,
 									render:function(data, type, row, meta){
-									    //个人理解  --以及参数的应用场景
-									    //data:当前cell的值  --主要是操作这个参数来做渲染
-									    //type:数据类型,枚举类型dt内置定义的  --用处不大
-									    //row:当前行的所有数据  --可以做来用级联(没办法更改其他cell的渲染)
-									    //meta:它下面有三个参数
-									    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
-									    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
 									    if(data==null){
 									    	return "";
 									    }
@@ -131,6 +121,18 @@ $(function() {
 									"title" : "编辑人", 
 									data:'editor', 
 									sorting : false
+								}, {
+									"title" : "主要信息",
+									data:'mainInfo',
+//									type:'date',
+									sorting : false,
+									render:function(data, type, row, meta){
+									    if(data=="1"){
+									    	return "主要";
+									    }else if(data==""){
+									    	return "";
+									    }
+									}
 								}],
 						"language" : {
 							"lengthMenu" : "每页显示 _MENU_ 条记录",
@@ -155,33 +157,49 @@ $(function() {
 			 */
 			var selectModelRowData=null;
 			$('#table-model tbody').on('click', 'tr', function () {
-				//$(this).toggleClass('selected');//添加选中行的样式
-				var checkbox=$(this).find('input:checkbox')[0];
-				if(!checkbox.checked){
-					tablemodel.$(':checked').attr('checked',false);
-					checkbox.checked=true;
+				var curCheckbox=$(this).find(':checkbox')[0];
+				if(curCheckbox==null){
+				 	return;
+				 }
+				 
+				 	/**
+					 * dataTable 的多选通过<tr>标签 class="selected" 属性是否存在来判断
+					 * row对象 : table.row('.selected').data();  
+					 * 返回数组: table.rows('.selected').data();
+					 */
+//					 $(this).toggleClass('selected');
+				 
+				if(!curCheckbox.checked){
+					//选中
+					tablemodel.$(':checked').attr('checked',false);//清除所有的选中框.
+					$('#table-model tr').removeClass('selected'); //清除grid所有的选择项.
+					$(this).addClass('selected');
+					
+//					curCheckbox.checked=true;
 					selectModelRowData=tablemodel.rows(this).data()[0];
 					tablemodelparam.settings()[0].ajax.data={overviewID:selectModelRowData.overviewID};
 					tablemodelparam.ajax.reload();
 				}else{
+					//取消
+					$(this).removeClass('selected');
 					tablemodelparam.settings()[0].ajax.data={overviewID:-1};
 					tablemodelparam.ajax.reload();
 //		        	tablemodelparam.clear();
 //		        	tablemodelparam.rows(0).clear();
 	//		        	tablemodelparam.rows(0).remove().draw(false);
-					checkbox.checked=false
+//					curCheckbox.checked=false
 				}
-//				checkbox.checked=!checkbox.checked;
+				curCheckbox.checked=!curCheckbox.checked;
 		    });
 		    
 		    /**
 			 * 修改机型
 			 */
 			$("#modifyModel").click(function(){
-				if(selectModelRowData==null){
+				if(tablemodel.row(".selected").length==0){
 					bootbox.alert("请选择机型!");
 				}else{
-					var s="addmodel?overviewID="+selectModelRowData.overviewID; 
+					var s="addmodel?overviewID="+tablemodel.row(".selected").data().overviewID; 
 					window.location.href=s
 //					bootbox.dialog({
 //						//onload="this.height =   document.frames["ifrname"].document.body.scrollHeight" id="ifrid"
@@ -194,7 +212,7 @@ $(function() {
 			 * 删除机型
 			 */
 			$("#delModel").click(function(){
-				if(selectModelRowData==null){
+				if(tablemodel.row(".selected").length==0){
 					bootbox.alert({
 						message:"请选择机型后在删除!",
 						buttons: 			
@@ -216,11 +234,13 @@ $(function() {
 								type:"POST",
 								url:"./delmodel",
 								data:{
-									overviewID:selectModelRowData.overviewID
+									overviewID:tablemodel.row(".selected").data().overviewID
 								},
 								success:function(msg){
 									bootbox.alert(msg);
 									tablemodel.ajax.reload();
+									selectModelParamRowData=null;
+									tablemodelparam.ajax.reload();
 									
 								}
 							})
@@ -230,6 +250,7 @@ $(function() {
 					//window.location.href="addmodelparampage?overviewID="+selectModelRowData.overviewID+"&basicID="+selectModelParamRowData.basicID; 
 				}
 			})
+			
 			
 		    
 			////////////////////////////////////////////////////
@@ -243,14 +264,23 @@ $(function() {
 				 if(curCheckbox==null){
 				 	return;
 				 }
+				 
+				 //table.$(':checked').attr('checked',false); //清除所有的选中框.
+				 $('#table-modelparam tr').removeClass('selected'); //清除grid所有的选择项.
+				 //$(this).toggleClass('selected');
+				 
 		        if (curCheckbox.checked ) {
+		        	//取消
 		        	curCheckbox.checked=false;
+		        	$(this).removeClass('selected');
 		        }
 		        else {
+		        	//选中
 		            //table.$('tr.selected').removeClass('selected');
 		        	tablemodelparam.$(':checked').attr('checked',false);
 		        	curCheckbox.checked=true;
 		        	selectModelParamRowData=tablemodelparam.rows(this).data()[0];
+		        	$(this).addClass('selected');
 		        }
 		    });
 		    
@@ -262,7 +292,7 @@ $(function() {
 				if(selectModelRowData==null){
 					bootbox.alert("请选择机型后在添加参数!");
 				}else{
-					window.location.href="addmodelparampage?overviewID="+selectModelRowData.overviewID//+window.location.href; 
+					window.location.href="addmodelparampage?overviewID="+selectModelRowData.overviewID+"&option=create"//+window.location.href; 
 				}
 			})
 			
@@ -270,15 +300,16 @@ $(function() {
 			 * 修改机型参数
 			 */
 			$("#modifyModelparam").click(function(){
-				if(selectModelParamRowData==null){
+				if(tablemodelparam.row('.selected').length==0){
 					bootbox.alert("请选择机型参数后在修改参数!");
 				}else{
-					window.location.href="addmodelparampage?overviewID="+selectModelRowData.overviewID+"&basicID="+selectModelParamRowData.basicID; 
+					window.location.href="addmodelparampage?overviewID="+tablemodel.row(".selected").data().overviewID+
+					"&basicID="+tablemodelparam.row('.selected').data().basicID+"&option=modify"; 
 				}
 			})
 			
 			$("#delModelparam").click(function(){
-				if(selectModelParamRowData==null){
+				if(tablemodelparam.row('.selected').length==0){
 					bootbox.alert({
 						message:"请选择机型参数后在删除参数!",
 						buttons: 			
@@ -300,12 +331,55 @@ $(function() {
 								type:"POST",
 								url:"./delmodelparam",
 								data:{
+									basicID:tablemodelparam.row('.selected').data().basicID,
+									overviewID:tablemodel.row(".selected").data().overviewID
+								},
+								success:function(msg){
+									bootbox.alert(msg);
+									selectModelParamRowData=null;
+									tablemodelparam.ajax.reload();
+									
+								}
+							})
+						}
+					})
+
+					//window.location.href="addmodelparampage?overviewID="+selectModelRowData.overviewID+"&basicID="+selectModelParamRowData.basicID; 
+				}
+			})
+			
+			/**
+			 * 设置机型参数为主要
+			 */
+			$("#setMainModelparam").click(function(){
+				if(selectModelRowData==null){
+					bootbox.alert({
+						message:"请选择机型!",
+						buttons: 			
+						{
+							"ok" :
+							 {
+								"label" : "确定",
+								"className" : "btn-sm ",
+								"callback": function() {
+									//Example.show("great success");
+								}
+							}
+						}
+						});
+				}else{
+					bootbox.confirm("是否设置当前机型参数为主要?",function(result){
+						if(result){
+							$.ajax({
+								type:"POST",
+								url:"./setMainModelparam",
+								data:{
+									overviewID:selectModelRowData.overviewID,
 									basicID:selectModelParamRowData.basicID
 								},
 								success:function(msg){
 									bootbox.alert(msg);
 									tablemodelparam.ajax.reload();
-									
 								}
 							})
 						}

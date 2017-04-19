@@ -1,6 +1,8 @@
 package com.ras.search.searchCriteria;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ras.search.SearchTag;
+import com.ras.tool.CommonTool;
 
 @Repository
 public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
@@ -21,7 +24,10 @@ public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
 	private SessionFactory sf;
 	
 	@SuppressWarnings("unchecked")
-	public List<String[]> SearchCriteriaGird(Map<String,String> map){
+	public void SearchCriteriaGird(SearchCriteriaVo vo){
+//    	String s=java.net.URLDecoder.decode(map.get("data")[0]);
+    	Map<String,String> map=vo.getParamMap();//CommonTool.stringFormToJson(s.split("&"),false);
+		
 		//所有Tag		
 		String sql="select * from RAS_SEARCH_TAG t where t.enname is not null";
 		List<SearchTag> searchTagList=sf.getCurrentSession().createSQLQuery(sql).addEntity(SearchTag.class).list();
@@ -29,12 +35,29 @@ public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
 		String tableSql=loadReqMapToTable(searchTagList,map);
 		String paramSql=loadReqMapToParam(searchTagList,map);
 		
-		sql="select distinct ao.id,ao.modelname,ao.modelcname,ao.modelename from ras_aircraft_overview ao "+tableSql+paramSql;
-		return sf.getCurrentSession().createSQLQuery(sql).list();
+		sql="from ras_aircraft_overview ao "+tableSql+paramSql;
+		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select distinct count(1) "+sql).uniqueResult();
+		vo.setRecordsTotal(count.intValue());
+		
+		List<Object[]> list=sf.getCurrentSession().createSQLQuery(" select distinct ao.id,ao.modelname,ao.modelcname,ao.modelename,ab.id basicID "+sql)
+					.setFirstResult(vo.getStart())
+					.setMaxResults(vo.getLength())
+					.list();
+		List<Map<String,String>> retList=new ArrayList<Map<String,String>>();
+		for(Object[] objs:list){
+			Map<String,String> dataMap=new HashMap<String,String>();
+			dataMap.put("overviewID", objs[0].toString());
+			dataMap.put("modelName", objs[1].toString());
+			dataMap.put("modelCname", objs[2].toString());
+			dataMap.put("modelEname", objs[3].toString());
+			dataMap.put("basicID", objs[4].toString());
+			retList.add(dataMap);
+		}
+		vo.setData(retList);
 	}
 	
 	/**
-	 * 转换数据为表格
+	 * 转换查询参数为字符串
 	 * @param searchTagList
 	 * @param reqMap 字段 Map
 	 * @return
@@ -50,7 +73,7 @@ public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
 						paramSet.add(s);
 						switch(s){
 						case "BASIC":
-							paramSQL.append("inner join ras_aircraft_basic ab on ab.overviewid=ao.id");
+							paramSQL.append("inner join ras_aircraft_basic ab on ab.overviewid=ao.id and ab.maininfo=1 ");
 							break;
 						case "WEIGHT":
 							paramSQL.append(" left join ras_aircraft_weight aw on aw.basic_id=ab.id ");

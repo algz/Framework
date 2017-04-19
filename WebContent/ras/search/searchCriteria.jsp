@@ -74,7 +74,7 @@
 									</script>
 								</div>
 							    </c:when>
-							    <c:when test="${searchTag.ui_type=='text'}">
+							    <c:when test="${searchTag.ui_type=='text'||searchTag.ui_type=='number'}">
 							    <!-- 文本框 -->
 							    <div class="btn-group" data-toggle="buttons">
 									<div >
@@ -134,7 +134,7 @@
 
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
-						<table id="sample-table-2" class="table table-striped table-bordered table-hover">
+						<table id="searchTable" class="table table-striped table-bordered table-hover">
 						</table>
 					</div>
 				

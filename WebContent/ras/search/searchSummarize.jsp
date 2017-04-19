@@ -72,10 +72,10 @@
 							<div id="docment" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_document.jsp"></jsp:include>
 							</div>
-							
+							<%--
 							<div id="discuss" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_discuss.jsp"></jsp:include>
-							</div>
+							</div>  --%>
 						</div>
 					</div>
 	
@@ -97,10 +97,10 @@
 			<!-- 图片放大查看(jquery弹出层插件jquery.ColorBox)  -->
 			<script src="<%=basePath%>ras/common/js/jquery.colorbox.js"></script>
 			
-			<!-- JS编辑器 -->
+			<!-- JS编辑器 
 			<script src="<%=basePath%>ras/common/js/jquery.hotkeys.js"></script>
 			<script src="<%=basePath%>ras/common/js/bootstrap-wysiwyg.js"></script>
-
+-->
 		</plugin_js>
 		<script type="text/javascript" src="searchSummarize.js"></script>		
 

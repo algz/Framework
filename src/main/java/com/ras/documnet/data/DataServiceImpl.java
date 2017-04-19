@@ -7,6 +7,7 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import com.ras.aircraftOverview.AircraftOverviewDao;
 import com.ras.aircraftPhoto.AircraftPhoto;
 import com.ras.aircraftPhoto.AircraftPhotoDao;
 import com.ras.aircraftWeight.AircraftWeight;
+import com.ras.search.SearchTag;
+import com.ras.search.SearchTagDao;
 import com.ras.tool.CommonTool;
 import com.ras.tool.file.UploadFile;
 
@@ -43,6 +46,8 @@ import net.sf.json.JSONObject;
 @Service
 public class DataServiceImpl implements DataService {
 	
+	@Autowired
+	private SearchTagDao searchTagDao;
 	
 	@Autowired
 	private AircraftOverviewDao aircraftOverviewDao;
@@ -65,7 +70,7 @@ public class DataServiceImpl implements DataService {
 	 * @see com.ras.documnet.data.DataService#saveModel(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Transactional
-	public void saveModel(Map<String, String[]> map) throws Exception{
+	public void saveModel(Map<String, String> map) throws Exception{
 		AircraftOverview ao=new AircraftOverview();
 		CommonTool.mapToBean(map, ao);
 		aircraftOverviewDao.saveOrUpdate(ao);
@@ -73,8 +78,10 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public void findTableModelGrid(DataVo vo) {
-		vo.setData(aircraftOverviewDao.findAll());
-		vo.setRecordsTotal(aircraftOverviewDao.count());
+		AircraftOverview ao=new AircraftOverview();
+		ao.setModelName(vo.getModelName());
+		vo.setData(aircraftOverviewDao.findByProperty(ao));
+		vo.setRecordsTotal(aircraftOverviewDao.count(ao));
 	}
 
 	@Override
@@ -95,38 +102,46 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Override
 	@Transactional
-	public void saveModelParam(Map<String, String[]> map) throws Exception {
-		Map<String,String> tem=new CaseInsensitiveMap();
-		
-		for (Map.Entry<String, String[]> entry : map.entrySet()) {
-			tem.put(entry.getKey(), entry.getValue().length == 0 ||entry.getValue()[0].equals("null")? null : entry.getValue()[0]);
-		}
-		
-		AircraftBasic ab = new AircraftBasic();
-		//CommonTool.mapToBean(map, ab);
-		//ab.setModifyDate(new Date());
-		aircraftBasicDao.saveOrUpdateMap(tem);
+	public void saveModelParam(Map<String, String> map) throws Exception {
 
-		//AircraftCapability ac = new AircraftCapability();
-//		ac.setBasicID(ab.getBasicID());
-//		CommonTool.mapToBean(map, ac);
-//		aircraftCapabilityDao.saveOrUpdate(ac);
-//
-//		AircraftWeight aw = new AircraftWeight();
-//		CommonTool.mapToBean(map, aw);
-		// aircraftBasicDao.saveOrUpdate(ab);
+		boolean isCreate=false;
+		String basicID=map.get("basicID");
+
+		
+		if(basicID==null||basicID.toString().equals("")){
+			isCreate=true;
+			BigDecimal count=aircraftBasicDao.countMaininfo(map.get("overviewID"));
+			map.put("MAININFO", count.compareTo(BigDecimal.ZERO)!=0?null:"1");
+			dao.saveModelParam("BASIC", map,isCreate);
+			map.put("basicID", map.get("ID"));
+		}else{
+			dao.saveModelParam("BASIC", map,isCreate);
+		}
+		dao.saveModelParam("WEIGHT", map,isCreate);
+		dao.saveModelParam("LAYOUT", map,isCreate);
+		dao.saveModelParam("CAPABILITY", map,isCreate);
+		dao.saveModelParam("SYSTEM", map,isCreate);
+
+	}
+	
+	private boolean validateTable(String tableID,List<SearchTag> allTags,Map<String, String> map){
+		for (SearchTag tag : allTags) {
+			if (tableID.equals(tag.getParent_id())&&map.containsKey(tag.getEnname())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override
 	public JSONObject addModelParamPage(DataVo vo) {
-//		return dao.addModelParamPage(vo);
 		return dao.findModelParam(vo);
 	}
 
 	@Override
 	@Transactional
-	public void delModelParam(String[] ids) {
-		dao.delModelParam(ids);
+	public void delModelParam(String[] ids,String overviewID) {
+		dao.delModelParam(ids,overviewID);
 		
 	}
 
@@ -136,10 +151,17 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
+	@Transactional
 	public void delModel(String[] ids) {
 		dao.delModel(ids);
 	}
 
+	@Override
+	@Transactional
+	public void setMainModelParam(String basicID,String overviewID) {
+		dao.setMainModelParam(basicID,overviewID);
+	}
+	
 	/**
 	 * 查找图片,按类别.
 	 */
@@ -166,5 +188,7 @@ public class DataServiceImpl implements DataService {
 	public void delImageFile(String photoID) {
 		aircraftPhotoDao.del(photoID);
 	}
+
+
 
 }

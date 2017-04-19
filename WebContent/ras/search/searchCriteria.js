@@ -30,7 +30,7 @@ $(function() {
 			})
 
 			// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
-			var dataTable = $('#sample-table-2')
+			var dataTable = $('#searchTable')
 					// .wrap("<div class='dataTables_borderWrap' />") 
 					// if you are applying horizontal scrolling (sScrollX)
 					.DataTable({
@@ -57,7 +57,8 @@ $(function() {
 										return startIndex+meta.row+1;
 									}
 								},{
-									"title" : "机型名",/* data:'name', */
+									"title" : "机型名", 
+									data:'modelName',
 									sorting : false,
 									render:function(data, type, row, meta){
 									    //个人理解  --以及参数的应用场景
@@ -67,10 +68,15 @@ $(function() {
 									    //meta:它下面有三个参数
 									    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
 									    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
-									    return "<a href='./searchsummarize?overviewID="+row[0]+"'>"+data+"</a>";
+									    return "<a href='./searchsummarize?overviewID="+row.overviewID+"&option=load'>"+data+"</a>";
 									}
 								}, {
-									"title" : "型号",/* data:'model', */
+									"title" : "中文名称",
+									data:'modelCname',
+									sorting : false
+								}, {
+									"title" : "英文名称",
+									data:'modelEname',
 									sorting : false
 								}],
 						"language" : {

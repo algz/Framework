@@ -6,6 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ras.search.SearchTagVo;
+
+import net.sf.json.JSONArray;
+
 @Service
 public class SearchCriteriaServiceImpl implements SearchCriteriaService {
 
@@ -13,9 +17,9 @@ public class SearchCriteriaServiceImpl implements SearchCriteriaService {
 	private SearchCriteriaDao dao;
 	
 	@Override
-	public List<String[]> SearchCriteriaGird(Map map) {
-		
-		return dao.SearchCriteriaGird(map);
+	public void SearchCriteriaGird(SearchCriteriaVo vo) {
+		dao.SearchCriteriaGird(vo);
 	}
+
 
 }

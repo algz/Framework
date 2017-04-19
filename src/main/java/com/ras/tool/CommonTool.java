@@ -19,11 +19,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-
-import com.ras.search.SearchTag;
+import org.springframework.web.multipart.MultipartFile;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -107,7 +106,7 @@ public class  CommonTool{
 	 * @return
 	 */
 	public static JSONObject beanToJSONObject(Object obj,final boolean  isSaveNull){
-		JsonConfig jsonConfig = new JsonConfig(); 
+		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.setJsonPropertyFilter(new PropertyFilter(){
 			/**
 			 * @param source 输入的原对象
@@ -119,7 +118,7 @@ public class  CommonTool{
 				// 这里填写需要过滤的属性名,返回 true,则过滤;
 				//class.isInstance(obj),判断 obj 对象能否转换成 class 类型;
 				//obj instanceof Class,判断 obj 对象是不是 Class 类型.
-			if (source.getClass().isInstance(value)||value instanceof Set||(!isSaveNull&&value==null)){
+			if (source.getClass().isInstance(value)||value instanceof Set||value instanceof MultipartFile||(!isSaveNull&&value==null)){
 				return true;
 			}
 			return false;
@@ -134,28 +133,28 @@ public class  CommonTool{
 	 * @param obj
 	 * @throws Exception
 	 */
-	public static void mapToBean(Map<String, String[]> map,Object obj)throws Exception{
+	public static void mapToBean(Map<String, String> map,Object obj)throws Exception{
 	            BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
 	            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 	            for (PropertyDescriptor property : propertyDescriptors) {
 	                String key = property.getName();
 	                if (map.containsKey(key)) {
-	                    String[] value = (String[])map.get(key);
+	                    String value = map.get(key);
 	                    // 得到property对应的setter方法
 	                    Method setter = property.getWriteMethod();
 	                    switch (setter.getParameterTypes()[0].getName()){
 		                    case "java.lang.Integer":
-		                    	if(!value[0].equals("")){
-			                    	setter.invoke(obj, Integer.parseInt(value[0]));
+		                    	if(!value.equals("")){
+			                    	setter.invoke(obj, Integer.parseInt(value));
 		                    	}
 		                    	break;
 		                    case "java.lang.Double":
-		                    	if(!value[0].equals("")){
-		                    		setter.invoke(obj, Double.parseDouble(value[0]));
+		                    	if(!value.equals("")){
+		                    		setter.invoke(obj, Double.parseDouble(value));
 		    	                }
 		                    	break;
 		                    default:
-		                    	setter.invoke(obj, value[0]);
+		                    	setter.invoke(obj, value);
 			                    break;
 	                    }
 	                    
@@ -181,6 +180,11 @@ public class  CommonTool{
     	}
         return map;
     }
+	
+	public static String getGUID(Session sf){
+		String sql="select rawtohex(sys_guid()) from dual";
+		return (String)sf.createSQLQuery(sql).uniqueResult();
+	}
 	
 //	 private static void printType (Object object) {
 //		    Class type = object.getClass();

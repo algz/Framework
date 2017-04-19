@@ -3,6 +3,8 @@ package com.ras.search;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 public interface SearchTagService {
 	
 	public List<SearchTag> findAllParent();
@@ -11,6 +13,6 @@ public interface SearchTagService {
 	
 	public void save(SearchTag searchTag);
 	
-	public Map<String,String> searchSummarize(String overviewID);
+	public JSONObject addNoteForTagInput(String overviewID,String[] inputNames);
 	
 }

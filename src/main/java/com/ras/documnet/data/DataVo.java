@@ -13,6 +13,10 @@ public class DataVo<T> extends ReturnVo<T>{
 	
 	private String basicID;
 	
+	private String modelName;
+	
+	private String option;
+	
 	private Integer start;
 	private Integer limit;
 	private Integer count;
@@ -61,6 +65,22 @@ public class DataVo<T> extends ReturnVo<T>{
 
 	public void setBasicID(String basicID) {
 		this.basicID = basicID;
+	}
+
+	public String getOption() {
+		return option;
+	}
+
+	public void setOption(String option) {
+		this.option = option;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
 	
