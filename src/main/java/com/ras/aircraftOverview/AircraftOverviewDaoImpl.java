@@ -3,16 +3,21 @@
  */
 package com.ras.aircraftOverview;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftBasic.AircraftBasic;
+import com.ras.tool.CommonTool;
 
 /**
  * @author algz

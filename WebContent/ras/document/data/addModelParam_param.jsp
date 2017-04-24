@@ -11,21 +11,12 @@
 %>
 <form id='modelParamForm' action="./savemodelparam" method="post">
 	<input name="overviewID" type="hidden" value="<%=request.getParameter("overviewID") %>"/>
-<c:forEach var="dataParam" items="${paramMap }" varStatus="status">
+	<c:forEach var="dataParam" items="${paramMap }" varStatus="status">
 	<c:if test="${fn:length(dataParam.dataMap)!=0 }">
 	
 	<div>
 		<h3 class="header smaller lighter purple">
 			${dataParam.caption}
-			<c:if test="${status.index==0}">
-			<%if(request.getAttribute("isModify")==null||!request.getAttribute("isModify").equals("true")){ %>
-			<label>
-				<small class="smaller-90">开启注释:</small>
-				<input class="ace ace-switch ace-switch-5" id="checkBtn" type="checkbox" >
-				<span class="lbl middle" ></span>
-			</label>
-			<%} %>
-			</c:if>
 		</h3>
 							
 		<div class="row">
@@ -37,6 +28,7 @@
 					<c:forEach var="basicItem" items="${dataParam.dataMap }">
 					<%
 					String validateType=null; 
+					String extDataValue=null;
 					//新建/修改状态验证
 					if(request.getAttribute("isModify")!=null&&request.getAttribute("isModify").equals("true")){
 						
@@ -48,11 +40,14 @@
 							case "numberRegion":
 								validateType+=" number ";
 								break;
+							case "checkbox":
+								extDataValue="extCheckbox="+jo.get("elTypeValue")+"";
+								break;
 							}
 						}
 					}
 					%>
-						<form:form-group id="${basicItem.elID }" label="${basicItem.elLabel }" value="${basicItem.elValue}" readonly="${basicItem.readonly}" simpleValidate="<%=validateType %>"/>   
+						<form:form-group id="${basicItem.elID }" type="${basicItem.elType=='checkbox1'?'select':'text'}" label="${basicItem.elLabel }" value="${basicItem.elValue}" readonly="${basicItem.readonly}" extData="<%=extDataValue %>" simpleValidate="<%=validateType %>"/>   
 					</c:forEach>
 				</div>
 			</div><!-- /.col -->
@@ -62,8 +57,6 @@
 	</c:if>
 </c:forEach>
 
-
-	<%if(request.getAttribute("isModify")!=null&&request.getAttribute("isModify").equals("true")){ %>
 	<div class="row">
 		<div class="col-sm-offset-6">
 			<div class="btn-group">
@@ -74,10 +67,33 @@
 			</div>
 		</div>
 	</div>
-	<script src="<%=basePath%>ras/common/js/jqueryvalidation/jquery.validate.js"></script>
-	<script src="<%=basePath%>ras/common/js/jqueryvalidation/messages_zh.js"></script>
+
 	<script type="text/javascript">
 	$(function(){
+		
+		/* $("select[extCheckbox]").each(function(index,element){
+			$.ajax({
+				url:'./findtablesql',
+				data:{
+					tableName:$(this).attr('extCheckbox')
+				},
+				success:function(data){
+					element.options.add(new Option());
+					$(element).attr('multiple',"")
+					for(var i=0;i<data.vals.length;i++){
+						element.options.add(new Option(data.vals[i],data.vals[i])); //这个兼容IE与firefox 
+						//$(this).append('<option>'+data.vals[i]+'</option>')
+					}
+					  $(element).chosen({
+							allow_single_deselect : true,
+							disable_search:true, //关闭搜索框,默认为false.
+						    width: '100%'
+						}); 
+				}
+			})
+		}) */
+
+		
 		 /**
          * 表单验证
          */
@@ -115,7 +131,6 @@
 						digits:true,
 						max:99
 					}
-					
 				},
 				/**
 				 * messages：自定义的提示信息，key:value 的形式，key 是要验证的元素(name属性)，value 可以是字符串或函数。
@@ -170,59 +185,4 @@
 			});
 	})
 	</script>
-	<%}else{ %>
-	<script type="text/javascript">
-$(function(){
-	$("#checkBtn").click(function(){
-		//checked="checked"
-		if($(this).attr("checked")==null){
-			//打开
-			$(this).attr("checked","checked");
-			var s="";
-			var els=$("#modelParamForm :text[name!=dataSources]");
-			for(var i=0;i<els.length;i++){
-				if(i!=0){
-					s+=",";
-				}
-				s+=$(els[i]).attr("name");
-			}
-			$.ajax({
-				url:'./addnotefortaginput',
-				data:{
-					overviewID:$(":hidden[name=overviewID]").val(),
-					inputName:s
-				},
-				success:function(data){
-					var obj=data;//eval("("+data+")");
-					for(var i=0;i<obj.inputs.length;i++){
-						var input=obj.inputs[i];
-						var el=$(":text[name="+input.name+"]");
-						el.offsetParent().offsetParent().attr("data-toggle","tooltip");
-						el.after("<i class='ace-icon fa fa-info-circle'></i>");
-						var s="<ul class='list-unstyled'>"
-						for(var j=0;j<input.vals.length;j++){
-							var val=input.vals[j]
-							s+="<li>"
-							s+=(j+1)+"."+val.inputValue+" <i class='ace-icon fa fa-external-link blue'/><span class='text-muted'>"+val.dataSources+"</span><p>";
-							s+="</li>"
-						}
-						el.offsetParent().offsetParent().attr("title",s+"</ul>");
-					}
-					$('[data-toggle="tooltip"]').tooltip({
-						html:true,
-						placement:'right'
-					});
-				}
-			})
-		}else{
-			//关闭
-			$(this).removeAttr("checked")
-			$('[data-toggle="tooltip"]').tooltip('destroy')
-			$('[data-toggle="tooltip"]').attr("title","")
-			$(":text~").remove();
-		}
-	})
-})
-</script>
-	<%} %>
 </form>

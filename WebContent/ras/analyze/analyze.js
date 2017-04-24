@@ -1,5 +1,13 @@
 $(function(){
 
+	$("#dt-list-1 dd").each(function(index,el){
+		if($(el).find(".btn-group :input").length==0){
+			$(el).prev().remove();
+			$(el).next().remove();
+			$(el).remove();
+		}
+	})
+	
 	var chart=null;
 
    $('#modelNameBtn').typeahead(null,{
@@ -104,11 +112,14 @@ $('#modelNameBtn').keydown(function(event){
 				yAxis:yAxis
 			},
 			success:function(data){
-				if(chart==null){
+//				if(chart==null){
 					chart=Highcharts.chart("highchart",{
 				    	// Highcharts 配置
+						credits: {
+			            	enabled: false
+			       	 	},
 						chart: {
-            				type: 'scatter'//,
+            				type: $('#chartType').val()//'column'// 'scatter'//,
             				//zoomType: 'xy'
 	        				},
 					    title: {
@@ -135,7 +146,7 @@ $('#modelNameBtn').keydown(function(event){
 					        data : [2,4,6,8,10]//[[1, 4], [3, 5], [2, 6]]
 					    }]*/
 					});
-				}
+//				}
 				
 				chart.xAxis[0].setTitle({
             		text: $('#xAxisTxt').val()
@@ -146,7 +157,7 @@ $('#modelNameBtn').keydown(function(event){
             		//rotation: 90
         		});
 				chart.series=[];
-				data="[{names:'f-32',datas:[2000]},{names:'f-35',datas:[2200]}]"
+				//data="[{names:'f-32',datas:[[100,100],2000]},{names:'f-35',datas:[200,2200]}]"
 				var objs=eval(data);
 				
 				for(var i=0;i<objs.length;i++){

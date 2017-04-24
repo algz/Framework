@@ -140,6 +140,7 @@ public class AircraftBasicDaoImpl implements AircraftBasicDao {
 	@Override
 	public List<AircraftBasic> find(AircraftBasic ab) {
 		String hql="from AircraftBasic where overviewID=:overviewID order by maininfo";
+		BigDecimal count=(BigDecimal)sf.getCurrentSession().createQuery("select count(1) "+hql).uniqueResult();
 		Query query= sf.getCurrentSession().createQuery(hql);
 		List list= query.setProperties(ab).list();//.setEntity("ab", ab).list();
 		return list;

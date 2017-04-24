@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,9 +36,15 @@ public interface DataService {
 	
 	public JSONArray findModelImageParam(String category,String basicID);
 	
-	public void saveImageFile(AircraftPhoto photo);
+	public void saveModelPhotoFile(AircraftOverview ao);
+	
+	public void saveModelParamPhotoFile(AircraftPhoto photo);
+	
+	
 	
 	public void delImageFile(String photoID);
+	
+	public void delModelImageFile(String overviewID);
 	
 	/**
 	 * 保存 机型概述
@@ -52,4 +59,6 @@ public interface DataService {
 	public void delModelParam(String[] ids,String overviewID);
 	
 	public void setMainModelParam(String basicID,String overviewID);
+	
+	public List findTableSQL(String tableName);
 }

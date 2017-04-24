@@ -19,8 +19,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftBasic.AircraftBasic;
 
@@ -43,11 +45,16 @@ public class AircraftOverview{
 	@Column(name="MODELENAME")
 	private String modelEname;
 
+	@Column(name="PHOTOURL")
+	private String photoUrl;
+	
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "overviewID")
 	//@OrderBy(value = "id asc") //对@OneToMany获取的关联列表排序,在@OneToMany下面加个@OrderBy,参数值要对应Bean中的属性名
 //	 @LazyCollection(LazyCollectionOption.FALSE)
 	private List<AircraftBasic> aircraftBasicSet;
 	
+	@Transient
+	private MultipartFile photoFile;
 	
 	public String getOverviewID() {
 		return overviewID;
@@ -87,6 +94,25 @@ public class AircraftOverview{
 
 	public void setAircraftBasicSet(List<AircraftBasic> aircraftBasicSet) {
 		this.aircraftBasicSet = aircraftBasicSet;
+	}
+
+	
+
+
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
+
+	public MultipartFile getPhotoFile() {
+		return photoFile;
+	}
+
+	public void setPhotoFile(MultipartFile photoFile) {
+		this.photoFile = photoFile;
 	}
 
 

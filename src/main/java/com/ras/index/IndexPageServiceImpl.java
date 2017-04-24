@@ -12,9 +12,8 @@ public class IndexPageServiceImpl implements IndexPageService{
 	private IndexPageDao dao;
 	
 	@Override
-	public List<?> searchIndexPage(String modelname) {
-		// TODO Auto-generated method stub
-		return dao.searchIndexPage(modelname);
+	public void searchIndexPage(IndexPageVo vo) {
+		dao.searchIndexPage(vo);
 	}
 
 }

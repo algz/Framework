@@ -10,7 +10,9 @@ package com.ras.documnet.data;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -130,10 +132,7 @@ public class DataController{
 	@RequestMapping({"/addmodelparampage"})
 	public ModelAndView AddModelParamPage(DataVo vo,HttpServletRequest request,HttpServletResponse response){
     	Map<String, Object> map=new HashMap<String, Object>();
-    	Page page=new Page();
-    	page.setHeader_h1("首页");
-    	page.setHeader_small("机型参数编辑");
-    	map.put("page", page);
+
     	
     	//开启UI参数控制
     	map.put("isModify", "true");
@@ -142,7 +141,12 @@ public class DataController{
     	map.putAll(service.addModelParamPage(vo));//paramMap
    	
     	//加载图片
-    	map.put("img",service.findModelImageParam(null,vo.getBasicID()));
+    	map.put("img",service.findModelImageParam(null,vo.getOverviewID()));
+    	
+    	Page page=new Page();
+    	page.setHeader_h1("首页");
+    	page.setHeader_small(map.get("modelName")+"机型参数编辑");
+    	map.put("page", page);
     	
     	return new ModelAndView("/ras/document/data/addModelParam",map);
 	}
@@ -266,16 +270,43 @@ public class DataController{
 		CommonTool.writeJSONToPage(response, s);
 	}
 	
+	/**
+	 * 
+	 * @param file
+	 * @param photo
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping({"/upmodelimagefile"})
+	public void upModelImageFile(@RequestParam("file") MultipartFile file,AircraftOverview ao,HttpServletRequest request, HttpServletResponse response){
+        String msg="{\"success\":true}";
+        String overviewID=ao.getOverviewID();
+        if(overviewID==null||overviewID.equals("null")){
+        	msg="{\"success\":false}";
+        	//msg="{\"id\":\"ff8081814cdf6f22014cdf6fafb40000\"}";
+        	CommonTool.writeJSONToPage(response,msg ); 
+        }else{
+            ao.setPhotoFile(file);
+            service.saveModelPhotoFile(ao);
+        }
+
+
+      //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
+        CommonTool.writeJSONToPage(response,ao ); 
+	}
+	
+	
+	
 	@RequestMapping({"/upimagefile"})
 	public void upImageFile(@RequestParam("file") MultipartFile file, AircraftPhoto photo,HttpServletRequest request, HttpServletResponse response){
         String msg="{\"success\":true}";
-        if(photo.getBasicID()==null||photo.getBasicID().equals("null")){
+        if(photo.getOverviewID()==null||photo.getOverviewID().equals("null")){
         	msg="{\"success\":false}";
         	//msg="{\"id\":\"ff8081814cdf6f22014cdf6fafb40000\"}";
         	CommonTool.writeJSONToPage(response,msg ); 
         }else{
             photo.setPhotoFile(file);
-            service.saveImageFile(photo);
+            service.saveModelParamPhotoFile(photo);
         }
 
 
@@ -297,6 +328,87 @@ public class DataController{
       //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
         CommonTool.writeJSONToPage(response,msg ); 
 	}
+	
+	/**
+	 * 删除图片
+	 * @param photo
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping({"/delmodelimagefile"})
+	public void delModelImageFile(AircraftOverview ao,HttpServletRequest request, HttpServletResponse response){
+        String msg="{\"success\":true}";
+        service.delModelImageFile(ao.getOverviewID());
+
+      //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
+        CommonTool.writeJSONToPage(response,msg ); 
+	}
+	
+	@RequestMapping({"/findtablesql"})
+	public void findTableSQL(HttpServletRequest request,HttpServletResponse response){
+		String tableName=request.getParameter("tableName");
+		List list=service.findTableSQL(tableName);
+		Map m=new HashMap();
+		m.put("vals", list);
+		CommonTool.writeJSONToPage(response,m); 
+	}
+	
+	/**
+	       * 文件下载
+	       * @Description: 
+	       * @param fileName
+	       * @param request
+	      * @param response
+	       * @return
+	       */
+	      @RequestMapping("/download")
+	     public String downloadFile(@RequestParam("fileName") String fileName,
+	             HttpServletRequest request, HttpServletResponse response) {
+	         if (fileName != null) {
+	             String realPath = request.getServletContext().getRealPath(
+	                     "WEB-INF/File/");
+	             File file = new File(realPath, fileName);
+	             if (file.exists()) {
+	                 response.setContentType("application/force-download");// 设置强制下载不打开
+	                 response.addHeader("Content-Disposition",
+	                         "attachment;fileName=" + fileName);// 设置文件名
+	                 byte[] buffer = new byte[1024];
+	                 FileInputStream fis = null;
+	                 BufferedInputStream bis = null;
+	                 try {
+	                     fis = new FileInputStream(file);
+	                     bis = new BufferedInputStream(fis);
+	                     OutputStream os = response.getOutputStream();
+	                     int i = bis.read(buffer);
+	                     while (i != -1) {
+	                         os.write(buffer, 0, i);
+	                         i = bis.read(buffer);
+	                     }
+	                 } catch (Exception e) {
+	                     // TODO: handle exception
+	                     e.printStackTrace();
+	                 } finally {
+	                     if (bis != null) {
+	                         try {
+	                             bis.close();
+	                         } catch (IOException e) {
+	                             // TODO Auto-generated catch block
+	                             e.printStackTrace();
+	                         }
+	                     }
+	                     if (fis != null) {
+	                         try {
+	                             fis.close();
+	                         } catch (IOException e) {
+	                             // TODO Auto-generated catch block
+	                             e.printStackTrace();
+	                         }
+	                     }
+	                 }
+	             }
+	         }
+	         return null;
+	     }
 	
 ////////////////////////////////////////////////////////
 	

@@ -3,16 +3,21 @@
  */
 package com.ras.documnet.data;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftBasic.AircraftBasicDao;
@@ -42,10 +47,27 @@ public class DataDaoImpl implements DataDao {
 
 	
 	@Override
-	public void FindTableModelParamGrid(DataVo vo) {
-		// TODO Auto-generated method stub
-		String sql="";
-		sf.getCurrentSession().createSQLQuery(sql).list();
+	public void findTableModelParamGrid(DataVo vo) {
+		if(vo.getOverviewID()==null){
+			return ;
+		}
+		String sql="from RAS_AIRCRAFT_BASIC where overviewid='"+vo.getOverviewID()+"'  ";
+		if(vo.getModelName()!=null){
+			sql+=" and lower(modelName) like '%"+vo.getModelName().toLowerCase()+"%'";
+		}
+
+		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select count(1) "+sql).uniqueResult();
+		vo.setRecordsTotal(count.intValue());
+		if(count.intValue()==0){
+			return ;
+		}
+		List list= sf.getCurrentSession().createSQLQuery("select * "+sql)
+					 .addEntity(AircraftBasic.class)
+				     .setFirstResult(vo.getStart())
+				     .setMaxResults(vo.getLength())
+				     .list();//query.setProperties(ab).list();//.setEntity("ab", ab).list();
+		vo.setData(list);
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -126,7 +148,8 @@ public class DataDaoImpl implements DataDao {
 		
 		switch(vo.getOption()){
 		case "load":
-			basicID=aircraftBasicDao.getMainAircraftBasic(vo.getOverviewID()).getBasicID();
+			AircraftBasic ab=aircraftBasicDao.getMainAircraftBasic(vo.getOverviewID());
+			basicID=(ab==null?"":ab.getBasicID());
 			break;
 		case "create":
 			break;
@@ -247,6 +270,7 @@ public class DataDaoImpl implements DataDao {
 							s=obj.toString();
 						}
 						jo.put("elValue", s);
+						jo.put("elTypeValue", tag.getUi_value());
 					}
 				}
 			}
@@ -267,6 +291,7 @@ public class DataDaoImpl implements DataDao {
 			jo.put("elID", tag.getEnname());
 			jo.put("elLabel", tag.getName());
 			jo.put("elType", tag.getUi_type());
+			jo.put("elTypeValue", tag.getUi_value());
 			ja.add(jo);
 		}
 		return ja;
@@ -361,5 +386,85 @@ public class DataDaoImpl implements DataDao {
 			return val;
 		}
 	
+	}
+
+	@Override
+	public void findTableModelGrid(DataVo vo) {
+		
+		String hql="from AircraftOverview where 1=1  ";
+		if(vo.getModelName()!=null){
+			hql+=" and lower(modelName) like '%"+vo.getModelName().toLowerCase()+"%'";
+		}
+
+		Long count=(Long)sf.getCurrentSession().createQuery("select count(1) "+hql).uniqueResult();
+		vo.setRecordsTotal(count.intValue());
+		if(count.intValue()==0){
+			return;
+		}
+		List list= sf.getCurrentSession().createQuery(hql)
+				     .setFirstResult(vo.getStart())
+				     .setMaxResults(vo.getLength())
+				     .list();//query.setProperties(ab).list();//.setEntity("ab", ab).list();
+		vo.setData(list);
+		
+	}
+
+	@Override
+	public void saveModelPhotoFile(AircraftOverview ao) {
+		if(ao.getPhotoFile()!=null){
+			MultipartFile image=ao.getPhotoFile();
+			//ao=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, ao.getOverviewID());
+			String contentType = image.getContentType();//文件类型.image/jpeg.
+	        String type = contentType.substring(contentType.indexOf("/") + 1);//文件扩展名
+			String fileName=System.currentTimeMillis()+new Random().nextInt(100) + "." + type;
+			try {
+				String dir=CommonTool.PHOTO_URL_PREFIX+ao.getModelName()+"/";
+				ao.setPhotoUrl(dir+fileName);
+				File file=new File(dir);
+				if(!file.exists()){
+					file.mkdir();
+				}
+				String path=CommonTool.PHOTO_DIR+ao.getModelName()+"\\"+fileName;
+				image.transferTo(new File(path));
+				
+				ao=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, ao.getOverviewID());
+				if(ao.getPhotoUrl()!=null){
+					String[] s=ao.getPhotoUrl().split("/");
+					String fileName_tem=s[s.length-1];
+					file=new File(CommonTool.PHOTO_DIR+ao.getModelName()+"\\"+fileName_tem);
+					file.delete();
+				}
+
+				
+				ao.setPhotoUrl(dir+fileName);
+				
+//				String sql="update RAS_AIRCRAFT_OVERVIEW set photoURL='"+path+"' WHERE ID='"+ao.getOverviewID()+"'";
+//				sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		sf.getCurrentSession().saveOrUpdate(ao);
+		
+	}
+
+	@Override
+	public void delModelImageFile(String overviewID) {
+		AircraftOverview ao=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, overviewID);
+		
+		String[] s=ao.getPhotoUrl().split("/");
+		String fileName_tem=s[s.length-1];
+		File file=new File(CommonTool.PHOTO_DIR+ao.getModelName()+"\\"+fileName_tem);
+		file.delete();
+		
+		ao.setPhotoUrl("");
+	}
+
+	@Override
+	public List findTableSQL(String tableName) {
+		return sf.getCurrentSession().createSQLQuery("select name from "+tableName).list();
+		
 	}
 }

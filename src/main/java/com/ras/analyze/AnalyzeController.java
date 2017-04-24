@@ -9,6 +9,7 @@ package com.ras.analyze;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import com.ras.index.Page;
+import com.ras.search.SearchTag;
 import com.ras.search.SearchTagService;
 import com.ras.tool.CommonTool;
 
@@ -54,6 +56,12 @@ public class AnalyzeController {
     	page.setHeader_small("分析");
     	map.put("page", page);
     	
+//    	List<SearchTag> list=searchTagService.findAllParent();
+//    	for(SearchTag tag:list){
+//    		if(!tag.getParent_id().equals("0")&&!tag.getUi_type().equals("number")&&!tag.getUi_type().equals("numberRegion")){
+//    			list.remove(tag);
+//    		}
+//    	}
     	map.put("searchTags", searchTagService.findAllParent());
     	
         return new ModelAndView("ras/analyze/analyze",map);
@@ -97,7 +105,7 @@ public class AnalyzeController {
     	axis[0]=request.getParameter("xAxis");
     	axis[1]=request.getParameter("yAxis");
     	try {
-    		JSONArray ja=JSONArray.fromObject(service.analyzeChart(modelName.split(","), axis));
+    		JSONArray ja=service.analyzeChart(modelName.split(","), axis);
 			response.getWriter().print(ja);
 		} catch (IOException e) {
 			e.printStackTrace();

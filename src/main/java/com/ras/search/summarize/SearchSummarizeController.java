@@ -56,6 +56,8 @@ public class SearchSummarizeController {
 //    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
     	Map<String, Object> map=new HashMap<String, Object>();
     	
+    	map.put("tab", request.getParameter("tab"));
+    	
     	DataVo<?> vo=new DataVo();
     	vo.setOverviewID(request.getParameter("overviewID"));
     	vo.setBasicID(request.getParameter("basicID"));
@@ -70,9 +72,9 @@ public class SearchSummarizeController {
         	map.put("page", page);
         	
 //        	String test="[{url:'/upload/photo/Chrysanthemum.jpg',title:'整体图1'},{url:'/upload/photo/Desert.jpg'},{url:'/upload/photo/Hydrangeas.jpg'}]";
-        	map.put("integralGraph",dataService.findModelImageParam("整体图",vo.getBasicID()));
-        	map.put("threeGraph",dataService.findModelImageParam("三面图",vo.getBasicID()));
-        	map.put("surfaceGraph",dataService.findModelImageParam("外观图",vo.getBasicID()));
+        	map.put("integralGraph",dataService.findModelImageParam("整体图",vo.getOverviewID()));
+        	map.put("threeGraph",dataService.findModelImageParam("三面图",vo.getOverviewID()));
+        	map.put("surfaceGraph",dataService.findModelImageParam("外观图",vo.getOverviewID()));
     	}
     	
 

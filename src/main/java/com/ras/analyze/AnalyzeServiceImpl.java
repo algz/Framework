@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftOverview.AircraftOverviewDao;
 
+import net.sf.json.JSONArray;
+
 @Service
 public class AnalyzeServiceImpl implements AnalyzeService {
 
@@ -35,7 +37,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	}
 
 	@Override
-	public List<?> analyzeChart(String[] modelNames, String[] axis) {
+	public JSONArray analyzeChart(String[] modelNames, String[] axis) {
 		return dao.analyzeChart(modelNames, axis);
 	}
 

@@ -1,5 +1,7 @@
 $(function() {
 
+
+	
 			function stringToJson(data){
 			 var o={};
 			 $.each(data, function(i, data){
@@ -23,9 +25,11 @@ $(function() {
 		   
 			$('#submitBtn').click(function() {
 				var data=$('#tagForm').serializeArray();
-				//alert1(data);
 				var o=stringToJson(data);
-				dataTable.settings()[0].ajax.data={data:$('#tagForm').serialize()};
+				/////////////////
+				var params=$('#tagForm').serialize();
+				//params=decodeURIComponent(params,true);
+				dataTable.settings()[0].ajax.data={data:params};
 				dataTable.ajax.reload(); //必须用   
 			})
 
@@ -36,7 +40,7 @@ $(function() {
 					.DataTable({
 						// "paging": false, //是否开启本地分页
 						// "lengthChange": false, //是否隐藏每页显示数量框(css).true,默认不隐藏;false,隐藏.
-						//"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], //定义每页显示数据数量,与"lengthChange": true 一起使用.
+						"lengthMenu": [[10, 25, 50,100,200, -1], [10, 25, 50,100,200, "All"]], //定义每页显示数据数量,与"lengthChange": true 一起使用.
 						"ordering" : false, // 是否允许Datatables开启排序
 						// "info": false, //控制是否显示表格左下角的信息
 						"searching" : false, // 开启、关闭Datatables的搜索功能
@@ -49,6 +53,13 @@ $(function() {
 						},
 						deferLoading:0, //延迟加载(值为0,即不加载;不设置为默认自动加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
 						"columns" : [{
+									data:null,
+									class : "center",
+									width:50,
+									render: function(data, type, row, meta){
+									　　 return '<label class="position-relative"><input type="checkbox" class="ace" /><span class="lbl"></span></label>';
+									}
+								},{
 									data:null,
 									class : "center",
 									width:50,
@@ -96,5 +107,163 @@ $(function() {
 							}
 						}
 						});
+						
+			$('#searchTable tbody').on('click', 'tr', function () {
+				 var curCheckbox=$(this).find(":checkbox")[0];
+				 if(curCheckbox==null){
+				 	return;
+				 }
+				 
+		        if (curCheckbox.checked ) {
+		        	//取消
+		        	curCheckbox.checked=false;
+		        	$(this).removeClass('selected');
+		        }
+		        else {
+		        	//选中
+		        	curCheckbox.checked=true;
+		        	//selectModelParamRowData=tablemodelparam.rows(this).data()[0];
+		        	$(this).addClass('selected');
+		        }
+		    });
+		    
+		    /**
+		     * 对比
+		     */
+		    $("#comparisonModelparamBtn").on('click',function(){
+		    	var datas=dataTable.rows('.selected').data();
+		    	if(datas.length==0){
+		    		return ;
+		    	}
+		    	var arr=[];
+		    	for(var i=0;i<datas.length;i++){
+		    		arr.push(datas[i].modelName);
+		    	}
+		    	var obj=new Object()
+		    	obj.modelName=arr
+		    	StandardPost("/algz/ras/comparison/comparisondetail",obj)
+		    	//window.location='/algz/ras/comparison/comparisondetail';
+		    })
+	
+	function StandardPost(url,args){
+        var form = $("<form method='post'></form>"),
+            input;
+        form.attr({"action":url});
+        $.each(args,function(key,value){
+            input = $("<input type='hidden'>");
+            input.attr({"name":key});
+            input.val(value);
+            form.append(input);
+        });
+        form.appendTo(document.body);
+        form.submit();
+        document.body.removeChild(form[0]);
+    }
+		    
 
+    ////////////图表////////////////////////
+    
+    $(".chosen-select").chosen({
+    						allow_single_deselect:true,
+//					disable_search:true,
+//					disable_search_threshold:-1,
+//					enable_split_word_search:false,
+    	width : '40%'
+    });
+    
+    var chart=null;
+    //
+    $("#xAxisBtn").on('change',clickBtn);
+    $("#yAxisBtn").on('change',clickBtn);
+    $("#chartTypeBtn").on('change',clickBtn);
+    function clickBtn(){
+    	var xAxis=$("#xAxisBtn").val();
+    	var yAxis=$("#yAxisBtn").val();
+    	if(xAxis==yAxis){
+    		alert("x轴与y轴不能相同!")
+    		$(this).val("");
+			$(this).trigger("chosen:updated");
+			if(xAxis==""){
+				chart.destroy();
+				chart=null;
+				return;
+			}
+    	}
+    	$.ajax({
+			url : '../analyze/analyzechart',
+			data : {
+				modelName : $("#modelName").val(),
+				xAxis : $("#xAxisBtn").val(),
+				yAxis : $("#yAxisBtn").val()
+			},
+			success : function(data) {
+				var objs = eval(data);
+				chart=Highcharts.chart("highchart",{
+		    		// Highcharts 配置
+					credits: {
+			            enabled: false
+			        },
+					chart: {
+	    				type: $('#chartTypeBtn').val()//'column'// 'scatter'//,
+	    				//zoomType: 'xy'
+	    				},
+				    title: {
+				        text: "机型分析"//'我是标题'
+				    },
+				    subtitle: {
+				        //text: '我是副标题'
+				    },
+				    xAxis:{
+				        title:{
+				            text:$('#xAxisBtn option:selected').text()
+				        }
+				    },
+				    yAxis:{
+				        title:{
+				            text:$('#yAxisBtn option:selected').text()
+				        }
+				    },
+				    series : objs
+				    /*,
+				    series : [{
+				        name : '',
+				        data : [1,3,5,7,9]//[[1, 4], [3, 5], [2, 6]]
+				    },{
+				        name : '',
+				        data : [2,4,6,8,10]//[[1, 4], [3, 5], [2, 6]]
+				    }]*/
+				});
+			}
+    	})
+    }
+    
+    		/**
+		     * 分析
+		     */
+			$("#analyzeModelparamBtn").on('click', function() {
+				var datas = dataTable.rows('.selected').data();
+				if (datas.length == 0) {
+					return;
+				}
+				
+				var arr=[];
+				$.each(datas,function(i,obj){
+					arr.push(obj.modelName);
+				})
+				
+				$("#modelName").val(arr);
+				
+				$('#modal-form').modal().on('show.bs.modal',function(){
+					$("#xAxisBtn").val("");
+					$("#xAxisBtn").trigger("chosen:updated");
+    				$("#yAxisBtn").val("");
+    				$("#yAxisBtn").trigger("chosen:updated");
+					if(chart!=null){
+						chart.destroy();
+						chart=null;
+						//chart.destroy();
+					}
+				});
+			})
+    
 		})

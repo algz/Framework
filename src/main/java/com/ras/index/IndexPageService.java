@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface IndexPageService {
 
-	public List<?> searchIndexPage(String modelname);
+	public void searchIndexPage(IndexPageVo vo);
 }

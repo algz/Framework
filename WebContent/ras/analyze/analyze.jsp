@@ -101,6 +101,10 @@
 				</div>
 			</div>
 			<div class="hr hr8 hr-dotted"></div>
+			<select id="chartType">
+				<option value="scatter">散点图</option>
+				<option value="column">矩形图</option>
+			</select>
 			<div id="highchart" ></div>
 
 <div id="modal-form" class="modal fade" tabindex="-1">
@@ -119,9 +123,12 @@
 						<dd>
 							<div class="btn-group" data-toggle="buttons">
 							<c:forEach items="${searchTag.searchTags }" var="ctag">
+							<c:if test="${ctag.ui_type=='number'||ctag.ui_type=='numberRegion'}">
 								<label class="btn btn-sm btn-white btn-info">
-									<input type="checkbox" name="${ctag.enname }" value="${ctag.id }" >${ctag.name }
+									<input type="checkbox" name="${ctag.enname }" value="${ctag.id }" >
+									<span>${ctag.name }</span>
 								</label>
+							</c:if>
 							</c:forEach>
 							</div>
 						</dd>

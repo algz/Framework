@@ -83,7 +83,7 @@ public void createAccount(Account account) {
 1.ModelAndView 对象
 第一个参数是视图名/视图对象,第二个参数为模型属性(即传给用户的K-V对象).此类有很多构造函数,可查源码即可.
 
-五. jsp 自定义标签
+五.jsp 自定义标签
 1.tag文件
 650项目使用此方法.
 
@@ -111,6 +111,11 @@ public void createAccount(Account account) {
   <%@ taglib prefix="ex" uri="/mytaglib"%>
   ......
   <ex:hello/>
+  
+六.CSS类说明
+1. class="active"
+2. class="disabled"
+3. class="hidden"
 
 
 

@@ -2,6 +2,8 @@ package com.ras.analyze;
 
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 public interface AnalyzeService {
 
 	public List<?> findModelGird(String modelName);
@@ -10,5 +12,5 @@ public interface AnalyzeService {
 	
 	public List<?> findModelForTypeahead(String modelName);
 	
-	public List<?> analyzeChart(String[] modelNames,String[] axis);
+	public JSONArray analyzeChart(String[] modelNames,String[] axis);
 }

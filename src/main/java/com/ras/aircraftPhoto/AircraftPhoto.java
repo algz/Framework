@@ -30,8 +30,8 @@ public class AircraftPhoto{
 	/**
 	 * 外键
 	 */
-	@Column(name="BASIC_ID")
-	private String basicID;
+	@Column(name="OVERVIEWID")
+	private String overviewID;
 
 	@Column(name="PHOTO_NAME")
 	private String photoName;
@@ -47,6 +47,9 @@ public class AircraftPhoto{
 	
 	@Transient
 	private MultipartFile photoFile;
+	
+	@Transient
+	private String modelName;
 	
 	public String getPhotoID() {
 		return photoID;
@@ -74,12 +77,14 @@ public class AircraftPhoto{
 		this.photoCategory = photoCategory;
 	}
 
-	public String getBasicID() {
-		return basicID;
+
+	
+	public String getOverviewID() {
+		return overviewID;
 	}
 
-	public void setBasicID(String basicID) {
-		this.basicID = basicID;
+	public void setOverviewID(String overviewID) {
+		this.overviewID = overviewID;
 	}
 
 	public String getPhotoUrl() {
@@ -105,6 +110,15 @@ public class AircraftPhoto{
 	public void setPhotoFile(MultipartFile photoFile) {
 		this.photoFile = photoFile;
 	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	
 	
 	
 }

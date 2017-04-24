@@ -14,6 +14,9 @@ import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.search.SearchTag;
 import com.sun.xml.internal.ws.util.StringUtils;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 @Repository
 public class AnalyzeDaoImpl implements AnalyzeDao {
 
@@ -58,22 +61,95 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 	}
 
 
+	/**
+	 * @param axis     	
+	 *  axis[0]=request.getParameter("xAxis");
+    	axis[1]=request.getParameter("yAxis");
+	 */
 	@Override
-	public List<?> analyzeChart(String[] modelNames, String[] axis) {
-		StringBuilder sql=new StringBuilder("select ");
-		for(int i=0;i<axis.length&&!axis[i].equals("");i++){
-			if(i!=0)
-				sql.append(",");
-			sql.append(" to_number("+axis[i]+")");
+	public JSONArray analyzeChart(String[] modelNames, String[] axis) {
+		//modelName=f&xAxis=modelName&yAxis=modelCname
+		StringBuilder sql=new StringBuilder("select modelname ");
+		for(int i=0;i<axis.length;i++){
+			if(axis[i].equals("")){
+				sql.append(",0");
+			}else{
+				sql.append(",to_number(nvl("+axis[i]+",0))");
+			}
 		}
-//		for(int i=0;i<axis.length;i++){
-//			SearchTag tag=(SearchTag)sf.getCurrentSession().get(SearchTag.class, axis[i]);
-//			sql.append(" "+);
-//		}
-		sql.append(" from aircraftallparam t where t.modelname in (:modelname)");
-		List<?> list=sf.getCurrentSession().createSQLQuery(sql.toString())
+
+
+		//data="[{names:'f-32',datas:[[100,100],2000]},{names:'f-35',datas:[200,2200]}]"
+		
+		
+		
+		sql.append(" from ras_aircraft_overview ov  ");
+		sql.append(" inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id and ab.maininfo='1' ");
+		sql.append(" left join ras_aircraft_weight aw on aw.basicid=ab.id ");
+		sql.append(" left join ras_aircraft_layout al on al.basicid=ab.id ");
+		sql.append(" left join ras_aircraft_capability ac on ac.basicid=ab.id ");
+		sql.append(" left join ras_aircraft_dynamic ad on ad.basicid=ab.id ");
+		sql.append(" left join ras_aircraft_system asys on asys.basicid=ab.id ");
+		sql.append(" where ov.modelname in (:modelname)");
+		
+		List<Object[]> list=sf.getCurrentSession().createSQLQuery(sql.toString())
 						.setParameterList("modelname", modelNames).list();
-		return list;
+		//[{names:'f-32',datas:[[100,100],2000]},{names:'f-35',datas:[200,2200]}]
+		JSONArray ja=new JSONArray();
+		for(int i=0;i<modelNames.length;i++){
+			
+			JSONObject jo=new JSONObject();
+			String data="";
+			jo.put("name", modelNames[i]);
+			if(i<list.size()){
+				Object[] objs=list.get(i);
+				for(int j=1;j<objs.length;j++){
+					if(j!=1){
+						data+=",";
+					}
+					data+=objs[j];
+				}
+			}
+
+			jo.put("data", "[["+data+"]]");
+			ja.add(jo);
+		}
+//		for(Object[] objs:list){
+//			JSONObject jo=new JSONObject();
+//			jo.put("name", objs[0]);
+//			String data="";
+//			for(int i=1;i<objs.length;i++){
+//				if(i!=1){
+//					data+=",";
+//				}
+//				data+=objs[i];
+//			}
+//			jo.put("data", "[["+data+"]]");
+//			ja.add(jo);
+//		}
+		
+		return ja;//list;
 	}
 
+	private List<Map<String,Object>> loadTableData(String tableName,String id){
+		String sql="";
+		switch(tableName){
+		case "basic":
+			sql="select ab.* from ras_aircraft_overview ov "
+					+ " inner join ras_aircraft_basic ab on ab.overviewid=ov.id and ab.maininfo is null "
+					+ " where ov.id='"+id+"'";
+			break;
+		case "weight":
+		case "layout":
+		case "capablity":
+		case "dynamic":
+		case "system":
+			sql="select aw.* from ras_aircraft_overview ov "
+					+ " inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id and ab.maininfo is null "
+					+ " left join ras_aircraft_"+tableName+" aw on aw.basicid=ab.id "+"where ov.id='"+id+"'";
+			break;
+		}
+		return sf.getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	}
+	
 }

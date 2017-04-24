@@ -32,13 +32,15 @@
 			
 
 			<div class="widget-main">
-					<form id="searchForm" class="form-search" >
+					<form id="searchForm" class="form-search" method="post">
 						<div class="row">
 							<div class="col-xs-12 col-sm-8">
 								<div class="input-group">
 									<input name="modelName" class="form-control search-query" 
 									type="text" placeholder="飞机名称" 
 									value="${modelName }">
+									<input type='hidden' name='start' value='${start ==null?0:start}'>
+									<input type='hidden' name='length' value='${length==null?10:length }'>
 									<span class="input-group-btn">
 										<button id="submitBtn" class="btn btn-purple btn-sm" type="button">
 											查询一下
@@ -64,13 +66,17 @@
 									<div class="grid2">
 								    	<!-- 图片相框 -->
 										<span class="profile-picture">
-											<img class=" img-responsive " id="avatar" alt="Alex's Avatar" src="../picture/homeBackground.jpg">
+											<a href="../search/searchsummarize?tab=1&overviewID=${item.OVERVIEWID }">
+											<img class=" img-responsive "  alt="机型图片" src="${item.PHOTOURL==null?'holder.js/209x122':item.PHOTOURL }">
+											</a>
 										</span>
 									</div>
 	
 									<div class="grid2">
 									<p><p>
-									<a href="../search/searchsummarize?overviewID=${item.OVERVIEWID }">${item.MODELNAME}</a><p>${item.AIRCRAFTTYPE}<p>${item.PRODUCER_COUNTRIES }<p>${item.MANUFACTURER }
+									<a href="../search/searchsummarize?overviewID=${item.OVERVIEWID }">${item.MODELNAME}</a>
+									<p>${item.AIRCRAFTTYPE}<p>${item.PRODUCERCOUNTRIES }
+									<p>${item.MANUFACTURER }
 									</div>
 								</div>
 								
@@ -81,17 +87,69 @@
 				</div>
 			</div>
 </c:forEach>
-</c:if>
-			
+			<div class="row">
+			<div class=" col-xs-12">
+				<ul class="pagination">
+					<li id='previousPage' class='${curPage==1?"disabled":""}'>
+						<span>
+							<i class="ace-icon fa fa-angle-double-left"></i>
+						</span>
+					</li>
 
+					<c:forEach begin="1" end="${pageCount }" var="i">
+					<li class='${i==curPage?"active":"" }' >
+						<span>${i}</span>
+					</li>
+					</c:forEach>
 					
+					
+					<li id='nextPage' class='${curPage==pageCount?"disabled":""}'>
+						<span><i class="ace-icon fa fa-angle-double-right"></i></span>
+					</li>
+				</ul>
+				</div>
+			</div>	
+</c:if>
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
+		<plugin_js>
+		<script src="<%=basePath%>ras/common/js/holder/holder.js"></script>
+		</plugin_js>
 <script type="text/javascript">
-$('#submitBtn').click(function(){
-	$('#searchForm').submit();
+$(function(){
+	//查询按钮
+	$('#submitBtn').click(function(){
+		if($(':text[name=modelName]').val()==''){
+			return;
+		}
+		$('#searchForm').submit();
+	});
+	
+	$('.pagination li').on('click',function(e){
+		var el=$(e.target).closest('li');
+		var num=0;//$(el).text();
+		if(!el.hasClass('disabled')){
+			
+			var start=$(':hidden[name=start]').val();
+			var length=$(':hidden[name=length]').val();
+			if(el[0].id=='previousPage'){
+				num=$('.pagination li.active span').text();
+				num--;
+			}else if(el[0].id=='nextPage'){
+				num=$('.pagination li.active span').text();
+				num++;
+			}else{
+				num=$(el).text();
+			}
+			$(':hidden[name=start]').val((num-1)*(parseInt(length)))
+			$('#searchForm').submit();
+		}
+
+	})
+    
 })
+
 </script>
 
 

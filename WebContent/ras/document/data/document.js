@@ -289,9 +289,13 @@ $(function() {
 			 * 新增机型参数
 			 */
 			$("#addModelparam").click(function(){
-				if(selectModelRowData==null){
+				if(tablemodel.row(".selected").length==0){
 					bootbox.alert("请选择机型后在添加参数!");
 				}else{
+//					if(tablemodelparam.data().length>=1){
+//						bootbox.alert("系统暂时仅支持一条数源来源.");
+//						return ;
+//					}
 					window.location.href="addmodelparampage?overviewID="+selectModelRowData.overviewID+"&option=create"//+window.location.href; 
 				}
 			})
@@ -352,9 +356,9 @@ $(function() {
 			 * 设置机型参数为主要
 			 */
 			$("#setMainModelparam").click(function(){
-				if(selectModelRowData==null){
+				if(tablemodelparam.row('.selected').length==0){
 					bootbox.alert({
-						message:"请选择机型!",
+						message:"请选择机型参数!",
 						buttons: 			
 						{
 							"ok" :
@@ -374,8 +378,8 @@ $(function() {
 								type:"POST",
 								url:"./setMainModelparam",
 								data:{
-									overviewID:selectModelRowData.overviewID,
-									basicID:selectModelParamRowData.basicID
+									overviewID:tablemodelparam.row('.selected').data().overviewID,
+									basicID:tablemodelparam.row('.selected').data().basicID
 								},
 								success:function(msg){
 									bootbox.alert(msg);

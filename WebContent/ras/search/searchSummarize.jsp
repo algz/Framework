@@ -45,13 +45,14 @@
 									图片
 								</a>
 							</li>
+							<%-- 
 							<li >
 								<a data-toggle="tab" href="#docment">
 									<i class="green ace-icon fa fa-home bigger-120"></i>
 									文档
 								</a>
 							</li>
-							<%-- 
+							
 							<li>
 								<a data-toggle="tab" href="#discuss">
 									评论
@@ -64,15 +65,16 @@
 						<div class="tab-content">
 						
 							<div id="param" class="tab-pane fade in active">
-								<jsp:include page="../document/data/addModelParam_param.jsp"></jsp:include>
+								<jsp:include page="./searchSummarize_param.jsp"></jsp:include>
 							</div>
 							<div id="picture" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_picture.jsp"></jsp:include>
 							</div>
+							<%--
 							<div id="docment" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_document.jsp"></jsp:include>
 							</div>
-							<%--
+							
 							<div id="discuss" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_discuss.jsp"></jsp:include>
 							</div>  --%>
@@ -101,8 +103,11 @@
 			<script src="<%=basePath%>ras/common/js/jquery.hotkeys.js"></script>
 			<script src="<%=basePath%>ras/common/js/bootstrap-wysiwyg.js"></script>
 -->
-		</plugin_js>
-		<script type="text/javascript" src="searchSummarize.js"></script>		
-
+		</plugin_js>	
+<script type="text/javascript">
+$(function(){
+	$('#myTab li:eq(${tab==null?"0":tab}) a').tab('show')
+})
+</script>
 	</body>
 </html>

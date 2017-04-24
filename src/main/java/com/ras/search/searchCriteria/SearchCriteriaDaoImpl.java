@@ -48,9 +48,9 @@ public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
 			Map<String,String> dataMap=new HashMap<String,String>();
 			dataMap.put("overviewID", objs[0].toString());
 			dataMap.put("modelName", objs[1].toString());
-			dataMap.put("modelCname", objs[2].toString());
-			dataMap.put("modelEname", objs[3].toString());
-			dataMap.put("basicID", objs[4].toString());
+			dataMap.put("modelCname", (objs[2]==null?"":objs[2].toString()));
+			dataMap.put("modelEname", (objs[3]==null?"":objs[3].toString()));
+			dataMap.put("basicID", (objs[4]==null?"":objs[4].toString()));
 			retList.add(dataMap);
 		}
 		vo.setData(retList);
@@ -73,7 +73,7 @@ public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
 						paramSet.add(s);
 						switch(s){
 						case "BASIC":
-							paramSQL.append("inner join ras_aircraft_basic ab on ab.overviewid=ao.id and ab.maininfo=1 ");
+							paramSQL.append("left join ras_aircraft_basic ab on ab.overviewid=ao.id and ab.maininfo=1 ");
 							break;
 						case "WEIGHT":
 							paramSQL.append(" left join ras_aircraft_weight aw on aw.basic_id=ab.id ");

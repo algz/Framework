@@ -78,22 +78,16 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public void findTableModelGrid(DataVo vo) {
-		AircraftOverview ao=new AircraftOverview();
-		ao.setModelName(vo.getModelName());
-		vo.setData(aircraftOverviewDao.findByProperty(ao));
-		vo.setRecordsTotal(aircraftOverviewDao.count(ao));
+		dao.findTableModelGrid(vo);
+//		AircraftOverview ao=new AircraftOverview();
+//		ao.setModelName(vo.getModelName());
+//		vo.setData(aircraftOverviewDao.findByProperty(ao));
+//		vo.setRecordsTotal(aircraftOverviewDao.count(ao));
 	}
 
 	@Override
 	public void findTableModelParamGrid(DataVo vo) {
-		AircraftBasic ab=new AircraftBasic();
-		ab.setOverviewID(vo.getOverviewID());
-		List list=aircraftBasicDao.find(ab);
-		vo.setRecordsTotal(aircraftBasicDao.count(ab));
-		vo.setData(list);
-		//vo.setData(aircraftOverviewDao.findAll());
-		//vo.setRecordsTotal(aircraftOverviewDao.count());
-		
+		dao.findTableModelParamGrid(vo);
 	}
 
 	/*
@@ -166,10 +160,10 @@ public class DataServiceImpl implements DataService {
 	 * 查找图片,按类别.
 	 */
 	@Override
-	public JSONArray findModelImageParam(String photoCategory,String basicID) {
+	public JSONArray findModelImageParam(String photoCategory,String overviewID) {
 		AircraftPhoto photo=new AircraftPhoto();
 		photo.setPhotoCategory(photoCategory);
-		photo.setBasicID(basicID);
+		photo.setOverviewID(overviewID);
 		List<AircraftPhoto> photoList=aircraftPhotoDao.find(photo);
 		return CommonTool.arrayToJSONArray(photoList,true);
 	}
@@ -179,7 +173,7 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Transactional
 	@Override
-	public void saveImageFile(AircraftPhoto photo) {
+	public void saveModelParamPhotoFile(AircraftPhoto photo) {
 		aircraftPhotoDao.saveOrUpdate(photo);		
 	}
 
@@ -187,6 +181,23 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public void delImageFile(String photoID) {
 		aircraftPhotoDao.del(photoID);
+	}
+
+	@Transactional
+	@Override
+	public void saveModelPhotoFile(AircraftOverview ao){
+		dao.saveModelPhotoFile(ao);
+	}
+
+	@Transactional
+	@Override
+	public void delModelImageFile(String overviewID) {
+		dao.delModelImageFile(overviewID);
+	}
+
+	@Override
+	public List findTableSQL(String tableName) {
+		return dao.findTableSQL(tableName);
 	}
 
 

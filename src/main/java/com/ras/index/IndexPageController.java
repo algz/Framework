@@ -53,7 +53,7 @@ public class IndexPageController {
 //	private ExcelService excelService;
 	
     @RequestMapping(value={"/index","/"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public ModelAndView  index(HttpServletRequest request,HttpServletResponse response) {
+    public ModelAndView  index(IndexPageVo vo,HttpServletRequest request,HttpServletResponse response) {
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
 //    	JSONArray obj=JSONArray.fromObject("[{text:'menu1'},{text:'menu2'}]");
     	Map<String, Object> map=new HashMap<String, Object>();
@@ -76,12 +76,16 @@ public class IndexPageController {
 //    	map.put("user", user);
     	
 //    	Map<String, Object> searchParam=new HashMap<String, Object>();
-    	String modelname=request.getParameter("modelName");
-    	request.setAttribute("modelName", modelname);
+    	String modelname=vo.getModelName();//request.getParameter("modelName");
+    	map.put("modelName", modelname);
+//    	request.setAttribute("modelName", modelname);
     	
-    	if(modelname!=null){
-        	List list=service.searchIndexPage(modelname);
-            map.put("searchs", list);
+    	if(modelname!=null&&!modelname.equals("")){
+    		service.searchIndexPage(vo);
+            map.put("searchs", vo.getData());
+            
+            map.put("pageCount", Math.ceil(vo.getRecordsTotal()/10.0));
+            map.put("curPage", vo.getStart()/10+1);
     	}
 
     	

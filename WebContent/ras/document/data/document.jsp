@@ -74,7 +74,7 @@
 						<button id="modifyModelparam" class="btn btn-sm" type="button">修改</button>
 						<button id="delModelparam" class="btn btn-sm" type="button">删除</button>
 						<button id="setMainModelparam" class="btn btn-sm" type="button">设置为主要</button>
-						<button id="mergeMainModelparam" class="btn btn-sm" type="button">合并</button>
+						<button id="mergeMainModelparam" class="btn btn-sm hidden" type="button">合并</button>
 					</div>
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
@@ -84,6 +84,24 @@
 				</div>
 			</div>
 
+<div id="modal-form" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">        
+            	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            	<span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title">...</h4>
+        	</div>
+            <div class="modal-body">            
+          	
+          	</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+    			<button id="confirmBtn" type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		

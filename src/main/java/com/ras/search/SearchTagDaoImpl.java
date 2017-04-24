@@ -80,47 +80,6 @@ public class SearchTagDaoImpl implements SearchTagDao {
 						t.setName(v);
 						tag.getSearchTags().add(t);
 					}
-					
-					/*if(tag.getUi_value()!=null&&tag.getUi_value().equals("ras_country")){
-						//国家
-						List<Country> countryList=countryDao.findAll();
-						for(Country c:countryList){
-							SearchTag t=new SearchTag();
-							t.setId(c.getId());
-							t.setName(c.getName());
-							tag.getSearchTags().add(t);
-						}
-					}else 
-					if(tag.getUi_value()!=null&&tag.getUi_value().equals("algz_aircraft_type")){
-						//飞机类型
-						List<AircraftType> aircraftTypeList=aircraftTypeDao.findAll();
-						for(AircraftType a:aircraftTypeList){
-							SearchTag t=new SearchTag();
-							t.setId(a.getId());
-							t.setName(a.getName());
-							tag.getSearchTags().add(t);
-						}
-					}else{
-						List<String> list=new ArrayList<String>();
-						sql="select count(1) from user_tables where table_name='"+tag.getUi_value()+"'";
-						BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
-						if(count.intValue()>0){
-							sql="select name from "+tag.getUi_value();
-							list=sf.getCurrentSession().createSQLQuery(sql).list();
-						}else{
-							String[] vals=tag.getUi_value().split(",");
-							Collections.addAll(list, vals);
-						}
-						
-						for(String v:list){
-							SearchTag t=new SearchTag();
-							t.setId(null);
-							t.setName(v);
-							tag.getSearchTags().add(t);
-						}
-						
-
-					}*/
 
 					break;
 			}

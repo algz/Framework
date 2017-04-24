@@ -44,21 +44,26 @@
 jQuery(function($) {
 
 	var imgData=eval('(${img})');
-	var basicID=$(":hidden[name=basicID]").val();
+	//var basicID=$(":hidden[name=basicID]").val();
+	var overviewID=$(":hidden[name=overviewID]").val();
+	var modelName=$(":text[name=modelName]").val();;
 	var integralPhoto={};
 	integralPhoto.uploadExtraData={};
 	integralPhoto.uploadExtraData.photoCategory="整体图";
-	integralPhoto.uploadExtraData.basicID=basicID;
+	integralPhoto.uploadExtraData.overviewID=overviewID;
+	integralPhoto.uploadExtraData.modelName=modelName;
 	
 	var threePhoto={};
 	threePhoto.uploadExtraData={};
 	threePhoto.uploadExtraData.photoCategory="三面图";
-	threePhoto.uploadExtraData.basicID=basicID;
+	threePhoto.uploadExtraData.overviewID=overviewID;
+	threePhoto.uploadExtraData.modelName=modelName;
 	
 	var surfacePhoto={};
 	surfacePhoto.uploadExtraData={};
 	surfacePhoto.uploadExtraData.photoCategory="外观图";
-	surfacePhoto.uploadExtraData.basicID=basicID;
+	surfacePhoto.uploadExtraData.overviewID=overviewID;
+	surfacePhoto.uploadExtraData.modelName=modelName;
 	
 	var initPhotoUrl=new Array();
 	for(var i=0;i<imgData.length;i++){

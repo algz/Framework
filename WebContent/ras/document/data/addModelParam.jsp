@@ -45,13 +45,14 @@
 									图片
 								</a>
 							</li>
+							<%--
 							<li >
 								<a data-toggle="tab" href="#docment">
 									<i class="green ace-icon fa fa-home bigger-120"></i>
 									文档
 								</a>
 							</li>
-	
+	 --%>
 						</ul>
 	
 						<div class="tab-content">
@@ -62,9 +63,11 @@
 							<div id="picture" class="tab-pane fade">
 								<jsp:include page="addModelParam_picture.jsp"></jsp:include>
 							</div>
+							<%--
 							<div id="docment" class="tab-pane fade">
 								<jsp:include page="addModelParam_document.jsp"></jsp:include>
 							</div>
+							 --%>
 						</div>
 					</div>
 	
@@ -76,6 +79,8 @@
 		</page:page>
 		
 		<plugin_css>
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/chosen/chosen.css" />	
+		
 			<link rel="stylesheet" href="<%=basePath%>ras/common/css/fileinput/fileinput.css" />
 			<link href="<%=basePath%>ras/common/css/fileinput/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/>
 		</plugin_css>
@@ -93,6 +98,11 @@
 
 			<!-- 文件上传 -->
 			<script src="<%=basePath%>ras/common/js/fileinput/fileinput.js"></script>
+			
+			<script src="<%=basePath%>ras/common/js/chosen/chosen.jquery.js"></script>
+
+			<script src="<%=basePath%>ras/common/js/jqueryvalidation/jquery.validate.js"></script>
+			<script src="<%=basePath%>ras/common/js/jqueryvalidation/messages_zh.js"></script>
 
 		</plugin_js>
 			

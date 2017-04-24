@@ -1,5 +1,6 @@
 package com.ras.search.searchCriteria;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,11 +47,14 @@ public class SearchCriteriaController {
     	page.setHeader_small("查询关键字");
     	map.put("page", page);
     	
+
+    	
     	String str=request.getParameter("ids");
     	if(str!=null){
         	String[] ids=str.split(",");
         	map.put("searchTags", searchTagService.findAllByIds(ids));
     	}
+    	map.put("tagSelect", searchTagService.findAllParent());
     	return new ModelAndView("ras/search/searchCriteria",map);
     }
     
@@ -66,7 +70,17 @@ public class SearchCriteriaController {
 //    	vo.setDraw(Integer.parseInt(request.getParameter("draw")));
 //    	vo.setRecordsTotal(2);
 //    	rtvo.setRecordsFiltered(2);
-    	String s=java.net.URLDecoder.decode(map.get("data")[0]);
+    	if(map.get("data")==null){
+    		CommonTool.writeJSONToPage(response, vo);
+    		return ;
+    	}
+    	String s="";
+		try {
+			s = java.net.URLDecoder.decode(map.get("data")[0],"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	Map m=CommonTool.stringFormToJson(s.split("&"),false);
     	vo.setParamMap(m);
     	if(m.keySet().size()!=0){

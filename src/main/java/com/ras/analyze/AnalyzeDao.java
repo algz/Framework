@@ -2,11 +2,13 @@ package com.ras.analyze;
 
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 public interface AnalyzeDao {
 	public List<?> findComparisonDetailGrid(String[] modelNames);
 	
 	public List<?> findModelForTypeahead(String modelName);
 	
-	public List<?> analyzeChart(String[] modelNames,String[] axis);
+	public JSONArray analyzeChart(String[] modelNames,String[] axis);
 }
 

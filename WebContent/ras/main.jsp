@@ -47,7 +47,13 @@
 			<jsp:include  page="common/footer.jsp"/> 
 		</div><!-- /.main-container -->
 
-
+<script type="text/javascript">
+$(function(){
+	if(document.body.clientWidth<991){
+		alert("请将页面宽度调整至991px以上或全屏.");
+	}
+})
+</script>
 		
 
 		<!-- inline scripts related to this page 

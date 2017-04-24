@@ -79,6 +79,7 @@
 		
 		<script src="search.js"></script>
 		<plugin_js>
+
 			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
 		</plugin_js>
 		
