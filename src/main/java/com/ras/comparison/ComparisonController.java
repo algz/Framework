@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ras.index.Page;
-import com.ras.search.SearchTagService;
+import com.ras.searchParam.SearchParamService;
 import com.ras.tool.CommonTool;
 import com.ras.tool.ReturnVo;
 
@@ -58,7 +58,7 @@ public class ComparisonController {
     public void  findModelGird(ComparisonVo vo,HttpServletRequest request,HttpServletResponse response) {
     	//Map<String, Object> map=new HashMap<String, Object>();
     	String modelName=request.getParameter("modelName");
-    	vo.setData(service.findModelGird(modelName));
+    	service.findModelGird(vo);
     	CommonTool.writeJSONToPage(response,vo );
     }
     
@@ -67,7 +67,9 @@ public class ComparisonController {
     public ModelAndView  comparisonDetail(HttpServletRequest request,HttpServletResponse response) {
     	Map<String, Object> map=new HashMap<String, Object>();
     	String modelName=request.getParameter("modelName");
+    	String basicID=request.getParameter("basicID");
     	map.put("modelName", modelName);
+    	map.put("basicID", basicID);
     	Page page=new Page();
     	page.setHeader_h1("对比");
     	page.setHeader_small(modelName);
@@ -80,10 +82,10 @@ public class ComparisonController {
     
     @RequestMapping(value={"/findcomparisondetailgrid"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public void  findComparisonDetailGrid(ComparisonVo vo,HttpServletRequest request,HttpServletResponse response) {
-    	Map<String, Object> map=new HashMap<String, Object>();
     	String modelName=request.getParameter("modelName");
+    	String basicID=request.getParameter("basicID");
     	if(modelName!=null){
-    		vo.setData(service.findComparisonDetailGrid(modelName.split(",")));
+    		vo.setData(service.findComparisonDetailGrid(modelName.split(","),basicID.split(",")));
     	}
     	CommonTool.writeJSONToPage(response,vo );
     }

@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ras.index.Page;
 
 @Controller
-@RequestMapping("/ras/user")
+@RequestMapping("/ras/personal")
 public class UserController{
 	
 	@RequestMapping({"","/"})
@@ -25,8 +25,8 @@ public class UserController{
 		Map<String,Object> map=new HashMap<String,Object>();
     	Page page=new Page();
     	page.setHeader_h1("首页");
-    	page.setHeader_small("用户");
+    	page.setHeader_small("个人设置");
     	map.put("page", page);
-		return new ModelAndView("ras/user/user",map);
+		return new ModelAndView("ras/personal/personal",map);
 	}
 }

@@ -1,5 +1,7 @@
 <%@page language="Java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.ras.index.Navbar" %>
+<%@page import="algz.platform.core.shiro.authority.userManager.User" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="navbar" tagdir="/WEB-INF/tags/uiframe/navbar" %>
 
 <%
@@ -7,11 +9,14 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	
+	User user=(User)org.apache.shiro.SecurityUtils.getSubject().getSession().getAttribute("LoginUser");
+	request.setAttribute("user", user);
+	
 	Navbar navbar=new Navbar(); 
-	navbar.setNavbarbrand("飞机论证参照系统");
-	navbar.setIsTask("1");
-	navbar.setIsNotice("1");
-	navbar.setIsMessage("1");
+	navbar.setNavbarbrand("总体部飞机论证参照系统");
+	navbar.setIsTask("1"); //任务
+	navbar.setIsNotice("1"); //消息
+	navbar.setIsMessage("0"); //信息
 	request.setAttribute("navbar", navbar);
 	//map.put("navbar", navbar);
 %>
@@ -30,27 +35,6 @@
 					${navbar.navbarbrand }
 				</small>
 			</a>
-
-			<!-- /section:basics/navbar.layout.brand -->
-
-			<!-- #section:basics/navbar.toggle -->
-			<button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button" data-toggle="collapse" data-target=".navbar-buttons,.navbar-menu">
-				<span class="sr-only">Toggle user menu</span>
-
-				<img src="../assets/avatars/user.jpg" alt="Jason's Photo" />
-			</button>
-
-			<button class="pull-right navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#sidebar">
-				<span class="sr-only">Toggle sidebar</span>
-
-				<span class="icon-bar"></span>
-
-				<span class="icon-bar"></span>
-
-				<span class="icon-bar"></span>
-			</button>
-
-			<!-- /section:basics/navbar.toggle -->
 		</div>
 
 		<!-- #section:basics/navbar.dropdown -->
@@ -266,9 +250,12 @@
 				</li>
 
 				<!-- #section:basics/navbar.user_menu -->
-				<li class="light-blue user-min">
+				<li class="light-blue">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-						<img class="nav-user-photo" src="<%=basePath%>ras/common/avatars/user.jpg" alt="Jason's Photo" />
+						<c:if test="${user.photo!=null }">
+						<img class="nav-user-photo" width="36" height="36" src="${user.photo }" alt="${user.username}'s Photo" />
+						</c:if>
+						
 						<span class="user-info">
 							<small>欢迎,</small>
 							${user.username}
@@ -295,7 +282,7 @@
 						<li class="divider"></li>
 
 						<li>
-							<a href="#">
+							<a href="<%=basePath%>logout">
 								<i class="ace-icon fa fa-power-off"></i>
 								退出
 							</a>
@@ -313,35 +300,20 @@
 			<ul class="nav navbar-nav">
 				<li>
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						概述
- 		&nbsp;
+						概述&nbsp;
 						<i class="ace-icon fa fa-angle-down bigger-110"></i>
 					</a>
 
 					<ul class="dropdown-menu dropdown-light-blue dropdown-caret">
 						<li>
 							<a href="#">
-								<i class="ace-icon fa fa-eye bigger-110 blue"></i>
-								Monthly Visitors
-							</a>
-						</li>
-
-						<li>
-							<a href="#">
-								<i class="ace-icon fa fa-user bigger-110 blue"></i>
-								Active Users
-							</a>
-						</li>
-
-						<li>
-							<a href="#">
-								<i class="ace-icon fa fa-cog bigger-110 blue"></i>
-								Settings
+								<i class="ace-icon fa fa-book bigger-110 blue"></i>
+								说明
 							</a>
 						</li>
 					</ul>
 				</li>
-
+				<c:if test="${navbar.isNotice=='1'}">
 				<li>
 					<a href="#">
 						<i class="ace-icon fa fa-envelope"></i>
@@ -349,6 +321,8 @@
 						<span class="badge badge-warning">5</span>
 					</a>
 				</li>
+				</c:if>
+
 			</ul>
 
 			<!-- /section:basics/navbar.nav -->

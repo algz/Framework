@@ -17,6 +17,10 @@ public class DataVo<T> extends ReturnVo<T>{
 	
 	private String option;
 	
+	private String photoCategory;
+	
+	private String tag;
+	
 	private Integer start;
 	private Integer limit;
 	private Integer count;
@@ -81,6 +85,22 @@ public class DataVo<T> extends ReturnVo<T>{
 
 	public void setModelName(String modelName) {
 		this.modelName = modelName;
+	}
+
+	public String getPhotoCategory() {
+		return photoCategory;
+	}
+
+	public void setPhotoCategory(String photoCategory) {
+		this.photoCategory = photoCategory;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 	

@@ -11,7 +11,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.ras.search.SearchTag;
+import com.ras.searchParam.SearchParam;
 
 @Repository
 public class ComparisonDaoImpl implements ComparisonDao {
@@ -21,16 +21,16 @@ public class ComparisonDaoImpl implements ComparisonDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<?> findComparisonDetailGrid(String[] modelNames) {
+	public List<?> findComparisonDetailGrid(String[] modelNames,String[] basicID) {
 		List<String[]> retList=new <String[]>ArrayList();
 		//加载所有Tag
-		String sql="select * from RAS_SEARCH_TAG t where t.parent_id!=0 and t.enname is not null";
-		List<SearchTag> searchTagList=sf.getCurrentSession().createSQLQuery(sql).addEntity(SearchTag.class).list();
+		String sql="select * from RAS_SEARCH_param t where t.parent_id!=0 and t.enname is not null";
+		List<SearchParam> searchTagList=sf.getCurrentSession().createSQLQuery(sql).addEntity(SearchParam.class).list();
 		
 		//读取所有指定条件的数据
 		StringBuilder field=new StringBuilder();
 		boolean flag=false;
-		for(SearchTag tag:searchTagList){
+		for(SearchParam tag:searchTagList){
 			if(!tag.getParent_id().equals("0")){
 				if(flag){
 					field.append(",");
@@ -46,13 +46,15 @@ public class ComparisonDaoImpl implements ComparisonDao {
 		paramSQL.append(" left join ras_aircraft_capability ac on ac.basicid=ab.id ");
 		paramSQL.append(" left join ras_aircraft_dynamic ad on ad.basicid=ab.id ");
 		paramSQL.append(" left join ras_aircraft_system asys on asys.basicid=ab.id ");
-		paramSQL.append(" where ao.modelname in (:params)");
+//		paramSQL.append(" where ao.modelname in (:params)");
+		paramSQL.append(" where ab.id in (:params)");
 		List<Map<String,String>> mapList=sf.getCurrentSession().createSQLQuery(paramSQL.toString())
-										  .setParameterList("params", modelNames)
+//										  .setParameterList("params", modelNames)
+										  .setParameterList("params", basicID)
 										  .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
 										  .list();
 		
-		for(SearchTag tag:searchTagList){
+		for(SearchParam tag:searchTagList){
 			//加载列数据格式
 			String[] tem=new String[modelNames.length+1];
 			tem[0]=tag.getName(); //名称
@@ -76,7 +78,7 @@ public class ComparisonDaoImpl implements ComparisonDao {
 
 /*		if(mapList.size()!=0){
 			//sql="select u.comments,u.column_name from user_col_comments u where u.table_name='AIRCRAFTALLPARAM' and u.comments is not null";
-			sql="SELECT TAG.NAME,TAG.ENNAME FROM RAS_SEARCH_TAG TAG where tag.parent_id!=0 and tag.enname is not null";
+			sql="SELECT TAG.NAME,TAG.ENNAME FROM RAS_SEARCH_PARAM TAG where tag.parent_id!=0 and tag.enname is not null";
 			List<Object[]> colList=sf.getCurrentSession().createSQLQuery(sql).list();
 			for(Object[] objs:colList){
 				String[] arr=new String[mapList.size()+1];

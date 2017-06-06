@@ -31,6 +31,7 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<input id="modelName" type="hidden" value="${modelName }" />
+					<input id="basicID" type="hidden" value="${basicID }" />
 					<label>
 						<small class="smaller-90">隐藏空数据:</small>
 						<input class="ace ace-switch ace-switch-5" id="closeSpaceBtn" type="checkbox">
@@ -67,8 +68,8 @@
 		
 		<plugin_js>
 			<!-- dataTable.js -->
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 			
 			<!-- 图片放大查看 
 			<script src="<%=basePath%>ras/common/js/jquery.colorbox.js"></script>-->

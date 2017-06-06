@@ -42,7 +42,7 @@
 							<form:form-group id="modelName" label="机型名" value="${model.modelName }" simpleValidate="required"/>
 							<form:form-group id="modelCname" label="中文名称" value="${model.modelCname }" />
 							<form:form-group id="modelEname" label="英文名称" value="${model.modelEname }"/>
-							
+							<%-- <form:form-group id="tag" label="标签名称" value="${model.tag }"/> --%>
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" > 上传图片 </label>
 								<div class="col-xs-10 col-sm-5">
@@ -53,7 +53,7 @@
 							</div>
 							
 							<form:form-action >
-								<form:form-button buttonType="submit" id="submit" label="提交" icon="fa-check" buttonClass="btn-info"/>
+								<form:form-button buttonType="submit" id="submitBtn" label="提交" icon="fa-check" buttonClass="btn-info"/>
 								<form:form-button id="canle" label="取消" url="./"/>
 							</form:form-action>
 						</form>
@@ -107,7 +107,11 @@
 				 */
 				unhighlight: function(element) {
             		$(element).closest('.form-group').removeClass('has-error');
-        		}
+        		},
+				submitHandler:function(form){
+					//alert("提交事件!");
+					form.submit();
+				},
 			});
 		 
         
@@ -171,7 +175,7 @@
 				image : {
 					width : "150px",
 					height : "150px"
-				},
+				}
 			}
 		}).on("fileuploaded",function(event, data, previewId, index) {
 			//{"basicID":"5DEBD7F5C1F54CAD8BF6E1C234DC8720","photoCategory":"整体图","photoDesc":"","photoFile":null,"photoID":"FEE09A0FD6E7452C9C0731137D7B10BD","photoName":"Tulips.jpg","photoUrl":"/upload/photo/1492351809778.jpeg"}
@@ -184,7 +188,7 @@
 			});
 			$('#upfile-image').fileinput('enable');
 			alert("上传成功!");
-	})
+		})
 	})
 	</script>
 	</body>

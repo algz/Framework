@@ -2186,6 +2186,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Ace\'s JavaScript requires
  <b>Wizard</b>. A wrapper for FuelUX wizard element.
  It's just a wrapper so you still need to include FuelUX wizard script first.
 */
+
 (function($ , undefined) {
 	$.fn.aceWizard = $.fn.ace_wizard = function(options) {
 

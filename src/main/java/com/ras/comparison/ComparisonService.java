@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ComparisonService {
 
-	public List<?> findModelGird(String modelName);
+	public void findModelGird(ComparisonVo vo);
 	
-	public List<?> findComparisonDetailGrid(String[] modelNames);
+	public List<?> findComparisonDetailGrid(String[] modelNames,String[] basicID);
 }

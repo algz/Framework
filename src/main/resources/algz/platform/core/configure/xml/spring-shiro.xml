@@ -12,7 +12,8 @@
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/login"/>
+        <!-- 没有权限或者失败后跳转的页面 --> 
+        <property name="loginUrl" value="/ras/login"/>
         <property name="filters">
             <util:map>
                 <entry key="authc" value-ref="formAuthenticationFilter"/>

@@ -11,6 +11,7 @@ import java.util.Random;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.tool.CommonTool;
+
+import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.util.Common;
 
 /**
  * @author algz
@@ -42,7 +46,16 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 
 	@Override
 	public Integer count(AircraftOverview ao) {
-		StringBuilder str=new StringBuilder("select count(1) from AircraftOverview where 1=1 ");
+		StringBuilder str=new StringBuilder("select count(distinct ao.overviewID) from AircraftOverview ao, "
+				+ " AircraftBasic ab  where ab.overviewID=ao.overviewID ");
+		
+		//权限控制
+		if(!CommonTool.isDataManager()){
+			User curUser=Common.getLoginUser();
+			str.append(" and (ab.editor='"+curUser.getUserid()+"' or ab.permissionLevel in ('2','3'))");
+		}
+		
+		
 		Field[] fs = ao.getClass().getDeclaredFields();
 		for (Field f : fs) {
 			f.setAccessible(true); 
@@ -54,7 +67,7 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 				e.printStackTrace();
 			}
 			if(obj!=null){
-				str.append(" and LOWER("+f.getName()+") like '%"+obj.toString().toLowerCase()+"%'");
+				str.append(" and LOWER(ao."+f.getName()+") like '%"+obj.toString().toLowerCase()+"%'");
 			}
 			
 		}
@@ -69,6 +82,7 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 
 	@Override
 	public void saveOrUpdate(AircraftOverview ao) {
+		ao.setEditor(Common.getLoginUser().getUserid());
 		if (ao.getOverviewID().equals("")) {
 			sf.getCurrentSession().save(ao);
 		} else {
@@ -77,25 +91,32 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 	}
 
 	@Override
-	public List<AircraftOverview> findByProperty(AircraftOverview ao) {
-		StringBuilder str=new StringBuilder("from AircraftOverview where 1=1 ");
+	public List<AircraftOverview> findByProperty(AircraftOverview ao,Integer start,Integer length) {
+		StringBuilder str=new StringBuilder("select distinct ao from AircraftOverview ao "
+				+ " inner join ao.aircraftBasicSet ab where 1=1 ");
+		
+		//权限控制
+		if(!CommonTool.isDataManager()){
+			User curUser=Common.getLoginUser();
+			str.append(" and (ab.editor='"+curUser.getUserid()+"' or ab.permissionLevel in ('2','3'))");
+		}
+		
 		Field[] fs = ao.getClass().getDeclaredFields();
 		try {
 			for (Field f : fs) {
 				f.setAccessible(true); 
 				Object obj = f.get(ao);
 				if(obj!=null){
-					str.append(" and LOWER("+f.getName()+") like '%"+obj.toString().toLowerCase()+"%'");
+					str.append(" and LOWER(ao."+f.getName()+") like '%"+obj.toString().toLowerCase()+"%'");
 				}
-				
 			}
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 return sf.getCurrentSession().createQuery(str.toString()).list();
+		Query query=sf.getCurrentSession().createQuery(str.toString());
+		if(start!=null&&length!=null){
+			query.setFirstResult(start).setMaxResults(length);
+		}
+		return query.list();
 	}
 }

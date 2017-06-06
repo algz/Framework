@@ -2,6 +2,7 @@
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="page" tagdir="/WEB-INF/tags/uiframe/page" %> 
+<%@taglib prefix="approval" tagdir="/WEB-INF/tags/customize/approval" %> 
 <%
 
 	String path = request.getContextPath();
@@ -39,9 +40,11 @@
 
 					<!-- <div class="table-responsive"> -->
 					<div class="btn-group">
-						<a class="btn btn-sm" type="button" href="./addmodel">新增</a>
-						<button id="modifyModel" class="btn btn-sm" type="button">修改</button>
-						<button id="delModel" class="btn btn-sm" type="button">删除</button>
+						<a class="btn btn-sm" type="button" href="./addmodel">新增机型</a>
+						<button id="modifyModel" class="btn btn-sm" type="button">修改机型</button>
+						<button id="delModel" class="btn btn-sm" type="button">删除机型</button>
+						<button id="pictureManager" class="btn btn-sm btn-primary" type="button">图片管理</button>
+						<button id="archiveManager" class="btn btn-sm btn-primary" type="button">文档管理</button>
 						<span class="input-icon">
 							<input type="text" id="modelNameTxt" placeholder="机型名">
 							<i class="ace-icon fa fa-fighter-jet  blue"></i>
@@ -73,7 +76,8 @@
 						<button id="addModelparam" class="btn btn-sm" type="button">新增</button>
 						<button id="modifyModelparam" class="btn btn-sm" type="button">修改</button>
 						<button id="delModelparam" class="btn btn-sm" type="button">删除</button>
-						<button id="setMainModelparam" class="btn btn-sm" type="button">设置为主要</button>
+						<button id="setMainModelparam" class="btn btn-sm btn-info" type="button">设置为主要</button>
+						<button id="submitApprovalBtn" class="btn btn-sm" type="button">送审</button>
 						<button id="mergeMainModelparam" class="btn btn-sm hidden" type="button">合并</button>
 					</div>
 					<!-- <div class="dataTables_borderWrap"> -->
@@ -84,31 +88,15 @@
 				</div>
 			</div>
 
-<div id="modal-form" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">        
-            	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            	<span aria-hidden="true">&times;</span></button>
-        		<h4 class="modal-title">...</h4>
-        	</div>
-            <div class="modal-body">            
-          	
-          	</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-    			<button id="confirmBtn" type="button" class="btn btn-primary">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
+			<approval:approval modalID="approvalModealID" dataID="" dataTable="" />
+
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
 
 		<plugin_js>
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 			
 			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
 			

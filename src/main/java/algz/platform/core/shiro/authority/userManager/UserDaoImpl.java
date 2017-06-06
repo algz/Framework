@@ -44,7 +44,7 @@ public class UserDaoImpl implements UserDao {
 //            }
 //        }, keyHolder);
 
-        user.setId(keyHolder.getKey().longValue()+"");
+        user.setUserid(keyHolder.getKey().longValue()+"");
         return user;
     }
 
@@ -80,9 +80,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByUsername(String username) {
-        String sql = "select * from sys_user where username='"+username+"'";
-        return (User)sf.openSession().createSQLQuery(sql)
-        		.addEntity(User.class).setMaxResults(1).uniqueResult();
+        String hql = "from User where username='"+username+"'";
+        return (User)sf.getCurrentSession().createQuery(hql)
+        		.setMaxResults(1).uniqueResult();
         		//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), username);
     }
 }

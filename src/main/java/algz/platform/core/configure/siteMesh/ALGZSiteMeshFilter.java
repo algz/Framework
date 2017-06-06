@@ -19,7 +19,7 @@ public class ALGZSiteMeshFilter extends ConfigurableSiteMeshFilter {
 	@Override
 	protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
         // 配置默认的渲染器. 将应用于所有路径.  
-		builder.addDecoratorPath("/*", "/platform/decorators/top.jsp")  
+		builder//.addDecoratorPath("/*", "/platform/decorators/top.jsp")  
 			   .addDecoratorPath("/ras/*", "/ras/main.jsp")
            // 配置特定路径的渲染器.  
 //           .addDecoratorPath("/*.special.jsp", "/special-decorator.html")  
@@ -40,7 +40,7 @@ public class ALGZSiteMeshFilter extends ConfigurableSiteMeshFilter {
            .addExcludedPath("/error.jsp")
            .addExcludedPath("/*.jsp")
            .addExcludedPath("/*.html")
-           .addExcludedPath("/ras/login");  
+           .addExcludedPath("/*/login");  
 		
 		//Sitemesh 3 默认只提供了 body，title，head 等 tag 类型，我们可以通过实现 TagRuleBundle 扩展自定义的 tag 规则;
 		builder.addTagRuleBundles(new ExtHtmlTagRuleBundle());

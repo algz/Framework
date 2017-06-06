@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
-<%@page import="algz.platform.system.menu.*" %>
+<%@page import="algz.platform.core.shiro.authority.resourceManager.*" %>
 <%@page import="java.util.*" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="menu" tagdir="/WEB-INF/tags/uiframe/menu" %> 
@@ -26,8 +26,8 @@ strBackUrl=httpRequest.getAttribute("javax.servlet.include.request_uri")+"111";
 	ApplicationContext   ac   =   WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
 	//获取ApplicationContext.xml文件中定义的BEAN
-	MenuService menuService=(MenuService)ac.getBean("menuServiceImpl");
-	List<Menu> list=menuService.findAll(pathUrl);
+	ResourceService resourceService=(ResourceService)ac.getBean("resourceServiceImpl");
+	List<Resource> list=resourceService.findAll(pathUrl);
 	request.setAttribute("menus", list);
 	
 

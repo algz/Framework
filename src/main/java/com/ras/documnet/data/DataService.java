@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ras.aircraftArchive.AircraftArchive;
 import com.ras.aircraftOverview.AircraftOverview;
-import com.ras.aircraftPhoto.AircraftPhoto;
+import com.ras.aircraftPicture.AircraftPicture;
 import com.ras.tool.file.UploadFile;
 
 import net.sf.json.JSONArray;
@@ -38,11 +39,19 @@ public interface DataService {
 	
 	public void saveModelPhotoFile(AircraftOverview ao);
 	
-	public void saveModelParamPhotoFile(AircraftPhoto photo);
+	public void saveModelParamPhotoFile(AircraftPicture photo);
 	
+	public void findArchiveGrid(DataVo vo);
 	
+	public void findPictureGrid(DataVo vo);
 	
-	public void delImageFile(String photoID);
+	public void saveModelParamArchiveFile(AircraftArchive archive);
+	
+	public void delArichiveFile(String archiveID);
+	
+	public AircraftArchive downloadArchiveFile(String archiveID);
+	
+	public void delPictureFile(String photoID);
 	
 	public void delModelImageFile(String overviewID);
 	

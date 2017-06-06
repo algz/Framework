@@ -6,7 +6,7 @@ import net.sf.json.JSONArray;
 
 public interface AnalyzeService {
 
-	public List<?> findModelGird(String modelName);
+	public List<?> findModelGird(AnalyzeVo vo);
 	
 	public List<?> findComparisonDetailGrid(String[] modelNames);
 	

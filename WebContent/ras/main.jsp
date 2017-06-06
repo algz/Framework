@@ -13,7 +13,8 @@
 <!DOCTYPE html>
 <html lang="zh">
 	<head>
-		<title><sitemesh:write property='title' /></title>
+		<!-- <title><sitemesh:write property='title' /></title> -->
+		<title>总体部飞机论证参照系统</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -48,7 +49,11 @@
 		</div><!-- /.main-container -->
 
 <script type="text/javascript">
+//全局变量
+var basePath='<%=basePath%>';
+
 $(function(){
+	
 	if(document.body.clientWidth<991){
 		alert("请将页面宽度调整至991px以上或全屏.");
 	}

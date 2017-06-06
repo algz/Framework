@@ -103,7 +103,15 @@ public class AircraftBasic {
 	@Column(name="MAININFO")
 	private String mainInfo;
 
-    
+	/**
+	 * 权限级别:1只能允许自己可视;2部门内允许可视;3或空完全可视
+	 */
+	@Column(name="PERMISSION_LEVEL")
+    private String permissionLevel;
+	
+	@Column(name="TAG")
+	private String tag;
+	
     /**
      * 外键
      */
@@ -230,6 +238,22 @@ public class AircraftBasic {
 
 	public void setMainInfo(String mainInfo) {
 		this.mainInfo = mainInfo;
+	}
+
+	public String getPermissionLevel() {
+		return permissionLevel;
+	}
+
+	public void setPermissionLevel(String permissionLevel) {
+		this.permissionLevel = permissionLevel;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 

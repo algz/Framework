@@ -24,8 +24,8 @@
 		<jsp:include  page="../common/common_js.jsp"/> 
 
 			<!-- dataTable.js -->
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 	</head>
 	
 	<body >					

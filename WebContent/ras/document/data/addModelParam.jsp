@@ -39,20 +39,6 @@
 									参数
 								</a>
 							</li>
-							<li >
-								<a data-toggle="tab" href="#picture">
-									<i class="green ace-icon fa fa-home bigger-120"></i>
-									图片
-								</a>
-							</li>
-							<%--
-							<li >
-								<a data-toggle="tab" href="#docment">
-									<i class="green ace-icon fa fa-home bigger-120"></i>
-									文档
-								</a>
-							</li>
-	 --%>
 						</ul>
 	
 						<div class="tab-content">
@@ -60,14 +46,6 @@
 							<div id="param" class="tab-pane fade in active">
 								<jsp:include page="addModelParam_param.jsp"></jsp:include>
 							</div>
-							<div id="picture" class="tab-pane fade">
-								<jsp:include page="addModelParam_picture.jsp"></jsp:include>
-							</div>
-							<%--
-							<div id="docment" class="tab-pane fade">
-								<jsp:include page="addModelParam_document.jsp"></jsp:include>
-							</div>
-							 --%>
 						</div>
 					</div>
 	
@@ -85,9 +63,13 @@
 			<link href="<%=basePath%>ras/common/css/fileinput/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/>
 		</plugin_css>
 		<plugin_js>
+			
+			<!-- bootbox.js 提示框 -->
+			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
+		
 			<!-- dataTable.js -->
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 			
 			<!-- 图片放大查看 
 			<script src="<%=basePath%>ras/common/js/jquery.colorbox.js"></script>-->

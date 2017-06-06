@@ -9,13 +9,13 @@
 
 <!-- 标签属性 -->
 <%@attribute name="hover"  rtexprvalue="true" required="false" description="是否浮动" %>
-<%@attribute name="menu"  rtexprvalue="true" required="false" type="algz.platform.system.menu.Menu" description="菜单实体类" %>
+<%@attribute name="menu"  rtexprvalue="true" required="false" type="algz.platform.core.shiro.authority.resourceManager.Resource" description="菜单实体类" %>
 <c:choose>
-<c:when test="${menu.menus.size()==0 }">
+<c:when test="${menu.resources.size()==0 }">
 	<li class="${menu.active=='1'?'active':''} ${hover} ">
 		<a href="<%=path %>${fn:split(menu.url, ',')[0]}" >
 			<i class="menu-icon fa ${menu.icon }"></i>
-			<span class="menu-text"> ${menu.text }</span>
+			<span class="menu-text"> ${menu.name }</span>
 		</a>
 		<b class="arrow"></b>
 
@@ -26,11 +26,11 @@
 	<li class="${menu.active=='1'?'active':''} ${hover }">
 		<a href="#" class="dropdown-toggle" >
 			<i class="menu-icon fa ${menu.icon }"></i>
-			<span class="menu-text"> ${menu.text} </span>
+			<span class="menu-text"> ${menu.name} </span>
 			<i class="ace-icon fa fa-angle-down bigger-110"></i>
 		</a>
 		<b class="arrow"></b>
-		<menu:menu-ul menus="${menu.menus }" hover="${hover }"/>
+		<menu:menu-ul menus="${menu.resources }" hover="${hover }"/>
 		<jsp:doBody/>
 	</li>
 </c:otherwise>

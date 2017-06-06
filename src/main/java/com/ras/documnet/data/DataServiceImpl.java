@@ -22,17 +22,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ras.aircraftArchive.AircraftArchive;
+import com.ras.aircraftArchive.AircraftArchiveDao;
 import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftBasic.AircraftBasicDao;
 import com.ras.aircraftCapability.AircraftCapability;
 import com.ras.aircraftCapability.AircraftCapabilityDao;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftOverview.AircraftOverviewDao;
-import com.ras.aircraftPhoto.AircraftPhoto;
-import com.ras.aircraftPhoto.AircraftPhotoDao;
+import com.ras.aircraftPicture.AircraftPicture;
+import com.ras.aircraftPicture.AircraftPictureDao;
 import com.ras.aircraftWeight.AircraftWeight;
-import com.ras.search.SearchTag;
-import com.ras.search.SearchTagDao;
+import com.ras.searchParam.SearchParamDao;
+import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
 import com.ras.tool.file.UploadFile;
 
@@ -47,7 +49,7 @@ import net.sf.json.JSONObject;
 public class DataServiceImpl implements DataService {
 	
 	@Autowired
-	private SearchTagDao searchTagDao;
+	private SearchParamDao searchTagDao;
 	
 	@Autowired
 	private AircraftOverviewDao aircraftOverviewDao;
@@ -59,7 +61,11 @@ public class DataServiceImpl implements DataService {
 	private AircraftCapabilityDao aircraftCapabilityDao;
 	
 	@Autowired
-	private AircraftPhotoDao aircraftPhotoDao;
+	private AircraftPictureDao aircraftPictureDao;
+	
+	@Autowired
+	private AircraftArchiveDao aircraftArchiveDao;
+	
 	
 	@Autowired
 	private DataDao dao;
@@ -115,11 +121,12 @@ public class DataServiceImpl implements DataService {
 		dao.saveModelParam("LAYOUT", map,isCreate);
 		dao.saveModelParam("CAPABILITY", map,isCreate);
 		dao.saveModelParam("SYSTEM", map,isCreate);
+		dao.saveModelParam("DYNAMIC", map,isCreate);
 
 	}
 	
-	private boolean validateTable(String tableID,List<SearchTag> allTags,Map<String, String> map){
-		for (SearchTag tag : allTags) {
+	private boolean validateTable(String tableID,List<SearchParam> allTags,Map<String, String> map){
+		for (SearchParam tag : allTags) {
 			if (tableID.equals(tag.getParent_id())&&map.containsKey(tag.getEnname())) {
 				return true;
 			}
@@ -161,10 +168,10 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Override
 	public JSONArray findModelImageParam(String photoCategory,String overviewID) {
-		AircraftPhoto photo=new AircraftPhoto();
+		AircraftPicture photo=new AircraftPicture();
 		photo.setPhotoCategory(photoCategory);
 		photo.setOverviewID(overviewID);
-		List<AircraftPhoto> photoList=aircraftPhotoDao.find(photo);
+		List<AircraftPicture> photoList=aircraftPictureDao.find(photo);
 		return CommonTool.arrayToJSONArray(photoList,true);
 	}
 
@@ -173,14 +180,16 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Transactional
 	@Override
-	public void saveModelParamPhotoFile(AircraftPhoto photo) {
-		aircraftPhotoDao.saveOrUpdate(photo);		
+	public void saveModelParamPhotoFile(AircraftPicture photo) {
+		aircraftPictureDao.saveOrUpdate(photo);		
 	}
 
 	@Transactional
 	@Override
-	public void delImageFile(String photoID) {
-		aircraftPhotoDao.del(photoID);
+	public void delPictureFile(String photoIDS) {
+		for(String photoID:photoIDS.split(",")){
+			aircraftPictureDao.del(photoID);
+		}
 	}
 
 	@Transactional
@@ -198,6 +207,45 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public List findTableSQL(String tableName) {
 		return dao.findTableSQL(tableName);
+	}
+
+	/**
+	 * 保存文档
+	 */
+	@Transactional
+	@Override
+	public void saveModelParamArchiveFile(AircraftArchive archive) {
+		aircraftArchiveDao.saveOrUpdate(archive);	
+	}
+
+	/**
+	 * 删除文档
+	 */
+	@Transactional
+	@Override
+	public void delArichiveFile(String archiveID) {
+		aircraftArchiveDao.del(archiveID);
+	}
+
+	@Override
+	public void findArchiveGrid(DataVo vo) {
+		vo.setRecordsTotal(aircraftArchiveDao.count(null));
+		vo.setData(aircraftArchiveDao.find(null, vo.getStart(),vo.getLength()));
+	}
+
+	@Override
+	public AircraftArchive downloadArchiveFile(String archiveID) {
+		return aircraftArchiveDao.find(archiveID);
+	}
+
+	@Override
+	public void findPictureGrid(DataVo vo) {
+		AircraftPicture photo=new AircraftPicture();
+		photo.setPhotoCategory(vo.getPhotoCategory());
+		photo.setOverviewID(vo.getOverviewID());
+		photo.setTag(vo.getTag());
+		vo.setRecordsTotal(aircraftPictureDao.count(photo).intValue());
+		vo.setData(aircraftPictureDao.find(photo));
 	}
 
 

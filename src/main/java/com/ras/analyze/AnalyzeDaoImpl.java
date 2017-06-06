@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ras.aircraftOverview.AircraftOverview;
-import com.ras.search.SearchTag;
+import com.ras.searchParam.SearchParam;
 import com.sun.xml.internal.ws.util.StringUtils;
 
 import net.sf.json.JSONArray;
@@ -69,7 +69,7 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 	@Override
 	public JSONArray analyzeChart(String[] modelNames, String[] axis) {
 		//modelName=f&xAxis=modelName&yAxis=modelCname
-		StringBuilder sql=new StringBuilder("select modelname ");
+		StringBuilder sql=new StringBuilder("select ab.dataSources||'('||modelname||')' modelname ");
 		for(int i=0;i<axis.length;i++){
 			if(axis[i].equals("")){
 				sql.append(",0");
@@ -81,16 +81,16 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 
 		//data="[{names:'f-32',datas:[[100,100],2000]},{names:'f-35',datas:[200,2200]}]"
 		
-		
-		
 		sql.append(" from ras_aircraft_overview ov  ");
-		sql.append(" inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id and ab.maininfo='1' ");
+//		sql.append(" inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id and ab.maininfo='1' ");
+		sql.append(" inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id  ");
 		sql.append(" left join ras_aircraft_weight aw on aw.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_layout al on al.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_capability ac on ac.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_dynamic ad on ad.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_system asys on asys.basicid=ab.id ");
-		sql.append(" where ov.modelname in (:modelname)");
+//		sql.append(" where ov.modelname in (:modelname)");
+		sql.append(" where ab.id in (:modelname)");
 		
 		List<Object[]> list=sf.getCurrentSession().createSQLQuery(sql.toString())
 						.setParameterList("modelname", modelNames).list();
@@ -100,9 +100,10 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 			
 			JSONObject jo=new JSONObject();
 			String data="";
-			jo.put("name", modelNames[i]);
+			
 			if(i<list.size()){
 				Object[] objs=list.get(i);
+				jo.put("name", objs[0]);
 				for(int j=1;j<objs.length;j++){
 					if(j!=1){
 						data+=",";

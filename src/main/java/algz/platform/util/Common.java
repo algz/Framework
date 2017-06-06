@@ -1,6 +1,7 @@
 package algz.platform.util;
-//package algz.platform.util;
-//
+
+import algz.platform.core.shiro.authority.userManager.User;
+
 //import java.io.BufferedReader;
 //import java.io.ByteArrayOutputStream;
 //import java.io.File;
@@ -27,7 +28,19 @@ package algz.platform.util;
 //import org.springframework.web.bind.annotation.ResponseBody;
 //
 //
-//public class Common {
+public class Common {
+	
+	
+	/**
+	 * 获取当前登录用户
+	 * @return
+	 */
+	public static User getLoginUser() { 
+		return (User)org.apache.shiro.SecurityUtils.getSubject().getSession().getAttribute("LoginUser"); 
+	 }
+	
+	
+	
 //	/**
 //	 * 判断变量是否为空
 //	 * 
@@ -423,4 +436,4 @@ package algz.platform.util;
 //	    return username; 
 //	 }
 //
-//}
+}

@@ -64,12 +64,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		
 		/** 设置servlet编码,解决乱码问题  */
 		FilterRegistration scefilter = servletContext.addFilter("Set Character Encoding", CharacterEncodingFilter.class); 
-		Map<String,String> sceMap=new HashMap<String,String>();
+		Map<String,String> encodeFilter=new HashMap<String,String>();
 		//设置编码。forceEncoding=true后,等效于request.setCharacterEncoding("UTF-8")和response.setCharacterEncoding("UTF-8")
-		sceMap.put("encoding", "UTF-8");
+		encodeFilter.put("encoding", "UTF-8");
 		//forceEncoding默认为false,等效于request.setCharacterEncoding("UTF-8")
-		sceMap.put("forceEncoding", "true"); 
-		scefilter.setInitParameters(sceMap);
+		encodeFilter.put("forceEncoding", "true"); 
+		scefilter.setInitParameters(encodeFilter);
 		scefilter.addMappingForUrlPatterns(null, true, "/*");  //不能设置为"/",不然不会进行匹配,无效指定编码.
 		/**设置servlet编码结束*/
       

@@ -28,43 +28,43 @@ public class AircraftWeight{
 	/**
 	 * 使用空重(kg)
 	 */
-	@Column(name="EMPTY_WEIGHT")
+	@Column(name="EMPTYWEIGHT")
 	private Double emptyWeight;
 	
 	/**
 	 * 正常起飞重量(kg)
 	 */
-	@Column(name="NORMAL_TAKEOFF_WEIGHT")
+	@Column(name="NORMALTAKEOFFWEIGHT")
 	private Double normalTakeoffWeight;
 
 	/**
 	 * 最大起飞重量(kg)
 	 */
-	@Column(name="MAX_TAKEOFF_WEIGHT")
+	@Column(name="MAXTAKEOFFWEIGHT")
 	private Double maxTakeoffWeight;
 
 	/**
 	 * 设计着陆重量(kg)
 	 */
-	@Column(name="DESIGN_LAND_WEIGHT")
+	@Column(name="DESIGNLANDWEIGHT")
 	private Double designLandWeight;
 
 	/**
 	 * 机内油量
 	 */
-	@Column(name="FUEL_CAPACITY")
+	@Column(name="FUELCAPACITY")
 	private Double fuelCapacity;
 
 	/**
 	 * 最大装载重量(kg)
 	 */
-	@Column(name="MAX_LOAD_WEIGHT")
+	@Column(name="MAXLOADWEIGHT")
 	private Double maxLoadWeight;
 
 	/**
 	 * 起飞推重比
 	 */
-	@Column(name="TAKE_WEIGHT_RATIO")
+	@Column(name="TAKEWEIGHTRATIO")
 	private Double takeWeightRatio;
 
 	/**

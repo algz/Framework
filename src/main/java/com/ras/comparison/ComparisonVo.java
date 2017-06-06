@@ -13,8 +13,8 @@ public class ComparisonVo<T> extends ReturnVo<T>{
 	
 	private String basicID;
 	
-	private Integer start;
-	private Integer limit;
+	private String modelName;
+	
 	private Integer count;
 	
 	// Constructors
@@ -23,21 +23,6 @@ public class ComparisonVo<T> extends ReturnVo<T>{
 	public ComparisonVo() {
 	}
 
-	public Integer getStart() {
-		return start;
-	}
-
-	public void setStart(Integer start) {
-		this.start = start;
-	}
-
-	public Integer getLimit() {
-		return limit;
-	}
-
-	public void setLimit(Integer limit) {
-		this.limit = limit;
-	}
 
 	public Integer getCount() {
 		return count;
@@ -61,6 +46,16 @@ public class ComparisonVo<T> extends ReturnVo<T>{
 
 	public void setBasicID(String basicID) {
 		this.basicID = basicID;
+	}
+
+
+	public String getModelName() {
+		return modelName;
+	}
+
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
 	

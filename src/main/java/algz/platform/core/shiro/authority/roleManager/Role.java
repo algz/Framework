@@ -1,4 +1,5 @@
 package algz.platform.core.shiro.authority.roleManager;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -6,44 +7,67 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
+ * <p>User: algz
+ * <p>Date: 2017-1-28
  * <p>Version: 1.0
  */
+@Entity
+@Table(name="ALGZ_ROLE")
 public class Role implements Serializable {
-    private Long id; //编号
-    private String role; //角色标识 程序中判断使用,如"admin"
+	
+	@Id
+	@GenericGenerator(name = "ALGZGenerator", strategy = "guid")
+	@GeneratedValue(generator="ALGZGenerator")
+    private String id; //编号
+	
+	@Column(name="ROLENAME")
+    private String rolename; //角色标识 程序中判断使用,如"admin"
+	
+	@Column(name="DESCRIPTION")
     private String description; //角色描述,UI界面显示使用
+	
+	@Transient
     private List<Long> resourceIds; //拥有的资源
+	
+	@Transient
     private Boolean available = Boolean.FALSE; //是否可用,如果不可用将不会添加给用户
 
     public Role() {
     }
 
-    public Role(String role, String description, Boolean available) {
-        this.role = role;
-        this.description = description;
-        this.available = available;
-    }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getId() {
+		return id;
+	}
 
-    public String getRole() {
-        return role;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setRole(String role) {
-        this.role = role;
-    }
 
-    public String getDescription() {
+
+    public String getRolename() {
+		return rolename;
+	}
+
+
+
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
+	}
+
+
+
+	public String getDescription() {
         return description;
     }
 
@@ -107,19 +131,14 @@ public class Role implements Serializable {
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", role='" + role + '\'' +
-                ", description='" + description + '\'' +
-                ", resourceIds=" + resourceIds +
-                ", available=" + available +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Role{" +
+//                "id=" + id +
+//                ", role='" + role + '\'' +
+//                ", description='" + description + '\'' +
+//                ", resourceIds=" + resourceIds +
+//                ", available=" + available +
+//                '}';
+//    }
 }

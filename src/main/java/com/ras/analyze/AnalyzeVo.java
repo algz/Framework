@@ -13,30 +13,14 @@ public class AnalyzeVo<T> extends ReturnVo<T>{
 	
 	private String basicID;
 	
-	private Integer start;
-	private Integer limit;
+	private String modelName;
+	
 	private Integer count;
 	
 	// Constructors
 
 	/** default constructor */
 	public AnalyzeVo() {
-	}
-
-	public Integer getStart() {
-		return start;
-	}
-
-	public void setStart(Integer start) {
-		this.start = start;
-	}
-
-	public Integer getLimit() {
-		return limit;
-	}
-
-	public void setLimit(Integer limit) {
-		this.limit = limit;
 	}
 
 	public Integer getCount() {
@@ -61,6 +45,14 @@ public class AnalyzeVo<T> extends ReturnVo<T>{
 
 	public void setBasicID(String basicID) {
 		this.basicID = basicID;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 
 	

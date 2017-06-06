@@ -20,10 +20,11 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	private AnalyzeDao dao;
 	
 	@Override
-	public List<?> findModelGird(String modelName) {
+	public List<?> findModelGird(AnalyzeVo vo) {
 		AircraftOverview ao=new AircraftOverview();
-		ao.setModelName(modelName);
-		return aircraftOverviewDao.findByProperty(ao);
+		ao.setModelName(vo.getModelName());
+		aircraftOverviewDao.count(ao);
+		return aircraftOverviewDao.findByProperty(ao,vo.getStart(),vo.getLength());
 	}
 
 	@Override

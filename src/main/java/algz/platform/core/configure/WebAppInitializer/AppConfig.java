@@ -5,6 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -73,7 +74,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
   }*/
 	@Override
 	public void configureViewResolvers(ViewResolverRegistry registry) {
-		
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setViewClass(JstlView.class);
 		viewResolver.setPrefix("/");//("/WEB-INF/views/");

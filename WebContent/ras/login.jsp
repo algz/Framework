@@ -1,7 +1,12 @@
 <%@page language="Java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page import="java.util.Enumeration" %>
 <%
+
+String path = request.getContextPath();
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+		+ path + "/";
+String common_css=basePath+"/ras/common/common_css.jsp";
 
 String strBackUrl = "http://" + request.getServerName() //服务器地址  
 + ":"   
@@ -28,8 +33,8 @@ url=request.getAttribute("org.springframework.web.servlet.HandlerMapping.pathWit
 		<meta name="description" content="User login page" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-		<jsp:include  page="common/common_css.jsp"/> 
-		<jsp:include  page="common/common_js.jsp"/> 
+		<jsp:include  page="/ras/common/common_css.jsp"/> 
+		<jsp:include  page="/ras/common/common_js.jsp"/> 
 		
 	</head>
 <%=url %><p/>
@@ -62,36 +67,41 @@ url=request.getAttribute("org.springframework.web.servlet.HandlerMapping.pathWit
 
 											<div class="space-6"></div>
 
-											<form>
+											<form action="/algz/login" method="POST">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="用户名" />
+															<input type="text" name="username" class="form-control" placeholder="用户名" value="admin" />
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="密码" />
+															<input type="password" name="password" class="form-control" placeholder="密码" value="111111" />
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
 													</label>
 
 													<div class="space"></div>
-
+													${error}
+													<c:if test="${error!=null}">
+													<div class="alert alert-danger">
+														<i class="ace-icon fa fa-times"></i>
+														${error}
+													</div>
+													</c:if>
 													<div class="clearfix">
 														<label class="inline">
 															<input type="checkbox" class="ace" />
 															<span class="lbl">下次自动登陆</span>
 														</label>
 
-														<button type="button" class="width-35 pull-right btn btn-sm btn-primary">
+														<button type="button" id="subBtn" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">登陆</span>
 														</button>
 													</div>
-
 													<div class="space-4"></div>
 												</fieldset>
 											</form>
@@ -297,6 +307,10 @@ url=request.getAttribute("org.springframework.web.servlet.HandlerMapping.pathWit
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 			jQuery(function($) {
+				$('#subBtn').on('click',function(){
+					$("form").submit();
+				})
+				
 			 $(document).on('click', '.toolbar a[data-target]', function(e) {
 				e.preventDefault();
 				var target = $(this).data('target');

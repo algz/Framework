@@ -149,8 +149,8 @@
 		</page:page>
 		<plugin_js>
 			<!-- dataTable.js 表格-->
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.js"></script>
-			<script src="<%=basePath%>ras/common/js/jquery.dataTables.bootstrap.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
+			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 			<!-- highcharts.js 图表-->
 			<script src="<%=basePath%>ras/common/js/highcharts/highcharts.js"></script>
 

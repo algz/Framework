@@ -1,5 +1,7 @@
 package algz.platform.core.shiro.authority;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -7,6 +9,9 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.util.SavedRequest;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,14 +31,16 @@ import algz.platform.core.shiro.authority.userManager.User;
 public class AuthenticatorControl {
 
     @RequestMapping(value="/login",method=RequestMethod.GET)  
-    public String loginForm(Model model){  
+    public String loginForm(Model model,HttpServletRequest request){  
+    	//WebUtils.getSavedRequest(request);
 //        model.addAttribute("user", new User());  
         return "/login";  
     }  
       
     @RequestMapping(value="/login",method=RequestMethod.POST)  
-    public String login(User user,Model model){  
+    public String login(User user,Model model,HttpServletRequest request){  
         String error = null;
+        Subject subject = SecurityUtils.getSubject();
     	try {  
             String username=user.getUsername();
 //            if(bindingResult.hasErrors()){  
@@ -41,8 +48,34 @@ public class AuthenticatorControl {
 //            }  
             UsernamePasswordToken token=new UsernamePasswordToken(user.getUsername(), user.getPassword());
             //使用权限工具进行用户登录，登录成功后跳到shiro配置的successUrl中，与下面的return没什么关系！  
-            SecurityUtils.getSubject().login(token);  
+            subject.login(token);  
 
+            if (subject.isAuthenticated()) {
+            	//通过权限,保存登陆成功的用户.
+                request.getSession().setAttribute("LoginUser",subject.getPrincipal()); 
+//                ((User)subject.getPrincipal()).getRoles().size();
+                //获得"保存请求"的对象
+                SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+                // 获取保存的URL
+                if (savedRequest == null || savedRequest.getRequestUrl() == null) {
+                    return "redirect:/";
+                } else {
+                	return "redirect:.."+savedRequest.getRequestUrl();
+                	//String url = savedRequest.getRequestUrl().substring(12, savedRequest.getRequestUrl().length());
+                    //return "forward:.." + savedRequest.getRequestUrl();
+                }
+//              SecurityUtils.getSubject().getSession().setAttribute("LoginUser", user);
+//                if(error==null){
+//            		
+//            		String url = WebUtils.getSavedRequest(request).getRequestUrl();
+//            		if(url==null){
+//            			url="/";
+//            		}
+//            		return "redirect:.."+url;
+//            	}
+            } else {
+                return "login";
+            }
         }catch(UnknownAccountException uae){
         	error="对用户[" + user.getUsername() + "]进行登录验证..验证未通过,未知账户";
             System.out.println(error);  
@@ -67,7 +100,7 @@ public class AuthenticatorControl {
 //            request.setAttribute("message_login", "用户名或密码不正确");  
         } 
     	model.addAttribute("error", error);
-        return "login"; 
+        return "redirect:/login"; 
     }  
       
     @RequestMapping(value="/logout",method=RequestMethod.GET)    

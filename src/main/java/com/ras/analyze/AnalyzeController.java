@@ -20,10 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import com.ras.index.Page;
-import com.ras.search.SearchTag;
-import com.ras.search.SearchTagService;
+import com.ras.searchParam.SearchParamService;
+import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
 
 import net.sf.json.JSONArray;
@@ -44,7 +43,7 @@ public class AnalyzeController {
 	private AnalyzeService service;
 	
 	@Autowired
-	private SearchTagService searchTagService;
+	private SearchParamService searchParamService;
 	
 
     @RequestMapping(value={"","/"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
@@ -62,18 +61,18 @@ public class AnalyzeController {
 //    			list.remove(tag);
 //    		}
 //    	}
-    	map.put("searchTags", searchTagService.findAllParent());
+    	map.put("searchTags", searchParamService.findAllParent());
     	
         return new ModelAndView("ras/analyze/analyze",map);
     }
     
-    @RequestMapping(value={"/findmodelgird"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public void  findModelGird(AnalyzeVo vo,HttpServletRequest request,HttpServletResponse response) {
-    	Map<String, Object> map=new HashMap<String, Object>();
-    	String modelName=request.getParameter("modelName");
-    	vo.setData(service.findModelGird(modelName));
-    	CommonTool.writeJSONToPage(response,vo );
-    }
+//    @RequestMapping(value={"/findmodelgird"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
+//    public void  findModelGird(AnalyzeVo vo,HttpServletRequest request,HttpServletResponse response) {
+//    	Map<String, Object> map=new HashMap<String, Object>();
+//    	String modelName=request.getParameter("modelName");
+//    	service.findModelGird(vo);
+//    	CommonTool.writeJSONToPage(response,vo );
+//    }
     
     
 //    @RequestMapping(value={"/findcomparisondetailgrid"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
@@ -101,11 +100,12 @@ public class AnalyzeController {
     @RequestMapping(value={"/analyzechart"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public void  analyzeChart(HttpServletRequest request,HttpServletResponse response) {
     	String modelName=request.getParameter("modelName");
+    	String basicID=request.getParameter("basicID");
     	String[] axis=new String[2];
     	axis[0]=request.getParameter("xAxis");
     	axis[1]=request.getParameter("yAxis");
     	try {
-    		JSONArray ja=service.analyzeChart(modelName.split(","), axis);
+    		JSONArray ja=service.analyzeChart(basicID.split(","), axis);
 			response.getWriter().print(ja);
 		} catch (IOException e) {
 			e.printStackTrace();

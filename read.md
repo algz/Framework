@@ -68,6 +68,15 @@ public void updateAccount(Account userAccount) {
 2.@RequiresGuest 表明该用户需为”guest”用户 
 
 3.@RequiresPermissions 当前用户需拥有制定权限 
+sec_permission表的permissionName属性="user:create"
+(1)shiro HTML标签:
+
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<shiro:hasPermission name="user:create">
+     <a href="admin.jsp">创建用户</a>
+</shiro:hasPermission>
+
+(2)JAVA 方法:
 @RequiresPermissions("account:create")  
 public void createAccount(Account account) {  
     //this method will only be invoked by a Subject  
@@ -78,6 +87,15 @@ public void createAccount(Account account) {
 4.@RequiresRoles 当前用户需拥有制定角色 
 
 5.@RequiresUser 当前用户需为已认证用户或已记住用户 
+
+6.<shiro:hasRole> 有权限才能访问
+<shiro:hasRole name="admin">
+    Administer the system
+</shiro:hasRole>
+
+<shiro:hasRole name="user">
+    user role
+</shiro:hasRole>
 
 四.spring mvc
 1.ModelAndView 对象

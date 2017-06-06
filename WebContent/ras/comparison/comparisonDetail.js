@@ -47,7 +47,10 @@ $(function(){
 				serverSide : true, // 开启服务器模式
 				ajax : {
 					url : "./findcomparisondetailgrid",
-					data:{modelName:$("#modelName").val()}
+					data:{
+						modelName:$("#modelName").val(),
+						basicID:$("#basicID").val()
+					}
 //					type : 'POST'
 				},
 				//deferLoading:0,

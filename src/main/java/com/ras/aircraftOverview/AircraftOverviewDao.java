@@ -6,7 +6,7 @@ public interface AircraftOverviewDao {
 
 	public List<AircraftOverview> findAll();
 	
-	public List<AircraftOverview> findByProperty(AircraftOverview ao);
+	public List<AircraftOverview> findByProperty(AircraftOverview ao,Integer start,Integer length);
 	
 	public Integer count(AircraftOverview ao);
 	

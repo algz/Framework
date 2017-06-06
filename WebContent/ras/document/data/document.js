@@ -1,11 +1,36 @@
 $(function() {
+	/**
+	 * 查询按钮
+	 */
 	$("#modelSearch").on('click',function(){
-		var modelName=$("#modelNameTxt").val();
-		if(modelName){
-			tablemodel.settings()[0].ajax.data={modelName:modelName};
+			tablemodel.settings()[0].ajax.data={modelName:$("#modelNameTxt").val()};
 			tablemodel.ajax.reload();
+	})
+	
+	/**
+	 * 图片管理
+	 */
+	$('#pictureManager').on('click',function(){
+		if(tablemodel.row(".selected").length!=1){
+			bootbox.alert("请选择一个机型!");
+		}else{
+			var data=tablemodel.row(".selected").data()
+			window.location.href="picturemanager?overviewID="+data.overviewID+"&modelName="+data.modelName; 
 		}
 	})
+	
+	/**
+	 * 文档管理
+	 */
+	$('#archiveManager').on('click',function(){
+		if(tablemodel.row(".selected").length!=1){
+			bootbox.alert("请选择一个机型!");
+		}else{
+			var data=tablemodel.row(".selected").data()
+			window.location.href="archivemanager?overviewID="+data.overviewID+"&modelName="+data.modelName; 
+		}
+	})
+	
 	
 			// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
 			var tablemodel = $('#table-model')
@@ -27,6 +52,7 @@ $(function() {
 						//deferLoading:1, //延迟加载(值为0,即不加载;不设置为默认自动加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
 						"columns" : [{
 									class : "center",
+									width:100,
 									render : function(data, type, full, meta) {
 										return '<label class="position-relative"><input type="checkbox" class="ace" /><span class="lbl"></span></label>'
 									},
@@ -133,6 +159,18 @@ $(function() {
 									    	return "";
 									    }
 									}
+								}, {
+									"title" : "权限级别", 
+									data:'permissionLevel',
+									render:function(data, type, row, meta){
+										if(data==""||data=='1'){
+											return "个人可视";
+										}else if(data=='2'){
+											return "部门可视";
+										}else if(data=="3"){
+											return "所内可视";
+										}
+									}
 								}],
 						"language" : {
 							"lengthMenu" : "每页显示 _MENU_ 条记录",
@@ -182,6 +220,9 @@ $(function() {
 				}else{
 					//取消
 					$(this).removeClass('selected');
+////					row('.selected')
+//					tablemodelparam.rows('.selected').remove().draw( false );
+					
 					tablemodelparam.settings()[0].ajax.data={overviewID:-1};
 					tablemodelparam.ajax.reload();
 //		        	tablemodelparam.clear();
@@ -236,8 +277,8 @@ $(function() {
 								data:{
 									overviewID:tablemodel.row(".selected").data().overviewID
 								},
-								success:function(msg){
-									bootbox.alert(msg);
+								complete:function(msg){
+									bootbox.alert(msg.responseText);
 									tablemodel.ajax.reload();
 									selectModelParamRowData=null;
 									tablemodelparam.ajax.reload();
@@ -254,6 +295,28 @@ $(function() {
 			
 		    
 			////////////////////////////////////////////////////
+			
+			/**
+			 * 送审
+			 */
+			$("#submitApprovalBtn").on('click',function(){
+				if(tablemodelparam.row('.selected').length==0){
+					bootbox.alert("请选择一条数据!")
+					return ;
+				}else{
+					bootbox.confirm("是否送审?",function(result){
+						if(result){
+							approvalModal.show();
+//							approvalModal.complete=function(){
+//								alert(1);
+//							}
+						}
+					
+					});
+				}
+
+			})
+			
 			
 			/**
 		     * 机型参数Grid行选 单选
@@ -338,8 +401,8 @@ $(function() {
 									basicID:tablemodelparam.row('.selected').data().basicID,
 									overviewID:tablemodel.row(".selected").data().overviewID
 								},
-								success:function(msg){
-									bootbox.alert(msg);
+								complete:function(msg){
+									bootbox.alert(msg.responseText);
 									selectModelParamRowData=null;
 									tablemodelparam.ajax.reload();
 									
@@ -381,8 +444,8 @@ $(function() {
 									overviewID:tablemodelparam.row('.selected').data().overviewID,
 									basicID:tablemodelparam.row('.selected').data().basicID
 								},
-								success:function(msg){
-									bootbox.alert(msg);
+								complete:function(msg){
+									bootbox.alert(msg.responseText);
 									tablemodelparam.ajax.reload();
 								}
 							})

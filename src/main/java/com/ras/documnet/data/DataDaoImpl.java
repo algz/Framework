@@ -22,10 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftBasic.AircraftBasicDao;
 import com.ras.aircraftOverview.AircraftOverview;
-import com.ras.search.SearchTag;
-import com.ras.search.SearchTagDao;
+import com.ras.searchParam.SearchParamDao;
+import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
 
+import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.util.Common;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -37,7 +39,7 @@ import net.sf.json.JSONObject;
 public class DataDaoImpl implements DataDao {
 
 	@Autowired
-	private SearchTagDao searchTagDao;
+	private SearchParamDao searchTagDao;
 	
 	@Autowired
 	private AircraftBasicDao aircraftBasicDao;
@@ -51,11 +53,17 @@ public class DataDaoImpl implements DataDao {
 		if(vo.getOverviewID()==null){
 			return ;
 		}
-		String sql="from RAS_AIRCRAFT_BASIC where overviewid='"+vo.getOverviewID()+"'  ";
+		String sql="from RAS_AIRCRAFT_BASIC ab where ab.overviewid='"+vo.getOverviewID()+"'  ";
 		if(vo.getModelName()!=null){
-			sql+=" and lower(modelName) like '%"+vo.getModelName().toLowerCase()+"%'";
+			sql+=" and lower(ab.modelName) like '%"+vo.getModelName().toLowerCase()+"%'";
 		}
 
+		//权限控制
+		if(!CommonTool.isDataManager()){
+			User curUser=Common.getLoginUser();
+			sql+=" and (ab.editor='"+curUser.getUserid()+"' or ab.PERMISSION_LEVEL in ('2','3'))";
+		}
+		
 		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select count(1) "+sql).uniqueResult();
 		vo.setRecordsTotal(count.intValue());
 		if(count.intValue()==0){
@@ -141,15 +149,16 @@ public class DataDaoImpl implements DataDao {
 	 */
 	@Override
 	public JSONObject findModelParam(DataVo vo) {
-		List<SearchTag> searchTagList=searchTagDao.findAllChildren(null);
+		List<SearchParam> searchTagList=searchTagDao.findAllChildren(null);
 		
 		String basicID="";
 		AircraftOverview overview=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, vo.getOverviewID());
 		
 		switch(vo.getOption()){
 		case "load":
-			AircraftBasic ab=aircraftBasicDao.getMainAircraftBasic(vo.getOverviewID());
-			basicID=(ab==null?"":ab.getBasicID());
+			//AircraftBasic ab=aircraftBasicDao.getMainAircraftBasic(vo.getOverviewID());
+			//basicID=(ab==null?"":ab.getBasicID());
+			basicID=vo.getBasicID();
 			break;
 		case "create":
 			break;
@@ -201,13 +210,13 @@ public class DataDaoImpl implements DataDao {
 		return jo;
 	}
 	
-	private JSONArray modalParamToMap(String parentTagID,Map<String,String> paramMap,List<SearchTag> searchTagList){
+	private JSONArray modalParamToMap(String parentTagID,Map<String,String> paramMap,List<SearchParam> searchTagList){
 		JSONArray ja=new JSONArray();
 
 		//读取全部字段
-		List<SearchTag> tags=new ArrayList<SearchTag>();
-		SearchTag mTag=null;
-		for(SearchTag tag:searchTagList){
+		List<SearchParam> tags=new ArrayList<SearchParam>();
+		SearchParam mTag=null;
+		for(SearchParam tag:searchTagList){
 			if(tag.getId().toString().equals(parentTagID)){
 				mTag=tag;
 			}else if(tag.getParent_id().equals(parentTagID)){
@@ -257,7 +266,7 @@ public class DataDaoImpl implements DataDao {
 			}
 			for(Object ob:ja){
 				JSONObject jo=(JSONObject)ob;
-				for (SearchTag tag : tags) {
+				for (SearchParam tag : tags) {
 					if(jo.containsValue(tag.getEnname())){
 						String s=""; 
 						Object obj=dataMap.get(tag.getEnname().toUpperCase());
@@ -284,9 +293,9 @@ public class DataDaoImpl implements DataDao {
 	 * @param tags
 	 * @return
 	 */
-	private JSONArray loadModalParamToEl(List<SearchTag> tags){
+	private JSONArray loadModalParamToEl(List<SearchParam> tags){
 		JSONArray ja=new JSONArray();
-		for (SearchTag tag : tags) {
+		for (SearchParam tag : tags) {
 			JSONObject jo=new JSONObject();
 			jo.put("elID", tag.getEnname());
 			jo.put("elLabel", tag.getName());
@@ -329,6 +338,10 @@ public class DataDaoImpl implements DataDao {
 				c.append(col);
 				v.append(val);
 				flag=true;
+			}
+			if(tableName.equals("RAS_AIRCRAFT_BASIC")){
+				c.append(",editor");
+				v.append(",'"+Common.getLoginUser().getUserid()+"'");
 			}
 			param.append(" ("+c.toString()+") values ("+v.toString()+")");
 		}else{

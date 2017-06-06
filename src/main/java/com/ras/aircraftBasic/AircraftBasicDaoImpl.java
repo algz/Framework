@@ -18,6 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ras.aircraftOverview.AircraftOverview;
+import com.ras.tool.CommonTool;
+
+import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.util.Common;
 
 /**
  * @author algz
@@ -139,11 +143,19 @@ public class AircraftBasicDaoImpl implements AircraftBasicDao {
 	
 	@Override
 	public List<AircraftBasic> find(AircraftBasic ab) {
-		String hql="from AircraftBasic where overviewID=:overviewID order by maininfo";
-		BigDecimal count=(BigDecimal)sf.getCurrentSession().createQuery("select count(1) "+hql).uniqueResult();
-		Query query= sf.getCurrentSession().createQuery(hql);
-		List list= query.setProperties(ab).list();//.setEntity("ab", ab).list();
-		return list;
+		StringBuilder hql=new StringBuilder("from AircraftBasic where 1=1 ");
+		if(ab.getOverviewID()!=null){
+			hql.append(" and overviewID='"+ab.getOverviewID()+"'");
+		}
+		
+		if(!CommonTool.isDataManager()){
+			User curUser=Common.getLoginUser();
+			hql.append(" and (editor='"+curUser.getUserid()+"' or permissionLevel in ('2','3'))");
+		}
+		
+		return sf.getCurrentSession().createQuery(hql.toString()).list();
+//		Query query= sf.getCurrentSession().createQuery(hql.toString());
+//		return query.setProperties(ab).list();//.setEntity("ab", ab).list();
 	}
 
 	@Override
@@ -161,7 +173,13 @@ public class AircraftBasicDaoImpl implements AircraftBasicDao {
 	}
 	
 	public AircraftBasic getMainAircraftBasic(String overviewID){
-		String sql="select * from ras_aircraft_basic where maininfo='1' and overviewid='"+overviewID+"'";
+		String sql="select * from ras_aircraft_basic ab where ab.maininfo='1' and ab.overviewid='"+overviewID+"'";
+		
+		if(!CommonTool.isDataManager()){
+			User curUser=Common.getLoginUser();
+			sql+=" and (ab.editor='"+curUser.getUserid()+"' or ab.PERMISSION_LEVEL in ('2','3'))";
+		}
+		
 		return (AircraftBasic)sf.getCurrentSession().createSQLQuery(sql).addEntity(AircraftBasic.class).setMaxResults(1).uniqueResult();
 	}
 }

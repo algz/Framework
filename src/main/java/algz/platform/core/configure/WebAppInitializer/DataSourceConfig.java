@@ -101,7 +101,12 @@ public class DataSourceConfig {
 	    // more configuration...
 	    Properties properties=new Properties();
 	    properties.put("hibernate.dialect", dialect); //"org.hibernate.dialect.MySQLDialect"
-
+	    /**
+	     * 解决tomcat启动时,报以下异常,详见:http://blog.sina.com.cn/s/blog_667ac0360102ve1f.html
+	     * 五月 08, 2017 2:48:39 下午 org.hibernate.engine.jdbc.internal.LobCreatorBuilder useContextualLobCreation
+		   INFO: HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+	     */
+	    properties.put("hibernate.temp.use_jdbc_metadata_defaults", false);
 //	    properties.put("hibernate.connection.driver_class", "org.sqlite.JDBC");
 //	    properties.put("hibernate.dialect", "algz.platform.core.configure.database.dialect.SQLiteDialect");
 	   // properties.setProperty("hibernate.max_fetch_depth", "3");

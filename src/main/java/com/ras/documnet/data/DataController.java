@@ -47,11 +47,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ras.aircraftArchive.AircraftArchive;
 import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftOverview.AircraftOverview;
-import com.ras.aircraftPhoto.AircraftPhoto;
+import com.ras.aircraftPicture.AircraftPicture;
 import com.ras.index.Page;
-import com.ras.search.SearchTag;
+import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
 import com.ras.tool.ReturnVo;
 import com.ras.tool.file.FileService;
@@ -271,7 +272,7 @@ public class DataController{
 	}
 	
 	/**
-	 * 
+	 *  上传机型图片
 	 * @param file
 	 * @param photo
 	 * @param request
@@ -293,40 +294,6 @@ public class DataController{
 
       //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
         CommonTool.writeJSONToPage(response,ao ); 
-	}
-	
-	
-	
-	@RequestMapping({"/upimagefile"})
-	public void upImageFile(@RequestParam("file") MultipartFile file, AircraftPhoto photo,HttpServletRequest request, HttpServletResponse response){
-        String msg="{\"success\":true}";
-        if(photo.getOverviewID()==null||photo.getOverviewID().equals("null")){
-        	msg="{\"success\":false}";
-        	//msg="{\"id\":\"ff8081814cdf6f22014cdf6fafb40000\"}";
-        	CommonTool.writeJSONToPage(response,msg ); 
-        }else{
-            photo.setPhotoFile(file);
-            service.saveModelParamPhotoFile(photo);
-        }
-
-
-      //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
-        CommonTool.writeJSONToPage(response,photo ); 
-	}
-	
-	/**
-	 * 删除图片
-	 * @param photo
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping({"/delimagefile"})
-	public void delImageFile(AircraftPhoto photo,HttpServletRequest request, HttpServletResponse response){
-        String msg="{\"success\":true}";
-        service.delImageFile(photo.getPhotoID());
-
-      //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
-        CommonTool.writeJSONToPage(response,msg ); 
 	}
 	
 	/**
@@ -352,152 +319,8 @@ public class DataController{
 		m.put("vals", list);
 		CommonTool.writeJSONToPage(response,m); 
 	}
-	
-	/**
-	       * 文件下载
-	       * @Description: 
-	       * @param fileName
-	       * @param request
-	      * @param response
-	       * @return
-	       */
-	      @RequestMapping("/download")
-	     public String downloadFile(@RequestParam("fileName") String fileName,
-	             HttpServletRequest request, HttpServletResponse response) {
-	         if (fileName != null) {
-	             String realPath = request.getServletContext().getRealPath(
-	                     "WEB-INF/File/");
-	             File file = new File(realPath, fileName);
-	             if (file.exists()) {
-	                 response.setContentType("application/force-download");// 设置强制下载不打开
-	                 response.addHeader("Content-Disposition",
-	                         "attachment;fileName=" + fileName);// 设置文件名
-	                 byte[] buffer = new byte[1024];
-	                 FileInputStream fis = null;
-	                 BufferedInputStream bis = null;
-	                 try {
-	                     fis = new FileInputStream(file);
-	                     bis = new BufferedInputStream(fis);
-	                     OutputStream os = response.getOutputStream();
-	                     int i = bis.read(buffer);
-	                     while (i != -1) {
-	                         os.write(buffer, 0, i);
-	                         i = bis.read(buffer);
-	                     }
-	                 } catch (Exception e) {
-	                     // TODO: handle exception
-	                     e.printStackTrace();
-	                 } finally {
-	                     if (bis != null) {
-	                         try {
-	                             bis.close();
-	                         } catch (IOException e) {
-	                             // TODO Auto-generated catch block
-	                             e.printStackTrace();
-	                         }
-	                     }
-	                     if (fis != null) {
-	                         try {
-	                             fis.close();
-	                         } catch (IOException e) {
-	                             // TODO Auto-generated catch block
-	                             e.printStackTrace();
-	                         }
-	                     }
-	                 }
-	             }
-	         }
-	         return null;
-	     }
-	
-////////////////////////////////////////////////////////
-	
-	/*
-     * 通过流的方式上传文件
-     * @RequestParam("file") 将name=file控件得到的文件封装成CommonsMultipartFile 对象
-     */
-    @RequestMapping("fileUpload")
-    public String  fileUpload(@RequestParam("file") CommonsMultipartFile file) throws IOException {
-         
-         
-        //用来检测程序运行时间
-        long  startTime=System.currentTimeMillis();
-        System.out.println("fileName："+file.getOriginalFilename());
-         
-        try {
-            //获取输出流
-            OutputStream os=new FileOutputStream("E:/"+new Date().getTime()+file.getOriginalFilename());
-            //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-            InputStream is=file.getInputStream();
-            int temp;
-            //一个一个字节的读取并写入
-            while((temp=is.read())!=(-1))
-            {
-                os.write(temp);
-            }
-           os.flush();
-           os.close();
-           is.close();
-         
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        long  endTime=System.currentTimeMillis();
-        System.out.println("方法一的运行时间："+String.valueOf(endTime-startTime)+"ms");
-        return "/success"; 
-    }
-	
-    
-    /*
-     * 采用file.Transto 来保存上传的文件
-     */
-    @RequestMapping("fileUpload2")
-    public String  fileUpload2(@RequestParam("file") CommonsMultipartFile file) throws IOException {
-         long  startTime=System.currentTimeMillis();
-        System.out.println("fileName："+file.getOriginalFilename());
-        String path="E:/"+new Date().getTime()+file.getOriginalFilename();
-         
-        File newFile=new File(path);
-        //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-        file.transferTo(newFile);
-        long  endTime=System.currentTimeMillis();
-        System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
-        return "/success"; 
-    }
-    
-    
-    @RequestMapping("springUpload")
-    public String  springUpload(HttpServletRequest request) throws IllegalStateException, IOException
-    {
-         long  startTime=System.currentTimeMillis();
-         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
-        CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver(
-                request.getSession().getServletContext());
-        //检查form中是否有enctype="multipart/form-data"
-        if(multipartResolver.isMultipart(request))
-        {
-            //将request变成多部分request
-            MultipartHttpServletRequest multiRequest=(MultipartHttpServletRequest)request;
-           //获取multiRequest 中所有的文件名
-            Iterator iter=multiRequest.getFileNames();
-             
-            while(iter.hasNext())
-            {
-                //一次遍历所有文件
-                MultipartFile file=multiRequest.getFile(iter.next().toString());
-                if(file!=null)
-                {
-                    String path="E:/springUpload"+file.getOriginalFilename();
-                    //上传
-                    file.transferTo(new File(path));
-                }
-                 
-            }
-           
-        }
-        long  endTime=System.currentTimeMillis();
-        System.out.println("方法三的运行时间："+String.valueOf(endTime-startTime)+"ms");
-    return "/success"; 
-    }
+	    
+	      
+	      
+
 }

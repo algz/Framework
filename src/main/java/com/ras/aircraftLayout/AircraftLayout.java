@@ -26,34 +26,39 @@ public class AircraftLayout{
 	private String layoutID;
 	
 	/**
-	 * 
+	 * 机长（Total length）
 	 */
-	@Column(name="")
+	@Column(name="AIRLENGTH")
 	private Integer airLength;
+	
 	/**
-	 * 
+	 * 机高（Total height）
 	 */
 	@Column(name="")
 	private Integer airHeight;
+	
 	/**
-	 * 
+	 * 翼展（ wingspan）
 	 */
-	@Column(name="")
+	@Column(name="WINGSPAN")
 	private Integer wingSpan;
+	
 	/**
-	 * 
+	 * 机翼面积（wing area）
 	 */
-	@Column(name="")
+	@Column(name="WINGAREA")
 	private Integer wingArea;
+	
 	/**
-	 * 
+	 * 机翼展弦比（aspect ratio）
 	 */
-	@Column(name="")
+	@Column(name="WINGASPECTRATIO")
 	private Integer wingAspectRatio;
+	
 	/**
-	 * 
+	 * 起飞翼载（Takeoff Wing loading）
 	 */
-	@Column(name="")
+	@Column(name="LAUNCHWINGLOADING")
 	private Integer launchWingloading;
 	/**
 	 * 
