@@ -20,19 +20,21 @@ public interface UserService {
 
     public User updateUser(User user);
 
-    public void deleteUser(Long userId);
+    public void deleteUser(String userId);
 
     /**
      * 修改密码
      * @param userId
      * @param newPassword
      */
-    public void changePassword(Long userId, String newPassword);
+    public void changePassword(String userId, String newPassword);
 
 
-    User findOne(Long userId);
+    public User findOne(String userId);
 
-    List<User> findAll();
+    public List<User> findAll();
+    
+    public List<User> findAll(Integer start,Integer limit);
 
     /**
      * 根据用户名查找用户

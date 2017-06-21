@@ -69,11 +69,14 @@ public class DataDaoImpl implements DataDao {
 		if(count.intValue()==0){
 			return ;
 		}
-		List list= sf.getCurrentSession().createSQLQuery("select * "+sql)
+		@SuppressWarnings("unchecked")
+		List<AircraftBasic> list= sf.getCurrentSession().createSQLQuery("select * "+sql)
 					 .addEntity(AircraftBasic.class)
 				     .setFirstResult(vo.getStart())
 				     .setMaxResults(vo.getLength())
 				     .list();//query.setProperties(ab).list();//.setEntity("ab", ab).list();
+		
+		
 		vo.setData(list);
 
 	}

@@ -10,6 +10,7 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+   
     <filter>
 	   <filter-name>SpringOpenSessionInViewFilter</filter-name>
 	   <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>

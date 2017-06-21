@@ -1,13 +1,24 @@
 <%@page language="Java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@page import="algz.platform.core.shiro.authority.userManager.User" %>
+<%@page import="algz.platform.core.shiro.authority.roleManager.Role" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="page" tagdir="/WEB-INF/tags/uiframe/page" %> 
 <%
-
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	//JSONArray ja=(JSONArray)request.getAttribute("menus");
+
+	User user=(User)org.apache.shiro.SecurityUtils.getSubject().getSession().getAttribute("LoginUser");
+	request.setAttribute("user", user);
+	
+	boolean isDataManager=false;
+	for(String roleID:user.getRoleIds()){
+		if(roleID.equals("2")){
+			isDataManager=true;
+		}
+	}
+	request.setAttribute("isDataManager", isDataManager);
+
 	
 %>
 <!DOCTYPE html>
@@ -51,6 +62,13 @@
 <script type="text/javascript">
 //全局变量
 var basePath='<%=basePath%>';
+
+var algz={};
+algz.curUser={};
+algz.curUser.username='${user.username}'
+algz.curUser.roles=${user.getRoleIds()}
+algz.curUser.isDataManager=${isDataManager}
+
 
 $(function(){
 	

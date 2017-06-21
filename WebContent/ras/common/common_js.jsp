@@ -51,11 +51,8 @@
 		<script src="<%=basePath%>ras/common/js/jquery.sparkline.js"></script>
 		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.js"></script>
 		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.pie.js"></script>
-		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.resize.js"></script>   --%>	
+		<script src="<%=basePath%>ras/common/js/flot/jquery.flot.resize.js"></script>  
 
-
-
-		<%--  ace scripts
 		<script src="<%=basePath%>ras/common/js/ace/elements.scroller.js"></script>
 		<script src="<%=basePath%>ras/common/js/ace/elements.colorpicker.js"></script>
 		<script src="<%=basePath%>ras/common/js/ace/elements.fileinput.js"></script>

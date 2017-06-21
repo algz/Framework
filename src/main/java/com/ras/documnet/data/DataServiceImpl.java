@@ -38,6 +38,8 @@ import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
 import com.ras.tool.file.UploadFile;
 
+import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.core.shiro.authority.userManager.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -66,6 +68,8 @@ public class DataServiceImpl implements DataService {
 	@Autowired
 	private AircraftArchiveDao aircraftArchiveDao;
 	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private DataDao dao;
@@ -85,6 +89,13 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public void findTableModelGrid(DataVo vo) {
 		dao.findTableModelGrid(vo);
+		if(vo.getData()!=null){
+			for(Object obj:vo.getData()){
+				AircraftOverview ao=(AircraftOverview)obj;
+				User user=userService.findOne(ao.getEditor());
+				ao.setEditor(user.getUsername());
+			}
+		}
 //		AircraftOverview ao=new AircraftOverview();
 //		ao.setModelName(vo.getModelName());
 //		vo.setData(aircraftOverviewDao.findByProperty(ao));
@@ -92,8 +103,14 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public void findTableModelParamGrid(DataVo vo) {
+	public void findTableModelParamGrid(DataVo<AircraftBasic> vo) {
 		dao.findTableModelParamGrid(vo);
+		if(vo.getData()!=null){
+			for(AircraftBasic basic:vo.getData()){
+				User user=userService.findOne(basic.getEditor());
+				basic.setEditor(user.getUsername());
+			}
+		}
 	}
 
 	/*
@@ -231,6 +248,14 @@ public class DataServiceImpl implements DataService {
 	public void findArchiveGrid(DataVo vo) {
 		vo.setRecordsTotal(aircraftArchiveDao.count(null));
 		vo.setData(aircraftArchiveDao.find(null, vo.getStart(),vo.getLength()));
+		
+		if(vo.getData()!=null){
+			for(Object obj:vo.getData()){
+				AircraftArchive ao=(AircraftArchive)obj;
+				User user=userService.findOne(ao.getEditor());
+				ao.setEditor(user.getUsername());
+			}
+		}
 	}
 
 	@Override
@@ -246,6 +271,14 @@ public class DataServiceImpl implements DataService {
 		photo.setTag(vo.getTag());
 		vo.setRecordsTotal(aircraftPictureDao.count(photo).intValue());
 		vo.setData(aircraftPictureDao.find(photo));
+		
+		if(vo.getData()!=null){
+			for(Object obj:vo.getData()){
+				AircraftPicture ao=(AircraftPicture)obj;
+				User user=userService.findOne(ao.getEditor());
+				ao.setEditor(user.getUsername());
+			}
+		}
 	}
 
 

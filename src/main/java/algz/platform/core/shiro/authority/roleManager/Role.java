@@ -3,14 +3,21 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import algz.platform.core.shiro.authority.resourceManager.Resource;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -33,6 +40,13 @@ public class Role implements Serializable {
 	
 	@Column(name="DESCRIPTION")
     private String description; //角色描述,UI界面显示使用
+	
+	// 不能设置FetchType.LAZY,因为user保存到session(登陆)后,再使用关联查询(此时原会话关闭,启动的是新会话),会报异常could not initialize proxy - no Session
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(name="ALGZ_ROLE_RESOURCE",
+		joinColumns={@JoinColumn(name="ROLEID")},
+		inverseJoinColumns={@JoinColumn(name="RESOURCEID")})
+	private List<Resource> resources;
 	
 	@Transient
     private List<Long> resourceIds; //拥有的资源
@@ -131,6 +145,20 @@ public class Role implements Serializable {
         return true;
     }
 
+
+
+	public List<Resource> getResources() {
+		return resources;
+	}
+
+
+
+	public void setResources(List<Resource> resources) {
+		this.resources = resources;
+	}
+
+    
+    
 //    @Override
 //    public String toString() {
 //        return "Role{" +

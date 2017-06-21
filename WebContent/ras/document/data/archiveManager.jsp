@@ -3,7 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="page" tagdir="/WEB-INF/tags/uiframe/page" %> 
 <%@taglib prefix="form" tagdir="/WEB-INF/tags/uiframe/form" %> 
-
+<%@taglib prefix="approval" tagdir="/WEB-INF/tags/customize/approval" %> 
 <%
 
 	String path = request.getContextPath();
@@ -42,9 +42,10 @@
 					<!-- <div class="table-responsive"> -->
 
 					<!-- <div class="dataTables_borderWrap"> -->
-					<div class="btn-group">
+					<div id="docTool" class="btn-group">
 						<button id="upDoc" class="btn btn-sm" type="button">上传</button>
 						<button id="delDoc" class="btn btn-sm" type="button">删除</button>
+						<button id="submitApprovalBtn" class="btn btn-sm" type="button">送审</button>
 						<span class="input-icon">
 							<input type="text" id="docNameTxt" placeholder="文档名">
 							<i class="ace-icon fa fa-fighter-jet  blue"></i>
@@ -88,7 +89,7 @@
     </div>
 </div>
 
-
+<approval:approval modalID="approvalModealID" dataID="" dataTable="ARCHIVE" />
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
@@ -257,6 +258,10 @@
 										return "所内可视";
 									}
 								}
+							}, {
+								"title" : "编辑人", 
+								data:'editor',
+								sorting : false
 							}],
 					"language" : {
 						"lengthMenu" : "每页显示 _MENU_ 条记录",
@@ -274,17 +279,60 @@
 							"last" : " 最后一页 "
 						}
 					} // 多语言配置
-					});
+				});
 				
-				//2.多选
+				//2.单选
 				$('#docTable tbody').on('click', 'tr', function () {
 				    var curCheckbox=$(this).find(':checkbox')[0];
 				    if(curCheckbox==null){
 					 	return;
 					 }
-				    curCheckbox.checked=!curCheckbox.checked;
-				    $(this).toggleClass('selected');
+				    
+				    //curCheckbox.checked=!curCheckbox.checked;
+				    docTable.$(':checked').attr('checked',false);//清除所有的选中框.
+				    if ($(this).hasClass('selected')) {
+				        $(this).removeClass('selected');
+				        curCheckbox.checked=false;
+				     } else {
+				    	 docTable.$('tr.selected').removeClass('selected');
+				        $(this).addClass('selected');
+				        curCheckbox.checked=true;
+				        
+				        curSelectData=docTable.rows(this).data()[0];
+					    $("#docTool").children().removeAttr('disabled');
+						//需要数据管理员权限才能修改,删除和送审
+				    	if(!algz.curUser.isDataManager&&curSelectData.editor!=algz.curUser.username){
+				    		//不是数据管理员
+				    		$("#upDoc").attr('disabled',"true");
+				    		$("#delDoc").attr('disabled',"true");
+				    		$("#submitApprovalBtn").attr('disabled',"true");
+				    	}
+				     }
+				    //$(this).toggleClass('selected');
 				});
+				
+				
+				/**
+				 * 送审
+				 */
+				$("#submitApprovalBtn").on('click',function(){
+					if(docTable.row('.selected').length==0){
+						bootbox.alert("请选择一条数据!")
+						return ;
+					}else{
+						bootbox.confirm("是否送审?",function(result){
+							if(result){
+								approvalModal.show({
+									dataID:curSelectData.archiveID
+								});
+								approvalModal.complete=function(data){
+									alert(data.responseText);
+								}
+							}
+						});
+					}
+
+				})
 				
 			})
 

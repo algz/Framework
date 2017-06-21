@@ -13,12 +13,14 @@ public interface UserDao {
 
     public User createUser(User user);
     public User updateUser(User user);
-    public void deleteUser(Long userId);
+    public void deleteUser(String userId);
 
-    User findOne(Long userId);
+    User findOne(String userId);
 
     List<User> findAll();
 
+    public List<User> findAll(Integer start, Integer limit);
+    
     User findByUsername(String username);
 
 }

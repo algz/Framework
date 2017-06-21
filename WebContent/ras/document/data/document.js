@@ -70,6 +70,10 @@ $(function() {
 									"title" : "英文名",
 									data:'modelEname',
 									sorting : false
+								}, {
+									"title" : "编辑人", 
+									data:'editor', 
+									sorting : false
 								}],
 						"language" : {
 							"lengthMenu" : "每页显示 _MENU_ 条记录",
@@ -206,7 +210,7 @@ $(function() {
 					 * 返回数组: table.rows('.selected').data();
 					 */
 //					 $(this).toggleClass('selected');
-				 
+				$("#modelTool").children().removeAttr('disabled');
 				if(!curCheckbox.checked){
 					//选中
 					tablemodel.$(':checked').attr('checked',false);//清除所有的选中框.
@@ -217,9 +221,19 @@ $(function() {
 					selectModelRowData=tablemodel.rows(this).data()[0];
 					tablemodelparam.settings()[0].ajax.data={overviewID:selectModelRowData.overviewID};
 					tablemodelparam.ajax.reload();
+					
+					$("#modelTool").children().removeAttr('disabled');
+					//需要数据管理员权限才能修改,删除和送审
+		        	if(!algz.curUser.isDataManager&&selectModelRowData.editor!=algz.curUser.username){
+		        		//不是数据管理员
+		        		$("#modifyModel").attr('disabled',"true");
+		        		$("#delModel").attr('disabled',"true");
+		        	}
+					
 				}else{
 					//取消
 					$(this).removeClass('selected');
+					
 ////					row('.selected')
 //					tablemodelparam.rows('.selected').remove().draw( false );
 					
@@ -306,10 +320,12 @@ $(function() {
 				}else{
 					bootbox.confirm("是否送审?",function(result){
 						if(result){
-							approvalModal.show();
-//							approvalModal.complete=function(){
-//								alert(1);
-//							}
+							approvalModal.show({
+								dataID:selectModelParamRowData.basicID
+							});
+							approvalModal.complete=function(data){
+								alert(data.responseText);
+							}
 						}
 					
 					});
@@ -336,6 +352,8 @@ $(function() {
 		        	//取消
 		        	curCheckbox.checked=false;
 		        	$(this).removeClass('selected');
+		        	
+		        	$("#modelparamTool").children().removeAttr('disabled');
 		        }
 		        else {
 		        	//选中
@@ -344,6 +362,19 @@ $(function() {
 		        	curCheckbox.checked=true;
 		        	selectModelParamRowData=tablemodelparam.rows(this).data()[0];
 		        	$(this).addClass('selected');
+		        	
+		        	if(selectModelParamRowData.permissionLevel!='1'){
+			        	//需要数据管理员权限才能修改,删除和送审
+			        	if(!algz.curUser.isDataManager){
+			        		//不是数据管理员
+			        		$("#modifyModelparam").attr('disabled',"true");
+			        		$("#delModelparam").attr('disabled',"true");
+			        		$("#submitApprovalBtn").attr('disabled',"true");
+			        		
+			        	}
+		        	}else{
+		        		$("#modelparamTool").children().removeAttr('disabled');
+		        	}
 		        }
 		    });
 		    

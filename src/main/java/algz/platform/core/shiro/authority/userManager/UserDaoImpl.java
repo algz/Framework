@@ -1,6 +1,7 @@
 package algz.platform.core.shiro.authority.userManager;
 
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -56,27 +57,39 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-    public void deleteUser(Long userId) {
+    public void deleteUser(String userId) {
         String sql = "delete from sys_user where id=?";
+        sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
 //        jdbcTemplate.update(sql, userId);
     }
 
     @Override
-    public User findOne(Long userId) {
-        String sql = "select id, organization_id, username, password, salt, role_ids as roleIdsStr, locked from sys_user where id=?";
-        List<User> userList = null;//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), userId);
-        if(userList.size() == 0) {
-            return null;
-        }
-        return userList.get(0);
+    public User findOne(String userId) {
+        //String sql = "select id, organization_id, username, password, salt, role_ids as roleIdsStr, locked from sys_user where id=?";
+        return (User)sf.getCurrentSession().get(User.class, userId);
+//    	List<User> userList = null;//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), userId);
+//        if(userList.size() == 0) {
+//            return null;
+//        }
+//        return userList.get(0);
     }
 
     @Override
     public List<User> findAll() {
-        String sql = "select id, organization_id, username, password, salt, role_ids as roleIdsStr, locked from sys_user";
-        return null;//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class));
+    	return findAll(null,null);
+//        String sql = "select id, organization_id, username, password, salt, role_ids as roleIdsStr, locked from sys_user";
+//        return null;//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class));
     }
 
+	@Override
+	public List<User> findAll(Integer start, Integer limit) {
+    	String hql="from User";
+    	Query query= sf.getCurrentSession().createQuery(hql);
+    	if(start!=null){
+    		query.setFirstResult(start).setMaxResults(limit);
+    	}
+		return query.list();
+	}
 
     @Override
     public User findByUsername(String username) {
@@ -85,4 +98,6 @@ public class UserDaoImpl implements UserDao {
         		.setMaxResults(1).uniqueResult();
         		//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), username);
     }
+
+
 }

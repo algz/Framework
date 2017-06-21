@@ -1,6 +1,7 @@
-JAVA命名规则:
+一.JAVA命名规则:
 1.方法名: 首单词第一个字母小写，后续单词第一个字母大写。例如insertUser
 
+二.页面UI
 使用插件说明:
 1.typeahead.jquery.js :
 url: https://github.com/twitter/typeahead.js
@@ -41,7 +42,51 @@ issu:
 (2).试着让display不为none而让visibility为false来获取offsetwidth。但display和visibility是有区别的.
 (3).自行给div内的每个元素设置宽度.
 
-一.开发环境配置
+6.jsp 自定义标签
+(1).tag文件
+650项目使用此方法.
+
+(2).tld标签
+(2.1).在编写标签之前，必须引入 jsp-api.jar 文件配置在CLASSPATH；
+		<!-- jsp 自定义标签 -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.2.1-b03</version>
+		</dependency>
+		
+(2.2).编写标签库
+
+(2.3).引用标签库
+(a).web.xml 配置
+<!-- 自定义标签库 -->
+<jsp-config>
+    <taglib>
+        <taglib-uri>/mytaglib</taglib-uri>                                     <!-- 标签库名称 -->
+        <taglib-location>/WEB-INF/tags/test.tld</taglib-location>   <!-- 标签库路径 -->
+    </taglib>
+  </jsp-config>
+(b).jsp 引用
+  <%@ taglib prefix="ex" uri="/mytaglib"%>
+  ......
+  <ex:hello/>
+  
+六.CSS类说明
+1. class="active"
+2. class="disabled"
+3. class="hidden"
+
+
+
+
+
+
+
+三.系统框架介绍
+框架包含:
+springmvc + spring + hibernate + cxf
+
+(一).开发环境配置
 1.github 下载项目
 2.配置tamcat 热部署
  在conf文件夹下的server.xml的<Host></Host>标签加上
@@ -51,11 +96,11 @@ WEB项目与上传目录分离,重新部署时,不会覆盖.
 <!--增加的 path="/虚拟名" docBase="虚拟路径"-->
 <Context path="/upload" docBase="D:\upload\"  reloadable="true"/>
 
-二.系统配置
+(二).spring mvc
+1.ModelAndView 对象
+第一个参数是视图名/视图对象,第二个参数为模型属性(即传给用户的K-V对象).此类有很多构造函数,可查源码即可.
 
-
-
-三.shiro
+(三).shiro
 基于注解的授权实现 
 1.@RequiresAuthentication 可以用户类/属性/方法，用于表明当前用户需是经过认证的用户。 
 @RequiresAuthentication  
@@ -97,43 +142,6 @@ public void createAccount(Account account) {
     user role
 </shiro:hasRole>
 
-四.spring mvc
-1.ModelAndView 对象
-第一个参数是视图名/视图对象,第二个参数为模型属性(即传给用户的K-V对象).此类有很多构造函数,可查源码即可.
-
-五.jsp 自定义标签
-1.tag文件
-650项目使用此方法.
-
-2.tld标签
-(1).在编写标签之前，必须引入 jsp-api.jar 文件配置在CLASSPATH；
-		<!-- jsp 自定义标签 -->
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.2.1-b03</version>
-		</dependency>
-		
-(2).编写标签库
-
-(3).引用标签库
-(a).web.xml 配置
-<!-- 自定义标签库 -->
-<jsp-config>
-    <taglib>
-        <taglib-uri>/mytaglib</taglib-uri>                                     <!-- 标签库名称 -->
-        <taglib-location>/WEB-INF/tags/test.tld</taglib-location>   <!-- 标签库路径 -->
-    </taglib>
-  </jsp-config>
-(b).jsp 引用
-  <%@ taglib prefix="ex" uri="/mytaglib"%>
-  ......
-  <ex:hello/>
-  
-六.CSS类说明
-1. class="active"
-2. class="disabled"
-3. class="hidden"
-
-
+(四).CXF webservice
+1. CXF webservice 类也必须添加spring 注解  @Service等.
 

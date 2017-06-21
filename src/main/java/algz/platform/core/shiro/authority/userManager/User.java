@@ -55,7 +55,7 @@ public class User implements Serializable {
 	@Column(name="FULLNAME")
 	private String fullName;
     
-	// 不能设置FetchType.LAZY,因为user保存到session后,再使用关联查询(此时原会话关闭,启动的是新会话),会报异常could not initialize proxy - no Session
+	// 不能设置FetchType.LAZY,因为user保存到session(登陆)后,再使用关联查询(此时原会话关闭,启动的是新会话),会报异常could not initialize proxy - no Session
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(name="ALGZ_USER_ROLE",
 		joinColumns={@JoinColumn(name="USERID")},
@@ -74,9 +74,6 @@ public class User implements Serializable {
 
     @Transient
     private Boolean locked = Boolean.FALSE;
-
-    @Transient
-    private List<Long> roleIds; //拥有的角色列表
     
     public User() {
     }
@@ -86,7 +83,17 @@ public class User implements Serializable {
         this.password = password;
     }
 
-
+    /**
+     * 获取当前用户所有的Roles的ID
+     * @return
+     */
+	public List<String> getRoleIds() {
+		List<String> list=new ArrayList<String>();
+		for(Role role:this.roles){
+			list.add(role.getId());
+		}
+		return list;
+	}
 
     public String getUserid() {
 		return userid;
@@ -104,13 +111,8 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	public List<Long> getRoleIds() {
-		return roleIds;
-	}
 
-	public void setRoleIds(List<Long> roleIds) {
-		this.roleIds = roleIds;
-	}
+
 
 	public Long getOrganizationId() {
         return organizationId;

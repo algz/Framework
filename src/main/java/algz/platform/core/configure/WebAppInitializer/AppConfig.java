@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.remoting.jaxws.SimpleJaxWsServiceExporter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -44,6 +45,7 @@ import algz.platform.core.exception.ALGZExceptionHandler;
 警告: Bean creation exception on FactoryBean type check: org.springframework.beans.factory.BeanCurrentlyInCreationException: Error creating bean with name 'shiroFilter': Requested bean is currently in creation: Is there an unresolvable circular reference?
 */
 //@ImportResource({"classpath:algz/platform/core/configure/xml/spring-shiro.xml"})
+//@ImportResource({"classpath:algz/platform/core/configure/xml/bak/cxf.xml"})
 @ComponentScan(basePackages = {"algz.platform","com"})//扫描注解组件的包的基础位置(@Controller,@Service...)
 @EnableWebMvc //启用 MVC Java config ，在你的 @Configuration类上增加@EnableWebMvc注解
 //@PropertySource("/conf/jdbc.properties")

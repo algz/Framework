@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftArchive.AircraftArchive;
+import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftPicture.AircraftPicture;
 import com.ras.tool.file.UploadFile;
@@ -31,7 +32,7 @@ public interface DataService {
 	
 	public void findTableModelGrid(DataVo vo);
 	
-	public void findTableModelParamGrid(DataVo vo);
+	public void findTableModelParamGrid(DataVo<AircraftBasic> vo);
 	
 	public JSONObject  addModelParamPage(DataVo vo);
 	

@@ -37,6 +37,7 @@ import algz.platform.core.shiro.authority.resourceManager.Resource;
 import algz.platform.core.shiro.authority.userManager.User;
 import algz.platform.util.Common;
 import algz.platform.util.json.JSONTools;
+import algz.platform.util.xml.StAXUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -107,6 +108,7 @@ public class SearchTagController {
 //            map.put("pageCount", Math.ceil(vo.getRecordsTotal()/10.0));
 //            map.put("curPage", vo.getStart()/10+1);
 //    	}
+    	//String s=StAXUtil.writeToXmlString();
         return new ModelAndView("ras/searchtag/index",map);
     }
     

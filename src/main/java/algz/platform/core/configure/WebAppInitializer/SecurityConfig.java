@@ -162,20 +162,22 @@ public class SecurityConfig {
 //        </property>  
 		
 		//LinkedHashMap put顺序与get顺序一样.
-//		Map<String,String> filterChainMap=new LinkedHashMap<String,String>();
-//		filterChainMap.put("/login", "anon"); //不需要验证的URL
-//		filterChainMap.put("/ras/common/**", "anon"); //不需要验证的URL
-//
+		Map<String,String> filterChainMap=new LinkedHashMap<String,String>();
+		filterChainMap.put("/login", "anon"); //不需要验证的URL
+		filterChainMap.put("/ras/ssologin/**", "anon");
+		filterChainMap.put("/ras/common/**", "anon"); //不需要验证的URL
+		filterChainMap.put("/ras/ws/**", "anon"); //不需要验证的URL
+
 //		filterChainMap.put("/test/login", "anon"); 
-//		filterChainMap.put("/ras/ssologin1/**", "anon");
 //		filterChainMap.put("/test/getVerifyCodeImage", "anon");
-//		filterChainMap.put("/ras/**", "authc"); //需要验证的URL
-//		filterChainMap.put("/test/hello**", "authc");
-//		filterChainMap.put("/admin/listUser**", "authc,perms[admin:manage]");
-////		
-//		filterFactory.setFilterChainDefinitionMap(filterChainMap);
-		String definitions="/login=anon \r\n /ras/ssologin/**=anon \r\n /ras/common/**=anon \r\n /ras/**=authc";
-		filterFactory.setFilterChainDefinitions(definitions);
+		filterChainMap.put("/ras/**", "authc"); //需要验证的URL
+		filterChainMap.put("/test/hello**", "authc");
+		filterChainMap.put("/admin/listUser**", "authc,perms[admin:manage]");
+//		
+		filterFactory.setFilterChainDefinitionMap(filterChainMap);
+		
+		//String definitions="/login=anon \r\n /ras/ssologin/**=anon \r\n /ras/common/**=anon \r\n /ras/**=authc";
+//		filterFactory.setFilterChainDefinitions(definitions);
 		return filterFactory;
 	}
 	

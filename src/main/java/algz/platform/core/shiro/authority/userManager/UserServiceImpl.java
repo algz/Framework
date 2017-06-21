@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long userId) {
+    public void deleteUser(String userId) {
         userDao.deleteUser(userId);
     }
 
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
      * @param userId
      * @param newPassword
      */
-    public void changePassword(Long userId, String newPassword) {
+    public void changePassword(String userId, String newPassword) {
         User user =userDao.findOne(userId);
         user.setPassword(newPassword);
 //        passwordHelper.encryptPassword(user);
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findOne(Long userId) {
+    public User findOne(String userId) {
         return userDao.findOne(userId);
     }
 
@@ -64,6 +64,11 @@ public class UserServiceImpl implements UserService {
         return userDao.findAll();
     }
 
+	@Override
+	public List<User> findAll(Integer start, Integer limit) {
+		return userDao.findAll(start, limit);
+	}
+    
     /**
      * 根据用户名查找用户
      * @param username
@@ -98,5 +103,7 @@ public class UserServiceImpl implements UserService {
         }
         return null;//roleService.findPermissions(user.getRoleIds().toArray(new Long[0]));
     }
+
+
 
 }

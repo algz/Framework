@@ -171,9 +171,11 @@ public class DataController{
      * @param response
      */
     @RequestMapping(value={"/findtablemodelparamgrid"})
-    public void findTableModelParamGrid(DataVo<Map<String,String>> vo,HttpServletResponse response){
-    	service.findTableModelParamGrid(vo);
-		CommonTool.writeJSONToPage(response, vo);
+    public void findTableModelParamGrid(DataVo<AircraftBasic> vo,HttpServletResponse response){
+    	if(!vo.getOverviewID().equals("-1")){
+        	service.findTableModelParamGrid(vo);
+    	}
+    	CommonTool.writeJSONToPage(response, vo);
     }
     
 	/**

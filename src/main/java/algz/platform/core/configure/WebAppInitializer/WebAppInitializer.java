@@ -19,6 +19,7 @@ import org.springframework.web.util.IntrospectorCleanupListener;
 
 import algz.platform.core.configure.siteMesh.ALGZSiteMeshFilter;
 
+
 /**
  * 
  * 应用服务器加载后第一个调用
@@ -32,6 +33,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
 	public void onStartup(ServletContext servletContext){
 		
+
+		
 		  /** Spring配置,防止发生java.beans.Introspector内存泄露,应将它配置在ContextLoaderListener的前面   */
 	      servletContext.addListener(new IntrospectorCleanupListener());
 		
@@ -41,7 +44,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
 	      rootContext.register(AppConfig.class);
 	      servletContext.addListener(new ContextLoaderListener(rootContext)); // 注册监听器
 	      
-	    /** 配置SpringMVC dispatcher */
+		/** CXF webservice配置 */
+		ServletRegistration.Dynamic cxfServlet = servletContext.addServlet("CXFServlet", new org.apache.cxf.transport.servlet.CXFServlet());
+		cxfServlet.addMapping("/ras/ws/*");
+		cxfServlet.setLoadOnStartup(2);
+	      
+	    /** SpringMVC dispatcher配置 */
 		//XmlWebApplicationContext appContext = new XmlWebApplicationContext();
 		//appContext.setConfigLocation("classpath:*algz/platform/core/configure/xml/spring-mvc-servlet.xml");
 		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(rootContext));
@@ -87,6 +95,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		/** siteMesh */
 		FilterRegistration siteMeshFilter = servletContext.addFilter("sitemesh",ALGZSiteMeshFilter.class);
 		siteMeshFilter.addMappingForUrlPatterns(null, true, "/*");
+		
+
 		
 		/** 配置Log4j */
         //Log4jConfigListener  

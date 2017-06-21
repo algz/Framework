@@ -9,11 +9,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>视频</title>
 <!-- 引入jquery.js 必须放在所有JS前 -->
-<script type="text/javascript"
-	src="<%=path%>/platform/core/lib/jqGrid/js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 <!-- 引入Bootstrap.css -->
-<link href="<%=path%>/platform/core/lib/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
+<link rel="stylesheet" href="css/bootstrap.css">
 	
 <!-- 引入Bootstrap-tab 标签页 css -->
 <script type="text/javascript"

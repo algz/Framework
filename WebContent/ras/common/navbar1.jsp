@@ -1,6 +1,5 @@
 <%@page language="Java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.ras.index.Navbar" %>
-<%@page import="algz.platform.core.shiro.authority.userManager.User" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="navbar" tagdir="/WEB-INF/tags/uiframe/navbar" %>
 
@@ -9,8 +8,7 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	
-	User user=(User)org.apache.shiro.SecurityUtils.getSubject().getSession().getAttribute("LoginUser");
-	request.setAttribute("user", user);
+
 	
 	Navbar navbar=new Navbar(); 
 	navbar.setNavbarbrand("总体部飞机论证参照系统");

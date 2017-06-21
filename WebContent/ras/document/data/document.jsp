@@ -39,7 +39,7 @@
 					</div>
 
 					<!-- <div class="table-responsive"> -->
-					<div class="btn-group">
+					<div id="modelTool" class="btn-group">
 						<a class="btn btn-sm" type="button" href="./addmodel">新增机型</a>
 						<button id="modifyModel" class="btn btn-sm" type="button">修改机型</button>
 						<button id="delModel" class="btn btn-sm" type="button">删除机型</button>
@@ -72,7 +72,7 @@
 					</div>
 
 					<!-- <div class="table-responsive"> -->
-					<div class="btn-group">
+					<div id="modelparamTool" class="btn-group">
 						<button id="addModelparam" class="btn btn-sm" type="button">新增</button>
 						<button id="modifyModelparam" class="btn btn-sm" type="button">修改</button>
 						<button id="delModelparam" class="btn btn-sm" type="button">删除</button>
@@ -88,7 +88,7 @@
 				</div>
 			</div>
 
-			<approval:approval modalID="approvalModealID" dataID="" dataTable="" />
+			<approval:approval modalID="approvalModealID" dataID="" dataTable="BASIC" />
 
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
