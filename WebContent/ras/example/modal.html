@@ -1,0 +1,50 @@
+<!-- 
+fade: 动画效果
+js:
+$('#modal-form').modal('show'); 或  $('#modal-form').modal();
+$('#modal-form').modal('hide');
+ -->
+<div id="modal-form" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">......</div>
+            <div class="modal-body">......</div>
+            <div class="modal-footer">......</div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+方法
+(1).modal(options)
+将页面中的某块内容作为模态框激活。接受可选参数 object。
+$('#myModal').modal({
+  keyboard: false
+})
+
+(2).modal('toggle')
+手动打开或关闭模态框。在模态框显示或隐藏之前返回到主调函数中（也就是，在触发 shown.bs.modal 或 hidden.bs.modal 事件之前）。
+$('#myModal').modal('toggle')
+
+(3).modal('show')
+手动打开模态框。在模态框显示之前返回到主调函数中 （也就是，在触发 shown.bs.modal 事件之前）。
+$('#myModal').modal('show')
+
+(4).modal('hide')
+手动隐藏模态框。在模态框隐藏之前返回到主调函数中 （也就是，在触发 hidden.bs.modal 事件之前）。
+$('#myModal').modal('hide')
+
+(5).modal('handleUpdate')
+Readjusts the modal's positioning to counter a scrollbar in case one should appear, which would make the modal jump to the left.
+Only needed when the height of the modal changes while it is open.
+$('#myModal').modal('handleUpdate')
+ -->
+ 
+<!-- 
+事件类型	描述
+show.bs.modal	show 方法调用之后立即触发该事件。如果是通过点击某个作为触发器的元素，则此元素可以通过事件的 relatedTarget 属性进行访问。
+shown.bs.modal	此事件在模态框已经显示出来（并且同时在 CSS 过渡效果完成）之后被触发。如果是通过点击某个作为触发器的元素，则此元素可以通过事件的 relatedTarget 属性进行访问。
+hide.bs.modal	hide 方法调用之后立即触发该事件。
+hidden.bs.modal	此事件在模态框被隐藏（并且同时在 CSS 过渡效果完成）之后被触发。
+loaded.bs.modal	从远端的数据源加载完数据之后触发该事件。
+ -->

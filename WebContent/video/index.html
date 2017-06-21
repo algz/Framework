@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<title>视频网</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="description" content="top menu &amp; navigation" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/font-awesome.css" />
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="css/ace-fonts.css" />
+		
+		<!-- ace styles -->
+		<link rel="stylesheet" href="css/ace.css" />
+
+		<script src="js/jquery.js"></script>
+		<script src="js/bootstrap.js"></script>
+
+		
+		<!-- plugins -->
+        
+	 	<!-- dataTables -->
+		<script src="http://localhost:8080/algz/ras/common/js/dataTables/jquery.dataTables.js"></script>
+		<script src="http://localhost:8080/algz/ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+		<!-- 配置后,需设置 "language":dataTables_zh  -->
+		<script src="http://localhost:8080/algz/ras/common/js/dataTables/i18n/dataTables_zh.lang"></script>
+		
+		<!-- 图片放大查看(jquery弹出层插件jquery.ColorBox)  -->
+		<script src="http://localhost:8080/algz/ras/common/js/jquery.colorbox.js"></script>
+	</head>
+	<body class="no-skin">
+		<!-- #section:basics/navbar.layout -->
+		
+
+<!-- #section:basics/navbar.layout -->
+<div id="navbar" class="navbar navbar-default    navbar-collapse       h-navbar">
+	<script type="text/javascript">
+		try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+	</script>
+
+	<div class="navbar-container" id="navbar-container">
+		<div class="navbar-header pull-left">
+			<!-- #section:basics/navbar.layout.brand -->
+			<a href="#" class="navbar-brand">
+				<small>
+					<i class="fa fa-leaf"></i>
+					视频影音
+				</small>
+			</a>
+		</div>
+
+		<!-- #section:basics/navbar.dropdown -->
+		<div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse" role="navigation">
+			<ul class="nav ace-nav">
+
+				<li class="transparent">
+					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+						<i class="ace-icon fa fa-tasks"></i>
+						<span class="badge badge-grey">5</span>
+					</a>
+				
+					<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+						<li class="dropdown-header">
+							<i class="ace-icon fa fa-check"></i>
+							任务标题
+						</li>
+				
+						<li class="dropdown-content">
+							<ul class="dropdown-menu dropdown-navbar">
+							
+							
+											
+				<li>
+					<a href="#">
+						
+												<div class="clearfix">
+													<span class="pull-left">text-left</span>
+													<span class="pull-right">text-right</span>
+												</div>
+						
+												<div class="progress progress-mini">
+													<div style="width:65%" class="progress-bar"></div>
+												</div>
+											
+					</a>
+				</li>
+				
+										
+							
+							</ul>
+						</li>
+				
+						<li class="dropdown-footer">
+							<a href="#">
+								footer
+								<i class="ace-icon fa fa-arrow-right"></i>
+							</a>
+						</li>
+					</ul>
+				</li>
+							
+				<li class="transparent">
+					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+						<i class="ace-icon fa fa-bell icon-animated-bell"></i>
+					</a>
+
+					<div class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+						<div class="tabbable">
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a data-toggle="tab" href="#navbar-tasks">
+										Tasks
+										<span class="badge badge-danger">4</span>
+									</a>
+								</li>
+
+								<li>
+									<a data-toggle="tab" href="#navbar-messages">
+										Messages
+										<span class="badge badge-danger">5</span>
+									</a>
+								</li>
+							</ul><!-- .nav-tabs -->
+
+							<div class="tab-content">
+								<div id="navbar-tasks" class="tab-pane in active">
+									<ul class="dropdown-menu-right dropdown-navbar dropdown-menu">
+										<li class="dropdown-content">
+											<ul class="dropdown-menu dropdown-navbar">
+												<li>
+													<a href="#">
+														<div class="clearfix">
+															<span class="pull-left">Software Update</span>
+															<span class="pull-right">65%</span>
+														</div>
+
+														<div class="progress progress-mini">
+															<div style="width:65%" class="progress-bar"></div>
+														</div>
+													</a>
+												</li>
+
+												<li>
+													<a href="#">
+														<div class="clearfix">
+															<span class="pull-left">Hardware Upgrade</span>
+															<span class="pull-right">35%</span>
+														</div>
+
+														<div class="progress progress-mini">
+															<div style="width:35%" class="progress-bar progress-bar-danger"></div>
+														</div>
+													</a>
+												</li>
+
+												<li>
+													<a href="#">
+														<div class="clearfix">
+															<span class="pull-left">Unit Testing</span>
+															<span class="pull-right">15%</span>
+														</div>
+
+														<div class="progress progress-mini">
+															<div style="width:15%" class="progress-bar progress-bar-warning"></div>
+														</div>
+													</a>
+												</li>
+
+												<li>
+													<a href="#">
+														<div class="clearfix">
+															<span class="pull-left">Bug Fixes</span>
+															<span class="pull-right">90%</span>
+														</div>
+
+														<div class="progress progress-mini progress-striped active">
+															<div style="width:90%" class="progress-bar progress-bar-success"></div>
+														</div>
+													</a>
+												</li>
+											</ul>
+										</li>
+
+										<li class="dropdown-footer">
+											<a href="#">
+												See tasks with details
+												<i class="ace-icon fa fa-arrow-right"></i>
+											</a>
+										</li>
+									</ul>
+								</div><!-- /.tab-pane -->
+
+								<div id="navbar-messages" class="tab-pane">
+									<ul class="dropdown-menu-right dropdown-navbar dropdown-menu">
+										<li class="dropdown-content">
+											<ul class="dropdown-menu dropdown-navbar">
+												<li>
+													<a href="#">
+														<img src="../assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
+														<span class="msg-body">
+															<span class="msg-title">
+																<span class="blue">Alex:</span>
+																Ciao sociis natoque penatibus et auctor ...
+															</span>
+
+															<span class="msg-time">
+																<i class="ace-icon fa fa-clock-o"></i>
+																<span>a moment ago</span>
+															</span>
+														</span>
+													</a>
+												</li>
+
+												<li>
+													<a href="#">
+														<img src="../assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
+														<span class="msg-body">
+															<span class="msg-title">
+																<span class="blue">Susan:</span>
+																Vestibulum id ligula porta felis euismod ...
+															</span>
+
+															<span class="msg-time">
+																<i class="ace-icon fa fa-clock-o"></i>
+																<span>20 minutes ago</span>
+															</span>
+														</span>
+													</a>
+												</li>
+
+												<li>
+													<a href="#">
+														<img src="../assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
+														<span class="msg-body">
+															<span class="msg-title">
+																<span class="blue">Bob:</span>
+																Nullam quis risus eget urna mollis ornare ...
+															</span>
+
+															<span class="msg-time">
+																<i class="ace-icon fa fa-clock-o"></i>
+																<span>3:15 pm</span>
+															</span>
+														</span>
+													</a>
+												</li>
+
+												<li>
+													<a href="#">
+														<img src="../assets/avatars/avatar2.png" class="msg-photo" alt="Kate's Avatar" />
+														<span class="msg-body">
+															<span class="msg-title">
+																<span class="blue">Kate:</span>
+																Ciao sociis natoque eget urna mollis ornare ...
+															</span>
+
+															<span class="msg-time">
+																<i class="ace-icon fa fa-clock-o"></i>
+																<span>1:33 pm</span>
+															</span>
+														</span>
+													</a>
+												</li>
+
+												<li>
+													<a href="#">
+														<img src="../assets/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
+														<span class="msg-body">
+															<span class="msg-title">
+																<span class="blue">Fred:</span>
+																Vestibulum id penatibus et auctor  ...
+															</span>
+
+															<span class="msg-time">
+																<i class="ace-icon fa fa-clock-o"></i>
+																<span>10:09 am</span>
+															</span>
+														</span>
+													</a>
+												</li>
+											</ul>
+										</li>
+
+										<li class="dropdown-footer">
+											<a href="inbox.html">
+												See all messages
+												<i class="ace-icon fa fa-arrow-right"></i>
+											</a>
+										</li>
+									</ul>
+								</div><!-- /.tab-pane -->
+							</div><!-- /.tab-content -->
+						</div><!-- /.tabbable -->
+					</div><!-- /.dropdown-menu -->
+				</li>
+
+				<!-- #section:basics/navbar.user_menu -->
+				<li class="light-blue">
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+						
+						
+						<span class="user-info">
+							<small>欢迎,</small>
+							admin
+						</span>
+
+						<i class="ace-icon fa fa-caret-down"></i>
+					</a>
+
+					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+						<li>
+							<a href="#">
+								<i class="ace-icon fa fa-cog"></i>
+								设置
+							</a>
+						</li>
+
+						<li>
+							<a href="profile.html">
+								<i class="ace-icon fa fa-user"></i>
+								配置
+							</a>
+						</li>
+
+						<li class="divider"></li>
+
+						<li>
+							<a href="http://localhost:8080/algz/logout">
+								<i class="ace-icon fa fa-power-off"></i>
+								退出
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<!-- /section:basics/navbar.user_menu -->
+			</ul>
+		</div>
+
+		<!-- /section:basics/navbar.dropdown -->
+		<nav role="navigation" class="navbar-menu pull-left collapse navbar-collapse">
+			<!-- #section:basics/navbar.nav -->
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						概述&nbsp;
+						<i class="ace-icon fa fa-angle-down bigger-110"></i>
+					</a>
+
+					<ul class="dropdown-menu dropdown-light-blue dropdown-caret">
+						<li>
+							<a href="#">
+								<i class="ace-icon fa fa-book bigger-110 blue"></i>
+								说明
+							</a>
+						</li>
+					</ul>
+				</li>
+				
+				<li>
+					<a href="#">
+						<i class="ace-icon fa fa-envelope"></i>
+						消息
+						<span class="badge badge-warning">5</span>
+					</a>
+				</li>
+				
+
+			</ul>
+
+			<!-- /section:basics/navbar.nav -->
+
+			<!-- #section:basics/navbar.form -->
+			<form class="navbar-form navbar-left form-search" role="search">
+				<div class="form-group">
+					<input type="text" placeholder="查询" />
+				</div>
+
+				<button type="button" class="btn btn-xs btn-info2">
+					<i class="ace-icon fa fa-search icon-only bigger-110"></i>
+				</button>
+			</form>
+
+			<!-- /section:basics/navbar.form -->
+		</nav>
+	</div><!-- /.navbar-container -->
+</div>
+
+<!-- /section:basics/navbar.layout -->
+
+ 
+		<!-- /section:basics/navbar.layout -->
+		
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			
+
+
+
+
+
+ 
+
+
+			<!-- #section:basics/sidebar.horizontal -->
+			<div id="sidebar" class="sidebar h-sidebar navbar-collapse collapse">
+				<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				    <!-- 屏幕大窗口状态 -->
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+						<button class="btn btn-success">
+							<i class="ace-icon fa fa-signal"></i>
+						</button>
+
+						<button class="btn btn-info">
+							<i class="ace-icon fa fa-pencil"></i>
+						</button>
+
+						<!-- #section:basics/sidebar.layout.shortcuts -->
+						<button class="btn btn-warning">
+							<i class="ace-icon fa fa-users"></i>
+						</button>
+
+						<button class="btn btn-danger">
+							<i class="ace-icon fa fa-cogs"></i>
+						</button>
+
+						<!-- /section:basics/sidebar.layout.shortcuts -->
+					</div>
+					<!-- 屏幕小窗口状态 -->
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success"></span>
+
+						<span class="btn btn-info"></span>
+
+						<span class="btn btn-warning"></span>
+
+						<span class="btn btn-danger"></span>
+					</div>
+				</div><!-- /.sidebar-shortcuts -->
+
+				
+
+
+ 
+
+<!-- 标签属性 -->
+
+
+
+
+<ul class="nav nav-list">
+	 
+	
+	 
+
+ 
+ 
+
+
+<!-- 标签属性 -->
+
+
+
+
+	<li class="active hover ">
+		<a href="/algz/ras/searchtag/" >
+			<i class="menu-icon fa fa-tachometer"></i>
+			<span class="menu-text"> 查询标签</span>
+		</a>
+		<b class="arrow"></b>
+
+		
+	</li>
+
+
+
+
+
+		
+	 
+	
+	 
+
+ 
+ 
+
+
+<!-- 标签属性 -->
+
+
+
+
+	<li class=" hover ">
+		<a href="/algz/ras/searchparam/" >
+			<i class="menu-icon fa fa-tachometer"></i>
+			<span class="menu-text"> 查询参数</span>
+		</a>
+		<b class="arrow"></b>
+
+		
+	</li>
+
+
+
+
+
+		
+	 
+	
+	 
+
+ 
+ 
+
+
+<!-- 标签属性 -->
+
+
+
+
+
+	<li class=" hover">
+		<a href="#" class="dropdown-toggle" >
+			<i class="menu-icon fa fa-desktop"></i>
+			<span class="menu-text"> 资料编辑 </span>
+			<i class="ace-icon fa fa-angle-down bigger-110"></i>
+		</a>
+		<b class="arrow"></b>
+		
+
+ 
+
+<!-- 标签属性 -->
+
+
+
+<ul class="submenu">
+ 
+
+
+ 
+ 
+
+
+<!-- 标签属性 -->
+
+
+
+
+	<li class=" hover ">
+		<a href="/algz/ras/document/data/" >
+			<i class="menu-icon fa fa-caret-right"></i>
+			<span class="menu-text"> 数据编辑</span>
+		</a>
+		<b class="arrow"></b>
+
+		
+	</li>
+
+
+
+
+
+ 
+
+
+ 
+ 
+
+
+<!-- 标签属性 -->
+
+
+
+
+	<li class=" hover ">
+		<a href="/algz/ras/document/param/" >
+			<i class="menu-icon fa fa-caret-right"></i>
+			<span class="menu-text"> 参数配置</span>
+		</a>
+		<b class="arrow"></b>
+
+		
+	</li>
+
+
+
+
+
+
+</ul>
+
+	
+		
+	</li>
+
+
+
+
+		
+	
+</ul>
+
+
+				<!-- #section:basics/sidebar.layout.minimize -->
+
+				<!-- /section:basics/sidebar.layout.minimize -->
+				<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+				</script>
+			</div>
+
+			<!-- /section:basics/sidebar.horizontal --> 
+
+			
+
+		
+
+ 
+
+<!-- 标签属性 -->
+
+
+<div class="main-content">
+	<div class="main-content-inner">
+		<div class="page-content">
+		
+			
+			
+			
+
+
+
+<!-- 标签属性 -->
+
+
+
+<div class="page-header">
+	<h1>
+		标签查询
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			查询
+		</small>
+	</h1>
+</div><!-- /.page-header -->
+			
+<div class="row">
+	<div class="col-xs-12">
+		<!-- PAGE CONTENT BEGINS -->
+		
+			
+			<!-- PAGE CONTENT BEGINS -->
+			
+
+			<div class="widget-main">
+						<div class="row">
+							<div class="col-xs-12 col-sm-8">
+								<div class="input-group">
+									<input id="tag" class="form-control search-query" 
+									type="text" placeholder="标签名称" 
+									value="">
+									<input type='hidden' name='start' value='0'>
+									<input type='hidden' name='length' value='10'>
+									<span class="input-group-btn">
+										<button id="submitBtn" class="btn btn-purple btn-sm" type="button">
+											查询一下
+											<i class="icon-search icon-on-right bigger-110"></i>
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>
+				</div>
+
+			
+			<div class="hr hr8 hr-dotted"></div>
+			<div id="tab_row" class="row hidden">
+				<div class="col-sm-12">
+					
+
+
+
+
+
+
+
+
+
+<!-- #section:elements.tab -->
+<div class="tabbable">
+	<ul class="nav nav-tabs">
+	   
+		<li class='active'>
+			<a data-toggle="tab" href="#param0">
+				<i class="green ace-icon fa fa-home bigger-120"></i>
+				参数
+			</a>
+		</li>   
+	   
+		<li >
+			<a data-toggle="tab" href="#param1">
+				<i class="green ace-icon fa fa-home bigger-120"></i>
+				图片
+			</a>
+		</li>   
+	   
+		<li >
+			<a data-toggle="tab" href="#param2">
+				<i class="green ace-icon fa fa-home bigger-120"></i>
+				文档
+			</a>
+		</li>   
+	  
+	</ul>
+
+	<div class="tab-content">
+		
+		<div id="param0" class="tab-pane fade in active">
+		
+
+<table id="paramTable" class="table table-striped table-bordered table-hover">
+</table>
+<script type="text/javascript">
+$(function(){
+	// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
+	var paramTable = $('#paramTable')
+	// .wrap("<div class='dataTables_borderWrap' />") 
+	.DataTable({
+		// "paging": false, //是否开启本地分页
+		lengthChange: false, //是否隐藏每页显示数量框(css).true,默认不隐藏;false,隐藏.
+		//"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], //定义每页显示数据数量
+		"ordering" : false, // 是否允许Datatables开启排序
+		// "info": false, //控制是否显示表格左下角的信息
+		"searching" : false, // 开启、关闭Datatables的搜索功能
+		bAutoWidth : false,
+		//"destroy": true,
+		// processing: true,//"<img src='./loading.gif' />"
+		serverSide : true, // 开启服务器模式
+		ajax : {
+			url : "./findtagsearchgird",
+			data:{
+				tag:function(){return $('#tag').val()},
+				tagCategory:'param'
+			}
+		},
+		deferLoading:0, //延迟加载(值为0,即不加载;不设置为默认自动加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
+		"columns" : [{
+					class : "center",
+					title : "序号", 
+					width:70,
+					//data:null,
+					render: function(data, type, row, meta){
+						　　var startIndex= meta.settings._iDisplayStart;//获取到本页开始的条数
+							return startIndex+meta.row+1;
+					}
+				},{
+					"title" : "机型名", 
+					data:'modelName'
+				}, {
+					"title" : "中文名", 
+					data:'modelCname'
+				}, {
+					"title" : "英文名",
+					data:'modelEname'
+				}, {
+					"title" : "数据来源",
+					data:'dataSources',
+					render:function(data,type,row,meta){
+						return "<a href='../searchparam/searchsummarize?overviewID="+row.overviewID+"&basicID="+row.basicID+"&option=load'>"+data+"</a>";   
+					}
+				},{
+					"title" : "标签",
+					data:'tag'
+				}],
+		"language" : dataTables_zh // 多语言配置
+		});
+})
+</script>
+		</div>
+		
+		<div id="param1" class="tab-pane fade in ">
+		
+
+<table id="pictureTable" class="table table-striped table-bordered table-hover">
+</table>
+<script type="text/javascript">
+$(function(){
+	
+	// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
+	var pictureTable = $('#pictureTable')
+	// .wrap("<div class='dataTables_borderWrap' />") 
+	.DataTable({
+		// "paging": false, //是否开启本地分页
+		lengthChange: false, //是否隐藏每页显示数量框(css).true,默认不隐藏;false,隐藏.
+		//"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], //定义每页显示数据数量
+		"ordering" : false, // 是否允许Datatables开启排序
+		// "info": false, //控制是否显示表格左下角的信息
+		"searching" : false, // 开启、关闭Datatables的搜索功能
+		bAutoWidth : false,
+		//"destroy": true,
+		// processing: true,//"<img src='./loading.gif' />"
+		serverSide : true, // 开启服务器模式
+		ajax : {
+			url : "./findtagsearchgird",
+			data:{
+				tag:function(){return $('#tag').val()},
+				tagCategory:'picture'
+			}
+		},
+		deferLoading:0, //延迟加载(值为0,即不加载;不设置为默认自动加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
+		"columns" : [{
+					class : "center",
+					title : "序号", 
+					width:70,
+					data:null,
+					render: function(data, type, row, meta){
+						　　var startIndex= meta.settings._iDisplayStart;//获取到本页开始的条数
+							return startIndex+meta.row+1;
+					}
+				},{
+					"title" : "机型名称", 
+					data:'MODELNAME'
+				},{
+					"title" : "图片名称", 
+					data:'PHOTO_NAME'
+				}, {
+					"title" : "图片简介", 
+					data:'PHOTO_DESC'
+				},{
+					"title" : "图片类别", 
+					data:'PHOTO_CATEGORY'
+				}, {
+					"title" : "标签", 
+					data:'TAG'
+				}, {
+					"title" : "图片", 
+					data:'PHOTO_URL',
+					width:200,
+					render : function(data, type, row, meta) {
+						//个人理解  --以及参数的应用场景
+					    //data:当前cell的值  --主要是操作这个参数来做渲染
+					    //type:数据类型,枚举类型dt内置定义的  --用处不大
+					    //row:当前行的所有数据  --可以做来用级联(没办法更改其他cell的渲染)
+					    //meta:它下面有三个参数
+					    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
+					    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
+					    return '<div class="ace-thumbnails"><a href="'+data+'" data-rel="colorbox">'+
+							'<img width="150" height="150" alt="" src="'+data+'" /></a></div>'
+					    //return '<a href="./downloadarchivefile?archiveID='+row.photoID+'">'+data+'</a>'
+					}
+				}],
+		"language" : dataTables_zh // 多语言配置
+		});
+	
+	pictureTable.on('init.dt', function () {
+		$('.ace-thumbnails [data-rel="colorbox"]').colorbox({
+			//rel: 'colorbox',//群组必须属性.
+			reposition:true,
+			scalePhotos:true,//如果是true且maxWidth, maxHeight, innerWidth, innerHeight, width, 或者 height 被设置，Colorbox会缩放图片以使用边框
+			maxWidth:'100%',
+			maxHeight:'100%',
+			scrolling:false,//如果是false,Colorbox不会为了溢出元素设置滚动条
+			previous:'<i class="ace-icon fa fa-arrow-left"></i>',//“上一个”按钮的文本
+			next:'<i class="ace-icon fa fa-arrow-right"></i>',//“下一个”按钮的文本
+			close:'&times;',//“关闭”按钮的文本
+			current:'{current} of {total}',//文本内容：现在正在显示的元素序号
+			onOpen:function(){
+				//$overflow = document.body.style.overflow;
+				document.body.style.overflow = 'hidden';
+			},
+			onClosed:function(){
+				document.body.style.overflow = 'auto';//auto
+			},
+			onComplete:function(){
+				$.colorbox.resize();
+			}/*,
+		    onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+		    onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },*/
+		});
+    })
+	 
+})
+</script>
+		</div>
+		
+		<div id="param2" class="tab-pane fade in ">
+		
+
+<table id="archiveTable" class="table table-striped table-bordered table-hover">
+</table>
+<script type="text/javascript">
+$(function(){
+	// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
+	var archiveTable = $('#archiveTable')
+	// .wrap("<div class='dataTables_borderWrap' />") 
+	.DataTable({
+		// "paging": false, //是否开启本地分页
+		lengthChange: false, //是否隐藏每页显示数量框(css).true,默认不隐藏;false,隐藏.
+		//"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], //定义每页显示数据数量
+		"ordering" : false, // 是否允许Datatables开启排序
+		// "info": false, //控制是否显示表格左下角的信息
+		"searching" : false, // 开启、关闭Datatables的搜索功能
+		bAutoWidth : false,
+		//"destroy": true,
+		// processing: true,//"<img src='./loading.gif' />"
+		serverSide : true, // 开启服务器模式
+		ajax : {
+			url : "./findtagsearchgird",
+			data:{
+				tag:function(){return $('#tag').val()},
+				tagCategory:'archive'
+			}
+		},
+		deferLoading:0, //延迟加载(值为0,即不加载;不设置为默认自动加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
+		"columns" : [{
+					class : "center",
+					title : "序号", 
+					width:70,
+					data:null,
+					render: function(data, type, row, meta){
+						　　var startIndex= meta.settings._iDisplayStart;//获取到本页开始的条数
+							return startIndex+meta.row+1;
+					}
+				},{
+					"title" : "机型名称", 
+					data:'MODELNAME',
+					sorting : false
+				},{
+					"title" : "文档标题", 
+					data:'ARCHIVE_NAME',
+					sorting : false
+				}, {
+					"title" : "简介", 
+					data:'ARCHIVE_DESC',
+					sorting : false
+				}, {
+					"title" : "标签", 
+					data:'TAG'
+				}, {
+					"title" : "文件名",
+					data:'ARCHIVE_DISPLAYNAME',
+					render:function(data,type,row,meta){// ID
+						return '<a href="../document/data/downloadarchivefile?archiveID='+row.ID+'">'+data+'</a>'
+					}
+				}],
+		"language" : dataTables_zh // 多语言配置
+		});
+})
+</script>
+		</div>
+		
+	</div>
+</div>
+
+<!-- /section:elements.tab -->
+
+			
+				</div><!-- /.col -->	
+			</div>
+			
+
+			<!-- PAGE CONTENT ENDS -->
+		
+			
+		<!-- PAGE CONTENT ENDS -->
+	</div><!-- /.col -->
+</div><!-- /.row -->
+
+		</div><!-- /.page-content -->
+		</div>
+</div><!-- /.main-content -->
+		
+		
+		
+<script type="text/javascript">
+$(function(){
+	//查询按钮
+	$('#submitBtn').click(function(){
+		var tagName=$('#tagName').val()
+		if(tagName!=""){
+			$("#tab_row").removeClass("hidden")
+			$('#paramTable').DataTable().ajax.reload();
+			$('#pictureTable').DataTable().ajax.reload();
+			$('#archiveTable').DataTable().ajax.reload();
+		}
+	});
+    
+})
+
+</script>
+
+
+	
+
+			
+
+
+
+<div class="footer">
+	<div class="footer-inner">
+		<!-- #section:basics/footer -->
+		<div class="footer-content">
+			<span class="bigger-120">
+				<span class="blue bolder">ALGZ</span>
+				Application &copy; 2016-2017
+			</span>
+		</div>
+
+		<!-- /section:basics/footer -->
+	</div>
+</div>
+ 
+		</div><!-- /.main-container -->
+
+	</body>
+</html>
