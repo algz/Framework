@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,17 +69,38 @@ public class SearchSummarizeController {
         	
     		Page page=new Page();
         	page.setHeader_h1("查询");
-        	page.setHeader_small(jo.getString("modelName"));
+        	page.setHeader_small(jo.getString("modelName")+"("+jo.getString("dataSource")+")");
         	map.put("page", page);
         	
 //        	String test="[{url:'/upload/photo/Chrysanthemum.jpg',title:'整体图1'},{url:'/upload/photo/Desert.jpg'},{url:'/upload/photo/Hydrangeas.jpg'}]";
         	map.put("integralGraph",dataService.findModelImageParam("整体图",vo.getOverviewID()));
         	map.put("threeGraph",dataService.findModelImageParam("三面图",vo.getOverviewID()));
         	map.put("surfaceGraph",dataService.findModelImageParam("外观图",vo.getOverviewID()));
+        	map.put("surfaceGraph",dataService.findModelImageParam("其它图",vo.getOverviewID()));
     	}
-    	
-
     	
         return new ModelAndView("ras/searchparam/searchSummarize",map);
     }
+    
+    @RequestMapping("/savemodelparam")
+    public void saveModelParam(HttpServletRequest request,HttpServletResponse response){
+    	String dataSource=request.getParameter("dataSources");
+    	String paramName=request.getParameter("paramName");
+    	String paramValue=request.getParameter("paramValue");
+    	String overviewID=request.getParameter("overviewID");
+    	String msg="";
+    	CaseInsensitiveMap map=new CaseInsensitiveMap();
+    	map.put("OVERVIEWID", overviewID);
+    	map.put("MAININFO", null);
+//    	map.put("basicID", "");
+    	map.put("datasources", dataSource);
+    	map.put(paramName, paramValue);
+    	try {
+			dataService.saveModelParam(map);
+		} catch (Exception e) {
+			msg=e.getLocalizedMessage();
+		}
+		CommonTool.writeJSONToPage(response," {\"success\":true,\"msg\":\""+msg+"\"}");
+    }
+    
 }

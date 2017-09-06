@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
+ * <p>User: algz
+ * <p>Date: 17-6-25
  * <p>Version: 1.0
  */
 @Service
@@ -16,7 +16,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDao userDao;
+    private UserDao dao;
 //    @Autowired
 //    private PasswordHelper passwordHelper;
 //    @Autowired
@@ -29,17 +29,17 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         //加密密码
 //        passwordHelper.encryptPassword(user);
-        return userDao.createUser(user);
+        return dao.createUser(user);
     }
 
     @Override
     public User updateUser(User user) {
-        return userDao.updateUser(user);
+        return dao.updateUser(user);
     }
 
     @Override
     public void deleteUser(String userId) {
-        userDao.deleteUser(userId);
+        dao.deleteUser(userId);
     }
 
     /**
@@ -48,34 +48,39 @@ public class UserServiceImpl implements UserService {
      * @param newPassword
      */
     public void changePassword(String userId, String newPassword) {
-        User user =userDao.findOne(userId);
+        User user =dao.findOne(userId);
         user.setPassword(newPassword);
 //        passwordHelper.encryptPassword(user);
-        userDao.updateUser(user);
+        dao.updateUser(user);
     }
 
     @Override
     public User findOne(String userId) {
-        return userDao.findOne(userId);
+        return dao.findOne(userId);
     }
 
     @Override
     public List<User> findAll() {
-        return userDao.findAll();
+        return findAll();
     }
 
 	@Override
-	public List<User> findAll(Integer start, Integer limit) {
-		return userDao.findAll(start, limit);
+	public List<User> findAll(User user,Integer start, Integer limit) {
+		return dao.findAll(user,start, limit);
 	}
     
+	@Override
+	public Integer countAll(User user) {
+		return dao.countAll(user);
+	}
+	
     /**
      * 根据用户名查找用户
      * @param username
      * @return
      */
     public User findByUsername(String username) {
-        return userDao.findByUsername(username);
+        return dao.findByUsername(username);
     }
 
     /**
@@ -103,6 +108,8 @@ public class UserServiceImpl implements UserService {
         }
         return null;//roleService.findPermissions(user.getRoleIds().toArray(new Long[0]));
     }
+
+
 
 
 

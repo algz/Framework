@@ -2,21 +2,25 @@ package com.ras.comparison;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftOverview.AircraftOverviewDao;
-import com.ras.analyze.AnalyzeVo;
+
 
 @Service
 public class ComparisonServiceImpl implements ComparisonService {
 
 	@Autowired
 	private AircraftOverviewDao aircraftOverviewDao;
+
 	
 	@Autowired
 	private ComparisonDao dao;
+
 	
 	@Override
 	public void findModelGird(ComparisonVo vo) {
@@ -29,6 +33,13 @@ public class ComparisonServiceImpl implements ComparisonService {
 	@Override
 	public List<?> findComparisonDetailGrid(String[] modelNames,String[] basicID) {
 		return dao.findComparisonDetailGrid(modelNames,basicID);
+	}
+
+	@Override
+	@Transactional
+	public void saveReport(String reportName,String reportDes, String[] reportContent) {
+		dao.saveReport(reportName, reportDes, reportContent);
+		
 	}
 
 }

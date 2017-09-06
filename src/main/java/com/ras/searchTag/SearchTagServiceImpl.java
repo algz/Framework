@@ -9,14 +9,12 @@ import com.ras.aircraftArchive.AircraftArchive;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftPicture.AircraftPicture;
 import com.ras.aircraftPicture.AircraftPictureDao;
-import com.ras.aircraftTag.AircraftTag;
-import com.ras.aircraftTag.AircraftTagDaoImpl;
 
 @Service
 public class SearchTagServiceImpl implements SearchTagService{
 
-	@Autowired
-	private AircraftTagDaoImpl aircraftTagDao;
+//	@Autowired
+//	private AircraftTagDaoImpl aircraftTagDao;
 	
 	@Autowired
 	private AircraftPictureDao aircraftPictureDao;

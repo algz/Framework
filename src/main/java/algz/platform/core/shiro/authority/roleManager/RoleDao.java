@@ -13,4 +13,7 @@ import algz.platform.core.shiro.authority.userManager.User;
  */
 public interface RoleDao {
     public List<User> findUsernameByRole(Role role);
+    
+    public List<Role> findAll(Role role,Integer start,Integer length);
+    public Integer countAll(Role role);
 }

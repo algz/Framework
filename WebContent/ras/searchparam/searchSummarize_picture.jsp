@@ -12,7 +12,8 @@
 
 <gallery:gallery headerText="整体图" imgJSonArray="${integralGraph }" relGroup="c1" />
 <gallery:gallery headerText="三面图" imgJSonArray="${threeGraph }" relGroup="c2" />
-<gallery:gallery headerText="外观" imgJSonArray="${surfaceGraph }" relGroup="c3" />
+<gallery:gallery headerText="外观图" imgJSonArray="${surfaceGraph }" relGroup="c3" />
+<gallery:gallery headerText="其它图" imgJSonArray="${surfaceGraph }" relGroup="c3" />
 
 
 	

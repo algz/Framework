@@ -43,6 +43,8 @@ public class ParamConfigDaoImpl implements ParamConfigDao {
 			sql="ALTER TABLE "+tableName+" ADD ( "+columnName;
 			switch(tag.getUi_type()){
 			case "checkbox":
+			case "select":
+			case "textArea":
 			case "text":
 				//文本
 				sql+=" VARCHAR2("+(tag.getUi_value().equals("")?"32":tag.getUi_value())+") NULL  )";
@@ -69,11 +71,20 @@ public class ParamConfigDaoImpl implements ParamConfigDao {
 	 * 修改数据标签
 	 */
 	@Override
-	public void modifyTag(SearchParam tag) {
+	public void modifyTag(SearchParam tag)throws Exception {
 		if(tag.getOnlyRead()!=null&&tag.getOnlyRead().equals("0")){
-			if(tag.getParent_id()!=null){
-				tag.setParentTag((SearchParam)sf.getCurrentSession().get(SearchParam.class, Long.parseLong(tag.getParent_id())));
+			String sql="select t.parent_id from RAS_SEARCH_PARAM t where t.id="+tag.getId();
+			BigDecimal orignParentID=(BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
+			//SearchParam origntag=(SearchParam)sf.getCurrentSession().get(SearchParam.class, tag.getId());
+			if(!tag.getParent_id().equals(orignParentID.intValue()+"")){
+				delTag(new String[]{tag.getId()+""});
+				addTag(tag);
 			}
+
+			
+//			if(tag.getParent_id()!=null){
+//				tag.setParentTag((SearchParam)sf.getCurrentSession().get(SearchParam.class, Long.parseLong(tag.getParent_id())));
+//			}
 			sf.getCurrentSession().saveOrUpdate(tag);
 		}
 	}
@@ -82,30 +93,31 @@ public class ParamConfigDaoImpl implements ParamConfigDao {
 	 * 删除数据标签
 	 */
 	@Override
-	public void delTag(String[] ids) {
+	public void delTag(String[] ids) throws Exception{
 		for(String id:ids){
 			SearchParam tag=(SearchParam)sf.getCurrentSession().createSQLQuery("select * from RAS_SEARCH_PARAM t where t.id='"+id+"'")
 									   .addEntity(SearchParam.class)
 									   .uniqueResult();
 			if(tag!=null){
-				sf.getCurrentSession().delete(tag);
-				
 				//删除数据库字段
-				String tableName=" RAS_AIRCRAFT_"+tag.getParentTag().getEnname();
+				String tableName="RAS_AIRCRAFT_"+tag.getParentTag().getEnname();
 				String columnName=tag.getEnname();
 				String sql="select count(1) from user_tab_columns where table_name='"+tableName+"' and lower(column_name)='"+columnName.toLowerCase()+"'";
 				BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
 				if(count.intValue()!=0){
-					sf.getCurrentSession().createSQLQuery("alter table "+tableName+" drop column '"+columnName+"'").executeUpdate();
+					//删除字段,不要添加引号.
+					sf.getCurrentSession().createSQLQuery("alter table "+tableName+" drop column "+columnName).executeUpdate();
 				}
+				
+				sf.getCurrentSession().delete(tag);
 			}
 			
 		}
-		
-		
 	}
 
-	
+	private void delTableColumn(String tableName,String Column){
+		
+	}
 
 
 	

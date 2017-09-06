@@ -2,7 +2,6 @@ package com.ras.searchTag;
 
 import java.util.List;
 
-import com.ras.aircraftTag.AircraftTag;
 
 public interface SearchTagDao {
 

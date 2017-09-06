@@ -10,7 +10,7 @@
 
 	User user=(User)org.apache.shiro.SecurityUtils.getSubject().getSession().getAttribute("LoginUser");
 	request.setAttribute("user", user);
-	
+	//session.setAttribute("user", user);
 	boolean isDataManager=false;
 	for(String roleID:user.getRoleIds()){
 		if(roleID.equals("2")){
@@ -44,7 +44,7 @@
 	</head>
 	<body class="no-skin">
 		<!-- #section:basics/navbar.layout -->
-		<jsp:include  page="common/navbar1.jsp"/> 
+		<jsp:include  page="common/navbar.jsp"/> 
 		<!-- /section:basics/navbar.layout -->
 		
 		<div class="main-container" id="main-container">

@@ -41,6 +41,9 @@ public class Role implements Serializable {
 	@Column(name="DESCRIPTION")
     private String description; //角色描述,UI界面显示使用
 	
+	@Column(name="ROLECATEGORY")
+	private String roleCategory;
+	
 	// 不能设置FetchType.LAZY,因为user保存到session(登陆)后,再使用关联查询(此时原会话关闭,启动的是新会话),会报异常could not initialize proxy - no Session
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(name="ALGZ_ROLE_RESOURCE",
@@ -79,8 +82,6 @@ public class Role implements Serializable {
 		this.rolename = rolename;
 	}
 
-
-
 	public String getDescription() {
         return description;
     }
@@ -89,7 +90,21 @@ public class Role implements Serializable {
         this.description = description;
     }
 
-    public List<Long> getResourceIds() {
+    
+    
+    public String getRoleCategory() {
+		return roleCategory;
+	}
+
+
+
+	public void setRoleCategory(String roleCategory) {
+		this.roleCategory = roleCategory;
+	}
+
+
+
+	public List<Long> getResourceIds() {
         if(resourceIds == null) {
             resourceIds = new ArrayList<Long>();
         }

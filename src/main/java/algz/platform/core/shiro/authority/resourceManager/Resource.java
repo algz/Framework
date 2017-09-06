@@ -22,77 +22,86 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
-
-
 /**
- * <p>User: algz
- * <p>Date: 17-05-22
- * <p>Version: 1.0
+ * <p>
+ * User: algz
+ * <p>
+ * Date: 17-05-22
+ * <p>
+ * Version: 1.0
  * 
  * Hibernate 注解 自关联 : menus parentMenu
  * 
  */
 @Entity
-@Table(name="ALGZ_RESOURCE")
+@Table(name = "ALGZ_RESOURCE")
 public class Resource {
 
-//  private ResourceType type = ResourceType.menu; //资源类型
-//
-//  private String permission; //权限字符串
-//  private Long parentId; //父编号
-//  private String parentIds; //父编号列表
-//  private Boolean available = Boolean.FALSE;
+	// private ResourceType type = ResourceType.menu; //资源类型
+	//
+	// private String permission; //权限字符串
+	// private Long parentId; //父编号
+	// private String parentIds; //父编号列表
+	// private Boolean available = Boolean.FALSE;
 
-  
-  @Id
-	@GenericGenerator(name="ALGZGenerator",strategy="guid")
-	@GeneratedValue(generator="ALGZGenerator")
-	private String  id;
-	
-  /**
-   * 资源名称
-   */
-  @Column(name="NAME")
-  private String name; 
-	
+	@Id
+	@GenericGenerator(name = "ALGZGenerator", strategy = "guid")
+	@GeneratedValue(generator = "ALGZGenerator")
+	private String id;
+
+	/**
+	 * 资源名称
+	 */
+	@Column(name = "NAME")
+	private String name;
+
 	/**
 	 * 菜单ICON
 	 */
-	@Column(name="ICON")
+	@Column(name = "ICON")
 	private String icon;
-	
+
 	/**
 	 * 关联的URL,资源路径
 	 */
-	@Column(name="URL")
+	@Column(name = "URL")
 	private String url;
-	
+
 	/**
 	 * 菜单顺序
 	 */
-	@Column(name="sequence")
+	@Column(name = "sequence")
 	private Integer sequence;
-	
-	@Column(name="ISVALID")
+
+	/**
+	 * 是否有效.1有效,0无效.
+	 */
+	@Column(name = "ISVALID")
 	private String isValid;
-	
+
+	/**
+	 * 是否公有资源(所有人可看):空或1为公有;0为私有,有权限限制
+	 */
+	@Column(name = "ISPUBLIC")
+	private String isPublic;
+
 	/**
 	 * 是否当前菜单
 	 */
 	@Transient
 	private String active;
-	
-	@Column(name="PARENT_ID")
+
+	@Column(name = "PARENT_ID")
 	private String parentID;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@LazyToOne(LazyToOneOption.PROXY)
-	@JoinColumn(name = "PARENT_ID" ,nullable=true,insertable=false,updatable=false)
+	@JoinColumn(name = "PARENT_ID", nullable = true, insertable = false, updatable = false)
 	private Resource parentResource;
-	
-	//@Transient
-	@OrderBy(value = "sequence asc") //OrderBy参数值要对应Bean中的属性名
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "parentResource")
+
+	// @Transient
+	@OrderBy(value = "sequence asc") // OrderBy参数值要对应Bean中的属性名
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "parentResource")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private Set<Resource> resources;
 
@@ -136,8 +145,6 @@ public class Resource {
 		this.sequence = sequence;
 	}
 
-	
-	
 	public String getIsValid() {
 		return isValid;
 	}
@@ -154,8 +161,6 @@ public class Resource {
 		this.active = active;
 	}
 
-	
-	
 	public String getParentID() {
 		return parentID;
 	}
@@ -180,23 +185,25 @@ public class Resource {
 		this.resources = resources;
 	}
 
+	public String getIsPublic() {
+		return isPublic;
+	}
 
-  
-  
-  
-//  public static enum ResourceType {
-//      menu("菜单"), button("按钮");
-//
-//      private final String info;
-//      private ResourceType(String info) {
-//          this.info = info;
-//      }
-//
-//      public String getInfo() {
-//          return info;
-//      }
-//  }
+	public void setIsPublic(String isPublic) {
+		this.isPublic = isPublic;
+	}
 
-
+	// public static enum ResourceType {
+	// menu("菜单"), button("按钮");
+	//
+	// private final String info;
+	// private ResourceType(String info) {
+	// this.info = info;
+	// }
+	//
+	// public String getInfo() {
+	// return info;
+	// }
+	// }
 
 }

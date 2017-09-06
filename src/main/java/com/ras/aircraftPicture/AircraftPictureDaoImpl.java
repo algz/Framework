@@ -14,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftBasic.AircraftBasic;
-import com.ras.aircraftTag.AircraftTag;
-import com.ras.aircraftTag.AircraftTagDao;
 import com.ras.tool.CommonTool;
 import com.ras.tool.file.UploadFile;
 
@@ -25,8 +23,8 @@ import algz.platform.util.Common;
 @Repository
 public class AircraftPictureDaoImpl implements AircraftPictureDao {
 
-	@Autowired
-	private AircraftTagDao aircraftTagDao;
+//	@Autowired
+//	private AircraftTagDao aircraftTagDao;
 	
 	@Autowired
 	private SessionFactory sf;
@@ -95,7 +93,7 @@ public class AircraftPictureDaoImpl implements AircraftPictureDao {
 				photo.setPhotoUrl(dir+fileName);
 				//编辑人
 				photo.setEditor(Common.getLoginUser().getUserid());
-				File file=new File(dir);
+				File file=new File(CommonTool.PHOTO_DIR+photo.getModelName());
 				if(!file.exists()){
 					file.mkdir();
 				}
@@ -128,25 +126,15 @@ public class AircraftPictureDaoImpl implements AircraftPictureDao {
 		if(photo==null){
 			return;
 		}
-//		String sql="select distinct ao.modelname from RAS_AIRCRAFT_PICTURE t "
-//				+ "inner join  ras_aircraft_basic ab on ab.id=t.basicid "
-//				+ "inner join ras_aircraft_overview ao on ao.id=ab.overviewid "
-//				+ "where t.id='"+photoID+"'";
-//		String modelName=(String)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
+
 		String[] s=photo.getPhotoUrl().split("/");
 		String fileName=s[s.length-1];
 		File file=new File(CommonTool.PHOTO_DIR+photo.getOverview().getModelName()+"\\"+fileName);
 		if(file.exists()){
 			file.delete();
 		}
-		
-		
+				
 		sf.getCurrentSession().delete(photo);
-//		String sql="delete RAS_AIRCRAFT_PICTURE PHOTO where photo.id='"+photoID+"'";
-//		sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
-		
-		//删除标签
-		aircraftTagDao.delRelationID(photoID);
 	}
 
 

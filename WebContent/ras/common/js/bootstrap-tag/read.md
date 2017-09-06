@@ -1,0 +1,1 @@
+bootstrap-tag.js 依赖 bootstrap2.typeahead.js

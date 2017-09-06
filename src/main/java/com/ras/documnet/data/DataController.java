@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -142,11 +143,11 @@ public class DataController{
     	map.putAll(service.addModelParamPage(vo));//paramMap
    	
     	//加载图片
-    	map.put("img",service.findModelImageParam(null,vo.getOverviewID()));
+    	//map.put("img",service.findModelImageParam(null,vo.getOverviewID()));
     	
     	Page page=new Page();
-    	page.setHeader_h1("首页");
-    	page.setHeader_small(map.get("modelName")+"机型参数编辑");
+    	page.setHeader_h1("编辑");
+    	page.setHeader_small(map.get("modelName")+"");
     	map.put("page", page);
     	
     	return new ModelAndView("/ras/document/data/addModelParam",map);
@@ -206,15 +207,22 @@ public class DataController{
 	@RequestMapping({"/savemodelparam"})
 	public ModelAndView saveModelParam(HttpServletRequest request,HttpServletResponse response)throws Exception{
 		//ModelAndView("WebContent路径/jsp文件名(扩展名可选）", request作用域的属性名, request作用域的属性值);
-		Map<String,String> map=new CaseInsensitiveMap();
-		Enumeration<String> paramEnum = request.getParameterNames();
-		while (paramEnum.hasMoreElements()) {
-			String key=paramEnum.nextElement();
-			String value=request.getParameter(key);
+		Map<String,String[]> m=request.getParameterMap();
+		CaseInsensitiveMap map=new CaseInsensitiveMap();
+		Iterator<String> it=m.keySet().iterator();
+		while (it.hasNext()) {
+			String key=it.next();
+			String value=null;
+			if(m.get(key).length>1){
+				value=StringUtils.join(m.get(key),",");
+			}else if(m.get(key).length==1){
+				value=m.get(key)[0];
+			}
 			if(!value.equals("null")){
 				map.put(key, value);
 			}
 		}
+		
 		if(map.get("overviewID")==null){
 			return null;
 		}

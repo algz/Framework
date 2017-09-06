@@ -58,6 +58,11 @@
 								<input name="pic-radio" type="radio" class="ace" value="外观图">
 								<span class="lbl">外观图</span>
 							</label>
+							
+							<label>
+								<input name="pic-radio" type="radio" class="ace" value="其它">
+								<span class="lbl">其它图</span>
+							</label>
 						</div>
 					</div>
 					<div id='pictureTool' class="btn-group">
@@ -94,14 +99,15 @@
 								<input name="id" type="hidden" value="${id }">
 								<input name="onlyRead" type="hidden" value="${onlyRead }">
 								<form:form-group id="photoName" label="图片标题" />
-								<form:form-group id="photoDesc" label="图片简介" />	
+								<form:form-group id="photoDesc" type="textArea" label="图片简介" />	
 								<form:form-group id="photoCategory" label="类别" type="select">
 									<option>整体图</option>
 									<option>三面图</option>
 									<option>外观图</option>
+									<option>其它图</option>
 								</form:form-group>				
 								<form:form-group id="photoTag" label="标签" />
-								<form:form-group id="photoFile" label="上传文件" type="file" />
+								<form:form-group id="photoFile" label="上传文件" type="file" isMultiple="1" />
 							</form>
 			          	</div>
 			            <div class="modal-footer">
@@ -177,7 +183,10 @@ $(function(){
  		showUpload : false,
 		showRemove : false, 
 		showCancel:false,
-		//showPreview:false,
+		showPreview:false,
+		previewTemplates:"",
+		//hideThumbnailContent: true,
+		//uploadAsync: true,
 		browseClass:'btn btn-sm btn-primary',
 		allowedFileExtensions: ["jpg", "gif", "png", "tif","bmp"],
 		uploadExtraData: function(previewId, index) {   //额外参数的关键点

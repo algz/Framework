@@ -40,7 +40,7 @@ $(function() {
 						//deferLoading:0, //延迟加载(值为0,即默认不加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
 						"columns" : [{
 									class : "center",
-									width:130,
+									width:70,
 									render : function(data, type, row, meta) {
 										if(row.onlyRead!="1"){
 											return '<label class="position-relative"><input type="checkbox" class="ace" /><span class="lbl"></span></label>'
@@ -87,6 +87,11 @@ $(function() {
 								}, {
 									"title" : "类型值", 
 									data:'ui_value', 
+									sorting : false
+								}, {
+									"title" : "单位值", 
+									data:'unit', 
+									width:100,
 									sorting : false
 								},  {
 									"title" : "父节点", 
@@ -199,6 +204,7 @@ $(function() {
 					$('#ui_value').val(data.ui_value);
 					$('#sequence').val(data.sequence);
 					$('#parent_id').val(data.parent_id);
+					$('#unit').val(data.unit);
 					$('.form-horizontal :input[name=onlyRead]').val(data.onlyRead);
 				}
 				

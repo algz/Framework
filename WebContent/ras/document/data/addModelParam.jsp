@@ -21,10 +21,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<jsp:include  page="../../common/common_css.jsp"/> 
-		<jsp:include  page="../../common/common_js.jsp"/> 
+		<jsp:include  page="../../common/common_js.jsp"/>
+		
 	</head>
 
-	<body >
+	<body>
 
 		<page:page page="${page }">
 			<!-- PAGE CONTENT BEGINS -->
@@ -57,19 +58,34 @@
 		</page:page>
 		
 		<plugin_css>
+		
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/bootstrap-tag/bootstrap-tag.css" />	
+		
+		
 			<link rel="stylesheet" href="<%=basePath%>ras/common/css/chosen/chosen.css" />	
 		
 			<link rel="stylesheet" href="<%=basePath%>ras/common/css/fileinput/fileinput.css" />
 			<link href="<%=basePath%>ras/common/css/fileinput/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/>
 		</plugin_css>
 		<plugin_js>
+			<!-- bootstrap-tag -->
+			<script src="<%=basePath%>ras/common/js/bootstrap-tag/bootstrap2.typeahead.js"></script>
+			<script src="<%=basePath%>ras/common/js/bootstrap-tag/bootstrap-tag.js"></script>
 			
 			<!-- bootbox.js 提示框 -->
 			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
 		
-			<!-- dataTable.js -->
+
+			
+			<script src="<%=basePath%>ras/common/js/chosen/chosen.jquery.js"></script>
+
+			<script src="<%=basePath%>ras/common/js/jqueryvalidation/jquery.validate.js"></script>
+			<script src="<%=basePath%>ras/common/js/jqueryvalidation/messages_zh.js"></script>
+			
+			<!-- dataTable.js 
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+			-->
 			
 			<!-- 图片放大查看 
 			<script src="<%=basePath%>ras/common/js/jquery.colorbox.js"></script>-->
@@ -78,13 +94,9 @@
 			<script src="<%=basePath%>ras/common/js/jquery.hotkeys.js"></script>
 			<script src="<%=basePath%>ras/common/js/bootstrap-wysiwyg.js"></script>-->
 
-			<!-- 文件上传 -->
-			<script src="<%=basePath%>ras/common/js/fileinput/fileinput.js"></script>
+			<!-- 文件上传
+			<script src="<%=basePath%>ras/common/js/fileinput/fileinput.js"></script> -->
 			
-			<script src="<%=basePath%>ras/common/js/chosen/chosen.jquery.js"></script>
-
-			<script src="<%=basePath%>ras/common/js/jqueryvalidation/jquery.validate.js"></script>
-			<script src="<%=basePath%>ras/common/js/jqueryvalidation/messages_zh.js"></script>
 
 		</plugin_js>
 			

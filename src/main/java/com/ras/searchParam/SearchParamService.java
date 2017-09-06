@@ -15,4 +15,6 @@ public interface SearchParamService {
 	
 	public JSONObject addNoteForTagInput(String overviewID,String[] inputNames);
 	
+	public Map<String,List<String>> findAllCheckboxTypeList();
+	
 }

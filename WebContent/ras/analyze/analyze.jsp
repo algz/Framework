@@ -31,9 +31,6 @@
 	<body >
 	
 	<!-- 需加载到CSS的插件 -->
-	<plugin_css>
-	
-	</plugin_css>
 	
 		<page:page page="${page }">
 		
@@ -55,9 +52,12 @@
 											<a href="#">机型</a>
 										</td>
 										<td class="hidden1-480">
-											<input name="modelName" type="hidden">
-											<input id="modelNameBtn" class="typeahead scrollable" type="text" placeholder="机型名称" />
-											<span id="modelNameContent"></span>
+											<select id="modelNameSelect" class="chosen-select" multiple>
+											<c:forEach items="${aircraftAll}" var="ao">
+												<option value="${ao.overviewID }">${ao.modelName }</option>
+											</c:forEach>
+											</select>
+
 										</td>
 									</tr>
 
@@ -147,6 +147,9 @@
 
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
+		<plugin_css>
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/chosen/chosen.css" />	
+		</plugin_css>
 		<plugin_js>
 			<!-- dataTable.js 表格-->
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
@@ -156,6 +159,8 @@
 
 			<!-- 文本框扩展查询 -->
 			<script src="<%=basePath%>ras/common/js/typeahead.jquery.js"></script>
+			
+			<script src="<%=basePath%>ras/common/js/chosen/chosen.jquery.js"></script>
 			
 		</plugin_js>
 		<!-- inline scripts related to this page -->

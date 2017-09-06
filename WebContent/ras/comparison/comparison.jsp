@@ -35,8 +35,9 @@
 		<page:page page="${page }">
 		
 			<!-- PAGE CONTENT BEGINS -->
-			<form method="post" action="./comparisondetail">
+			<form method="post" action="./comparisondetail" target="_blank">
 			<input name="modelName" type="hidden"/>
+			<input name="basicID" type="hidden"/>
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="table-header">

@@ -67,7 +67,7 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
     	axis[1]=request.getParameter("yAxis");
 	 */
 	@Override
-	public JSONArray analyzeChart(String[] modelNames, String[] axis) {
+	public JSONArray analyzeChart(String[] overviewID, String[] axis) {
 		//modelName=f&xAxis=modelName&yAxis=modelCname
 		StringBuilder sql=new StringBuilder("select ab.dataSources||'('||modelname||')' modelname ");
 		for(int i=0;i<axis.length;i++){
@@ -83,20 +83,20 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 		
 		sql.append(" from ras_aircraft_overview ov  ");
 //		sql.append(" inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id and ab.maininfo='1' ");
-		sql.append(" inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id  ");
+		sql.append(" inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id and ab.MAININFO=1 ");
 		sql.append(" left join ras_aircraft_weight aw on aw.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_layout al on al.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_capability ac on ac.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_dynamic ad on ad.basicid=ab.id ");
 		sql.append(" left join ras_aircraft_system asys on asys.basicid=ab.id ");
 //		sql.append(" where ov.modelname in (:modelname)");
-		sql.append(" where ab.id in (:modelname)");
+		sql.append(" where ov.id in (:overviewID)");
 		
 		List<Object[]> list=sf.getCurrentSession().createSQLQuery(sql.toString())
-						.setParameterList("modelname", modelNames).list();
+						.setParameterList("overviewID", overviewID).list();
 		//[{names:'f-32',datas:[[100,100],2000]},{names:'f-35',datas:[200,2200]}]
 		JSONArray ja=new JSONArray();
-		for(int i=0;i<modelNames.length;i++){
+		for(int i=0;i<overviewID.length;i++){
 			
 			JSONObject jo=new JSONObject();
 			String data="";

@@ -40,7 +40,7 @@
 					<!-- <div class="table-responsive"> -->
 					<div class="btn-group">
 						<button id="addTag" class="btn btn-sm" type="button" >新增</button>
-						<button id="modifyTag" class="btn btn-sm" type="button">修改</button>
+						<!-- <button id="modifyTag" class="btn btn-sm" type="button">修改</button> -->
 						<button id="delTag" class="btn btn-sm" type="button">删除</button>
 					</div>
 					<label class="btn btn-sm  inline">
@@ -75,8 +75,10 @@
 									<option value="checkbox" >多选框</option>
 									<option value="number" >数值框</option>
 									<option value="numberRegion" >数值区</option>
+									<option value="textArea" >文本区</option>
 								</form:form-group>						
 								<form:form-group id="ui_value" label="类型值" value="${ui_value}"/>
+								<form:form-group id="unit" label="单位值" value="${unit}"/>
 								<form:form-group id="parent_id" label="父节点" value="${sequence}" type="select">
 									<option value="1" >基本</option>
 									<option value="2" >重量</option>
@@ -84,9 +86,12 @@
 									<option value="4" >性能</option>
 									<option value="5" >动力</option>
 									<option value="6" >系统</option>
+									<option value="7" >其它</option>
 								</form:form-group>
 							
 								<form:form-group id="sequence" label="序列" value="${sequence}"/>
+								<form:form-group id="remark" label="备注" type="textArea" value="${remark}"/>
+							
 							</form>
 			            </div>
 			            <div class="modal-footer">

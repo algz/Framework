@@ -9,6 +9,86 @@ $(function(){
 //		}
 //	})
 	
+	//创建报告
+	$('#createReportBtn').on('click',function(){
+		$('#reportDes').val(""); //结论
+		$('#reportName').val(""); //报告名称
+		$("#createReport-form").modal();
+	})
+	
+	$('#saveReport').on('click',function(){
+		var reportDes=$('#reportDes').val(); //结论
+		var reportName=$('#reportName').val(); //报告名称
+		var reportContent=[];
+		dataTable.rows().data().each(function (data,index,meta) {
+			var val="";
+			if(!$(dataTable.row(index).node()).hasClass('hidden')){
+				for(var i=0;i<data.length;i++){
+					if(i!=0){
+						val+=",";
+					}
+					val+=data[i]||"";
+				}
+				reportContent.push(val);
+			}
+			
+			
+				/*var flag=true;
+				for(var i=1;i<data.length;i++){
+					if(data[i]!=null){
+						flag=false;
+						break;
+					}
+				}
+				if(flag){
+					dataTable.row(index).child.hide();
+					$(dataTable.row(index).node()).addClass("hidden");
+				}*/
+			   //var S=" this.child( 'Row details for row: '+this.index() );"
+		});
+		
+		$.ajax({
+			url:'./savereport',
+			data:{
+				reportDes:reportDes,
+				reportName:reportName,
+				reportContent:reportContent
+			},
+			success:function(data){
+			}
+		})
+		$("#createReport-form").modal('hide');
+	})
+	
+	//筛选机型参数
+	$("#selectModelParamBtn").on('click',function(){
+		$(".modal-body label").removeClass("active");
+		$('#modal-form').modal();
+		$('#modal-form .modal-title').text("筛选机型参数")
+	})
+	
+	//弹出窗的确定按钮
+	$("#confirmBtn").on('click',function(e){
+		var els=$(".modal-body label.active");
+		dataTable.rows().data().each( function (data,index,meta) {
+//			$(dataTable.row(index).node()).removeClass("hidden");
+			
+			for(var i=0;i<els.length;i++){
+				var el=els[i];
+//				var name=$(el).children('input').attr('name');
+				var txt=$(el).children('span').text();
+				$(dataTable.row(index).node()).addClass("hidden");
+				if(data[0]==txt){
+					$(dataTable.row(index).node()).removeClass("hidden");
+					break;
+				}
+			}
+
+		   //var S=" this.child( 'Row details for row: '+this.index() );"
+		});
+		$('#modal-form').modal("hide");
+	})
+	
 	$("#closeSpaceBtn").on('click',function(){
 		if($(this).attr("checked")==null){
 			//打开
@@ -42,8 +122,9 @@ $(function(){
 				// "info": false, //控制是否显示表格左下角的信息
 				searching : false, // 开启、关闭Datatables的搜索功能
         		lengthChange: false,   //去掉每页显示多少条数据方法
+        		"scrollX": true,
         		dom:"t",//"t<'row'<'col-xs-6'i><'col-xs-6'p>>",
-				bAutoWidth : false,
+//				bAutoWidth : false,
 				serverSide : true, // 开启服务器模式
 				ajax : {
 					url : "./findcomparisondetailgrid",

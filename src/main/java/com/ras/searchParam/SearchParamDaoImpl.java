@@ -3,6 +3,7 @@ package com.ras.searchParam;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -123,6 +124,11 @@ public class SearchParamDaoImpl implements SearchParamDao {
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
 		list.addAll(loadTableData("basic",overviewID));
 		list.addAll(loadTableData("weight",overviewID));
+		list.addAll(loadTableData("layout",overviewID));
+		list.addAll(loadTableData("capability",overviewID));//CAPABILITY
+		list.addAll(loadTableData("dynamic",overviewID));
+		list.addAll(loadTableData("system",overviewID));
+		list.addAll(loadTableData("other",overviewID));
 		JSONArray inputs=new JSONArray();
 		for(String inputName:inputNames){
 			JSONObject input=new JSONObject();
@@ -160,10 +166,11 @@ public class SearchParamDaoImpl implements SearchParamDao {
 			break;
 		case "weight":
 		case "layout":
-		case "capablity":
+		case "capability":
 		case "dynamic":
 		case "system":
-			sql="select aw.* from ras_aircraft_overview ov "
+		case "other":
+			sql="select ab.datasources,aw.* from ras_aircraft_overview ov "
 					+ " inner join RAS_AIRCRAFT_BASIC ab on ab.overviewid=ov.id and ab.maininfo is null "
 					+ " left join ras_aircraft_"+tableName+" aw on aw.basicid=ab.id "+"where ov.id='"+id+"'";
 			break;
@@ -175,6 +182,20 @@ public class SearchParamDaoImpl implements SearchParamDao {
 	public List<SearchParam> findAllChildren(String parentID) {
 		String sql="select * from RAS_SEARCH_param t where t.enname is not null "+(parentID==null?"":" and PARENT_ID='"+parentID+"'");
 		return sf.getCurrentSession().createSQLQuery(sql).addEntity(SearchParam.class).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String,List<String>> findAllCheckboxTypeList() {
+		String hql="from SearchParam where ui_type='checkbox'";
+		List<SearchParam> list=sf.getCurrentSession().createQuery(hql).list();
+		Map<String,List<String>> m=new HashMap<String,List<String>>();
+		for(SearchParam param:list){
+			String sql="select name from "+param.getUi_value();
+			List<String> tem=sf.getCurrentSession().createSQLQuery(sql).list();
+			m.put(param.getUi_value(), tem);
+		}
+		return m;
 	}
 
 

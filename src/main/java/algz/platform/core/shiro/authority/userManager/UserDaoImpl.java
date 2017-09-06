@@ -27,7 +27,8 @@ public class UserDaoImpl implements UserDao {
 	private SessionFactory sf;
     
     public User createUser(final User user) {
-        final String sql = "insert into sys_user(organization_id, username, password, salt, role_ids, locked) values(?,?,?,?,?,?)";
+    	sf.getCurrentSession().save(user);
+//        final String sql = "insert into sys_user(organization_id, username, password, salt, role_ids, locked) values(?,?,?,?,?,?)";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 //        jdbcTemplate.update(new PreparedStatementCreator() {
@@ -44,8 +45,7 @@ public class UserDaoImpl implements UserDao {
 //                return psst;
 //            }
 //        }, keyHolder);
-
-        user.setUserid(keyHolder.getKey().longValue()+"");
+//        user.setUserid(keyHolder.getKey().longValue()+"");
         return user;
     }
 
@@ -74,15 +74,9 @@ public class UserDaoImpl implements UserDao {
 //        return userList.get(0);
     }
 
-    @Override
-    public List<User> findAll() {
-    	return findAll(null,null);
-//        String sql = "select id, organization_id, username, password, salt, role_ids as roleIdsStr, locked from sys_user";
-//        return null;//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class));
-    }
 
 	@Override
-	public List<User> findAll(Integer start, Integer limit) {
+	public List<User> findAll(User user,Integer start, Integer limit) {
     	String hql="from User";
     	Query query= sf.getCurrentSession().createQuery(hql);
     	if(start!=null){
@@ -91,6 +85,11 @@ public class UserDaoImpl implements UserDao {
 		return query.list();
 	}
 
+	@Override
+	public Integer countAll(User user) {
+		String hql="select count(1) from User";
+		return ((Long)sf.getCurrentSession().createQuery(hql).uniqueResult()).intValue();
+	}
     @Override
     public User findByUsername(String username) {
         String hql = "from User where username='"+username+"'";
@@ -98,6 +97,8 @@ public class UserDaoImpl implements UserDao {
         		.setMaxResults(1).uniqueResult();
         		//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), username);
     }
+
+
 
 
 }

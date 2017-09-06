@@ -27,4 +27,14 @@ public class RoleServiceImpl implements RoleService {
 		return dao.findUsernameByRole(role);
 	}
 
+	@Override
+	public List<Role> findAll(Role role, Integer start, Integer length) {
+		return dao.findAll(role, start, length);
+	}
+
+	@Override
+	public Integer countAll(Role role) {
+		return dao.countAll(role);
+	}
+
 }

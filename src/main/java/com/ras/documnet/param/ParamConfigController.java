@@ -95,8 +95,8 @@ public class ParamConfigController{
     	String id=request.getParameter("id");
     	String msg="未找到数据!";
     	if(!id.equals("")){
-    		service.delTag(id.split(","));
-    		msg="删除成功!";
+    		msg=service.delTag(id.split(","));
+    		msg=msg==null?"删除成功!":msg;
     	}
 		CommonTool.writeJSONToPage(response, msg);
     }

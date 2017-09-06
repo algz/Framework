@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftArchive.AircraftArchive;
@@ -36,6 +37,8 @@ public interface DataService {
 	
 	public JSONObject  addModelParamPage(DataVo vo);
 	
+	
+	
 	public JSONArray findModelImageParam(String category,String basicID);
 	
 	public void saveModelPhotoFile(AircraftOverview ao);
@@ -62,7 +65,7 @@ public interface DataService {
 	 */
 	public void saveModel(Map<String,String> map) throws Exception;
 	
-	public void saveModelParam(Map<String,String> map) throws Exception ;
+	public void saveModelParam(CaseInsensitiveMap map) throws Exception ;
 	
 	public void delModel(String[] ids);
 	

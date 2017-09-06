@@ -61,16 +61,16 @@ public class SecurityConfig {
 	
 	/**
 	 * 
-	 * @see algz.platform.core.configure.WebAppInitializer.ISecurityConfig#securityManager(algz.platform.core.shiro.realm.AuthoryRealm)
+	 * @see algz.platform.core.configure.WebAppInitializer.AppInitializer#securityManager(algz.platform.core.shiro.realm.AuthoryRealm)
 	 */
 	@Bean
 	public DefaultWebSecurityManager securityManager(List<Realm> authoryRealms,/*AuthoryRealm authoryRealm,*/CacheManager cacheManager){
 		DefaultWebSecurityManager sm=new DefaultWebSecurityManager();
-		sm.setRealms(authoryRealms);
-//		sm.setRealm(authoryRealm);
-		sm.setCacheManager(cacheManager);
 		
-//		sm.setRealms(realms);//配置多个Realm时,需设置以下参数或采用默认值.
+//		sm.setRealm(authoryRealm);
+		
+		sm.setRealms(authoryRealms);//配置多个Realm时,需设置以下参数或采用默认值.
+		sm.setCacheManager(cacheManager);
 		/**
 		 * 
 		 SecurityManager接口继承了Authenticator， 另外还有一个 ModularRealmAuthenticator实现，
@@ -85,6 +85,7 @@ public class SecurityConfig {
 		 */
 //		ModularRealmAuthenticator d=new ModularRealmAuthenticator();
 //		d.setAuthenticationStrategy(new FirstSuccessfulStrategy());
+//		d.setRealms(authoryRealms);// 定义 FirstSuccessfulStrategy 必须在添加Realms.
 //		sm.setAuthenticator(d);
 		
 		return sm;
@@ -119,7 +120,7 @@ public class SecurityConfig {
 
 	/**
 	 * 
-	 * @see algz.platform.core.configure.WebAppInitializer.ISecurityConfig#authorizationAttributeSourceAdvisor(org.apache.shiro.web.mgt.DefaultWebSecurityManager)
+	 * @see algz.platform.core.configure.WebAppInitializer.AppInitializer#authorizationAttributeSourceAdvisor(org.apache.shiro.web.mgt.DefaultWebSecurityManager)
 	 */
 	@Bean
 	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager secMan) {

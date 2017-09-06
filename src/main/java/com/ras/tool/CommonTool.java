@@ -94,7 +94,7 @@ public class  CommonTool{
 	 */
 	public static <T> void writeJSONToPage(HttpServletResponse response,Object obj){
 		Object object=null;
-		if(JSONUtils.isString(obj)){
+		if(JSONUtils.isString(obj)||net.sf.json.util.JSONUtils.isArray(obj)){
 		    //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
 	        //CommonTool.writeJSONToPage(response, "{\"success\":true}"); 
 			object=obj;
@@ -279,6 +279,11 @@ public class  CommonTool{
         return map;
     }
 	
+	/**
+	 * 获得与Hibernate 自动生成ID的相同方法
+	 * @param sf
+	 * @return
+	 */
 	public static String getGUID(Session sf){
 		String sql="select rawtohex(sys_guid()) from dual";
 		return (String)sf.createSQLQuery(sql).uniqueResult();

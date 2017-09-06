@@ -28,6 +28,7 @@ import com.ras.tool.CommonTool;
 
 import algz.platform.core.shiro.authority.userManager.User;
 import algz.platform.util.Common;
+import algz.platform.util.FileUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -141,11 +142,82 @@ public class DataDaoImpl implements DataDao {
 	@Override
 	public void delModel(String[] ids) {
 		for(String id:ids){
-			String sql="delete from ras_aircraft_overview ab where ab.id='"+id+"'";
-			sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
+			AircraftOverview ao=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, id);
+			
+			FileUtil.deleteFile(new File(CommonTool.PHOTO_DIR+ao.getModelName()));
+			FileUtil.deleteFile(new File(CommonTool.ARCHIVE_DIR+ao.getModelName()));
+			sf.getCurrentSession().delete(ao);
+//			sf.getCurrentSession().delete(photo);
+			
+//			String sql="delete from ras_aircraft_overview ab where ab.id='"+id+"'";
+//			sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
 		}
 	}
 
+	public JSONObject loadModelParam(DataVo vo){
+		List<SearchParam> searchTagList=searchTagDao.findAllChildren(null);
+		
+		String basicID=vo.getBasicID();
+		AircraftBasic ab=null;
+		if(vo.getBasicID()==null){
+			ab=aircraftBasicDao.getMainAircraftBasic(vo.getOverviewID());
+			basicID=ab.getBasicID();
+		}else if(vo.getOverviewID()==null&&vo.getBasicID()!=null){
+			ab=(AircraftBasic)sf.getCurrentSession().get(AircraftBasic.class, vo.getBasicID());
+			vo.setOverviewID(ab.getOverviewID());
+		}
+		AircraftOverview overview=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, vo.getOverviewID());
+		
+		//添加主要只读数据.
+		Map<String,String> paramMap=new HashMap<String,String>();
+		paramMap.put("basicID", basicID);
+		paramMap.put("modelName", overview.getModelName());
+		paramMap.put("modelCname", overview.getModelCname());
+		paramMap.put("modelEname", overview.getModelEname());
+		
+		
+		//读取所有参数及数据
+		JSONObject jo=new JSONObject();
+		jo.put("modelName", overview.getModelName());//用于显示页面标题
+		jo.put("dataSource", ab.getDataSources());
+		//basic表格,需要同时加载进overview表格数据
+		
+
+		JSONArray ja=new JSONArray();
+		JSONObject tem=new JSONObject();
+		tem.put("caption", "基本信息");
+		tem.put("dataMap", modalParamToMap("1",paramMap,searchTagList));
+		ja.add(tem);
+		tem=new JSONObject();
+		tem.put("caption", "重量信息");
+		tem.put("dataMap", modalParamToMap("2",paramMap,searchTagList));
+		ja.add(tem);
+		tem=new JSONObject();
+		tem.put("caption", "布局信息");
+		tem.put("dataMap", modalParamToMap("3",paramMap,searchTagList));
+		ja.add(tem);
+		tem=new JSONObject();
+		tem.put("caption", "性能信息");
+		tem.put("dataMap", modalParamToMap("4",paramMap,searchTagList));
+		ja.add(tem);
+		tem=new JSONObject();
+		tem.put("caption", "动力信息");
+		tem.put("dataMap", modalParamToMap("5",paramMap,searchTagList));
+		ja.add(tem);
+		tem=new JSONObject();
+		tem.put("caption", "系统信息");
+		tem.put("dataMap", modalParamToMap("6",paramMap,searchTagList));
+		ja.add(tem);
+		tem=new JSONObject();
+		tem.put("caption", "其它信息");
+		tem.put("dataMap", modalParamToMap("7",paramMap,searchTagList));
+		ja.add(tem);
+		jo.put("paramMap", ja);
+		
+		
+		return jo;
+	}
+	
 	/**
 	 * 查询机型参数
 	 * @param option create modify del load
@@ -155,6 +227,10 @@ public class DataDaoImpl implements DataDao {
 		List<SearchParam> searchTagList=searchTagDao.findAllChildren(null);
 		
 		String basicID="";
+		if(vo.getOverviewID()==null&&vo.getBasicID()!=null){
+			AircraftBasic basic=(AircraftBasic)sf.getCurrentSession().get(AircraftBasic.class, vo.getBasicID());
+			vo.setOverviewID(basic.getOverviewID());
+		}
 		AircraftOverview overview=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, vo.getOverviewID());
 		
 		switch(vo.getOption()){
@@ -209,10 +285,23 @@ public class DataDaoImpl implements DataDao {
 		tem.put("caption", "系统信息");
 		tem.put("dataMap", modalParamToMap("6",paramMap,searchTagList));
 		ja.add(tem);
+		tem=new JSONObject();
+		tem.put("caption", "其它信息");
+		tem.put("dataMap", modalParamToMap("7",paramMap,searchTagList));
+		ja.add(tem);
 		jo.put("paramMap", ja);
+		
+		
 		return jo;
 	}
 	
+	/**
+	 * 
+	 * @param parentTagID 父结点
+	 * @param paramMap
+	 * @param searchTagList
+	 * @return
+	 */
 	private JSONArray modalParamToMap(String parentTagID,Map<String,String> paramMap,List<SearchParam> searchTagList){
 		JSONArray ja=new JSONArray();
 
@@ -277,7 +366,7 @@ public class DataDaoImpl implements DataDao {
 							break;
 						}
 						if(obj instanceof BigDecimal){
-							s=((BigDecimal) obj).intValue()+"";
+							s=((BigDecimal) obj).toPlainString()+"";
 						}else if(obj instanceof String){
 							s=obj.toString();
 						}
@@ -301,7 +390,7 @@ public class DataDaoImpl implements DataDao {
 		for (SearchParam tag : tags) {
 			JSONObject jo=new JSONObject();
 			jo.put("elID", tag.getEnname());
-			jo.put("elLabel", tag.getName());
+			jo.put("elLabel", tag.getName()+(tag.getUnit()!=null?"("+tag.getUnit()+")":""));
 			jo.put("elType", tag.getUi_type());
 			jo.put("elTypeValue", tag.getUi_value());
 			ja.add(jo);
@@ -309,6 +398,7 @@ public class DataDaoImpl implements DataDao {
 		return ja;
 	}
 
+	
 	@Override
 	public void saveModelParam(String tableName,Map<String, String> map,boolean isCreate) {
 		tableName="RAS_AIRCRAFT_"+tableName;

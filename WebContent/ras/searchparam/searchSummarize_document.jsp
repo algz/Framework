@@ -45,12 +45,16 @@
 							// processing: true,//"<img src='./loading.gif' />"
 							serverSide : true, // 开启服务器模式
 							ajax : {
-								url : "./SearchCriteriaGird",
-								type : 'POST'
+								url : "../document/data/findarchivegrid",
+								type : 'POST',
+								data:{
+									overviewID:$(':hidden[name=overviewID]').val()
+								}
 							},
-							deferLoading:0, //延迟加载(值为0,即默认不加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
+							//deferLoading:0, //延迟加载(值为0,即默认不加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
 							"columns" : [{
 										"title" : "文档标题",/* data:'name', */
+										data:'archiveName',
 										sorting : false,
 										render:function(data, type, row, meta){
 										    //个人理解  --以及参数的应用场景
@@ -60,13 +64,16 @@
 										    //meta:它下面有三个参数
 										    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
 										    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
-										    return "<a href='./searchSummarize'>"+data+"</a>";
+										    return '<a href="../document/data/downloadarchivefile?archiveID='+row.archiveID+'">'+data+'</a>'
+											
 										}
-									}, {
-										"title" : "文档简介",/* data:'model', */
+									},{
+										"title" : "文档简介", 
+										data:'archiveDesc',
 										sorting : false
 									}, {
-										"title" : "发表日期",/* data:'model', */
+										"title" : "标签", 
+										data:'tag',
 										sorting : false
 									}],
 							"language" : {

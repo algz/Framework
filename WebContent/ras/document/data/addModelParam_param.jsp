@@ -9,8 +9,14 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+
+
 <form id='modelParamForm' action="./savemodelparam" method="post">
 	<input name="overviewID" type="hidden" value="<%=request.getParameter("overviewID") %>"/>
+	<input name="basicID" type="hidden" value="<%=request.getParameter("basicID") %>"/>
+	
+	
+	<!-- <input name="editor" type="hidden" value="${EDITOR}"/> -->
 	<c:forEach var="dataParam" items="${paramMap }" varStatus="status">
 	<c:if test="${fn:length(dataParam.dataMap)!=0 }">
 	
@@ -23,15 +29,14 @@
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
 				<div class="form-horizontal" role="form">
-					<input name="basicID" type="hidden" value="<%=request.getParameter("basicID") %>"/>
-					<!-- <input name="editor" type="hidden" value="${EDITOR}"/> -->
+				
 					<c:forEach var="basicItem" items="${dataParam.dataMap }">
 					<%
 					String validateType=null; 
 					String extDataValue=null;
 					//新建/修改状态验证
 					if(request.getAttribute("isModify")!=null&&request.getAttribute("isModify").equals("true")){
-						
+						//JSONObject paramMap=(JSONObject)pageContext.findAttribute("paramMap");
 						JSONObject jo=(JSONObject)pageContext.findAttribute("basicItem");
 						validateType=jo.get("validate")==null?"":jo.get("validate").toString();
 						if(jo.get("elType")!=null){
@@ -39,15 +44,19 @@
 							case "number":
 							case "numberRegion":
 								validateType+=" number ";
+								jo.put("elType", "text");
 								break;
 							case "checkbox":
-								extDataValue="extCheckbox="+jo.get("elTypeValue")+"";
+								extDataValue=jo.getString("checkboxVal");
+								jo.put("elType", "select");
+								//jo.put("elValue", "中国");
+								//System.out.println(extDataValue);
 								break;
 							}
 						}
 					}
 					%>
-						<form:form-group id="${basicItem.elID }" type="${basicItem.elType=='checkbox1'?'select':'text'}" label="${basicItem.elLabel }" value="${basicItem.elValue}" readonly="${basicItem.readonly}" extData="<%=extDataValue %>" simpleValidate="<%=validateType %>"/>   
+						<form:form-group id="${basicItem.elID }" isMultiple="1" type="${basicItem.elType}" label="${basicItem.elLabel }" value="${basicItem.elValue}" readonly="${basicItem.readonly}" extData="<%=extDataValue %>" simpleValidate="<%=validateType %>"/>   
 					</c:forEach>
 				</div>
 			</div><!-- /.col -->
@@ -71,7 +80,18 @@
 	<script type="text/javascript">
 	$(function(){
 		
-		/* $("select[extCheckbox]").each(function(index,element){
+		$("#modelParamForm").submit(function(){
+			alert("提交成功!");
+		    window.close();  
+		}); 
+		
+		$('.chosen-select').chosen({
+			allow_single_deselect : true,
+			width : '100%',
+			disable_search:true //关闭搜索框,默认为false.
+		}); 
+		
+		/*$("select[extCheckbox]").each(function(index,element){
 			$.ajax({
 				url:'./findtablesql',
 				data:{
@@ -155,9 +175,9 @@
             		$(element).closest('.form-group').removeClass('has-error');
         		},
 				//submitHandler:function(form){
-				 //alert("提交事件!");
+				// alert("提交事件!");
 				// form.submit();
-				 //},
+				// },
 				/**
 				 * success：要验证的元素通过验证后的动作，如果跟一个字符串，会当作一个 css 类，也可跟一个函数。
 				 */

@@ -61,6 +61,7 @@ public class AnalyzeController {
 //    			list.remove(tag);
 //    		}
 //    	}
+    	map.put("aircraftAll", service.getAircraftAll());
     	map.put("searchTags", searchParamService.findAllParent());
     	
         return new ModelAndView("ras/analyze/analyze",map);
@@ -99,13 +100,12 @@ public class AnalyzeController {
     
     @RequestMapping(value={"/analyzechart"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public void  analyzeChart(HttpServletRequest request,HttpServletResponse response) {
-    	String modelName=request.getParameter("modelName");
-    	String basicID=request.getParameter("basicID");
+    	String[] overviewID=request.getParameterValues("overviewID[]");
     	String[] axis=new String[2];
     	axis[0]=request.getParameter("xAxis");
     	axis[1]=request.getParameter("yAxis");
     	try {
-    		JSONArray ja=service.analyzeChart(basicID.split(","), axis);
+    		JSONArray ja=service.analyzeChart(overviewID, axis);
 			response.getWriter().print(ja);
 		} catch (IOException e) {
 			e.printStackTrace();

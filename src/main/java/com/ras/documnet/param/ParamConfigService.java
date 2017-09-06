@@ -26,5 +26,5 @@ public interface ParamConfigService {
 	
 	public void modifyTag(SearchParam tag);
 	
-	public void delTag(String[] ids);
+	public String delTag(String[] ids);
 }

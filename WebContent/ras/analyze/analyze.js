@@ -1,5 +1,11 @@
 $(function(){
-
+	$('.chosen-select').chosen({
+		allow_single_deselect : true,
+		width : '40%',
+		placeholder_text_multiple:'请选择一项'
+		//disable_search:true //关闭搜索框,默认为false.
+	})
+	
 	$("#dt-list-1 dd").each(function(index,el){
 		if($(el).find(".btn-group :input").length==0){
 			$(el).prev().remove();
@@ -97,17 +103,18 @@ $('#modelNameBtn').keydown(function(event){
 //                data:[200]
 //            });
 //		return;
-		var modelName=$(":input[name=modelName]").val(),
+//		return;
+		var overviewID=$('#modelNameSelect').val(),//$(":input[name=modelName]").val(),
 			xAxis=$(":input[name=xAxis]").val(),
 			yAxis=$(":input[name=yAxis]").val();
-		if(modelName==""||(xAxis==""&&yAxis=="")){
+		if(overviewID==""||(xAxis==""&&yAxis=="")){
 			alert("请输入数据!");
 			return;
 		}
 		$.ajax({
 			url:'./analyzechart',
 			data:{
-				modelName:modelName,
+				overviewID:overviewID,
 				xAxis:xAxis,
 				yAxis:yAxis
 			},
@@ -162,8 +169,8 @@ $('#modelNameBtn').keydown(function(event){
 				
 				for(var i=0;i<objs.length;i++){
 					chart.addSeries({
-						name:objs[i].names,
-    	            	data:objs[i].datas
+						name:objs[i].name,
+    	            	data:objs[i].data
 	            	});
 				}
 

@@ -133,16 +133,4 @@ public class SearchTagController {
 		
     }
     
-//    @RequestMapping(value={"/findpicturesearchgrid"})
-//    public void findPictureSearchGird(SearchTagVo vo,HttpServletRequest request,HttpServletResponse response) throws NoSuchMethodException, IllegalAccessException{
-//    	if(vo.getTagName()!=null){
-//    		service.findPictureSearchGird(vo);
-//    	}
-//    	MethodHandles.Lookup lookup = MethodHandles.lookup();  
-//        MethodHandle mh = lookup.findStatic(JSONTools.class, "BeanToJson", MethodType.methodType(JSONObject.class, Object.class));  
-//        
-//		CommonTool.writeJSONToPage(response, vo,mh);
-//		
-//    }
-    
 }

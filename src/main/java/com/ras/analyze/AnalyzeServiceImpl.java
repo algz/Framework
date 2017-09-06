@@ -9,6 +9,7 @@ import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftOverview.AircraftOverviewDao;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service
 public class AnalyzeServiceImpl implements AnalyzeService {
@@ -38,8 +39,21 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	}
 
 	@Override
-	public JSONArray analyzeChart(String[] modelNames, String[] axis) {
-		return dao.analyzeChart(modelNames, axis);
+	public JSONArray analyzeChart(String[] overviewID, String[] axis) {
+		return dao.analyzeChart(overviewID, axis);
+	}
+
+	@Override
+	public JSONArray getAircraftAll() {
+		List<AircraftOverview> list=aircraftOverviewDao.findAll();
+		JSONArray ja=new JSONArray();
+		for(AircraftOverview ao : list){
+			JSONObject jo=new JSONObject();
+			jo.put("modelName", ao.getModelName());
+			jo.put("overviewID", ao.getOverviewID());
+			ja.add(jo);
+		}
+		return ja;
 	}
 
 }

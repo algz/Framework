@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,7 @@ import com.ras.aircraftPicture.AircraftPicture;
 import com.ras.aircraftPicture.AircraftPictureDao;
 import com.ras.aircraftWeight.AircraftWeight;
 import com.ras.searchParam.SearchParamDao;
+import com.ras.searchParam.SearchParamService;
 import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
 import com.ras.tool.file.UploadFile;
@@ -51,7 +53,7 @@ import net.sf.json.JSONObject;
 public class DataServiceImpl implements DataService {
 	
 	@Autowired
-	private SearchParamDao searchTagDao;
+	private SearchParamService searchTagService;
 	
 	@Autowired
 	private AircraftOverviewDao aircraftOverviewDao;
@@ -93,7 +95,7 @@ public class DataServiceImpl implements DataService {
 			for(Object obj:vo.getData()){
 				AircraftOverview ao=(AircraftOverview)obj;
 				User user=userService.findOne(ao.getEditor());
-				ao.setEditor(user.getUsername());
+				ao.setEditor(user.getCname()==null?user.getUsername():user.getCname());
 			}
 		}
 //		AircraftOverview ao=new AircraftOverview();
@@ -108,28 +110,29 @@ public class DataServiceImpl implements DataService {
 		if(vo.getData()!=null){
 			for(AircraftBasic basic:vo.getData()){
 				User user=userService.findOne(basic.getEditor());
-				basic.setEditor(user.getUsername());
+				basic.setEditor(user.getCname()==null?user.getUsername():user.getCname());
 			}
 		}
 	}
 
-	/*
+	/**
 	 * 保存机型参数
-	 * @see com.ras.documnet.DocumentService#saveModelParam(java.util.Map)
+	 * 
+	 * @param map org.apache.commons.collections.map.CaseInsensitiveMap 忽略KEY大小写Map
 	 */
 	@Override
 	@Transactional
-	public void saveModelParam(Map<String, String> map) throws Exception {
+	public void saveModelParam(CaseInsensitiveMap map) throws Exception {
 
 		boolean isCreate=false;
-		String basicID=map.get("basicID");
+		String basicID=map.get("basicID")==null?null:map.get("basicID").toString();
 
 		
 		if(basicID==null||basicID.toString().equals("")){
 			isCreate=true;
-			BigDecimal count=aircraftBasicDao.countMaininfo(map.get("overviewID"));
+			BigDecimal count=aircraftBasicDao.countMaininfo(map.get("overviewID").toString());
 			map.put("MAININFO", count.compareTo(BigDecimal.ZERO)!=0?null:"1");
-			dao.saveModelParam("BASIC", map,isCreate);
+			dao.saveModelParam("BASIC", map,isCreate); //map的KEY必须都大写
 			map.put("basicID", map.get("ID"));
 		}else{
 			dao.saveModelParam("BASIC", map,isCreate);
@@ -139,6 +142,7 @@ public class DataServiceImpl implements DataService {
 		dao.saveModelParam("CAPABILITY", map,isCreate);
 		dao.saveModelParam("SYSTEM", map,isCreate);
 		dao.saveModelParam("DYNAMIC", map,isCreate);
+		dao.saveModelParam("OTHER", map,isCreate);
 
 	}
 	
@@ -153,7 +157,31 @@ public class DataServiceImpl implements DataService {
 	
 	@Override
 	public JSONObject addModelParamPage(DataVo vo) {
-		return dao.findModelParam(vo);
+		JSONObject jo=null;
+		switch(vo.getOption()){
+		case "load":
+//			AircraftBasic ab=aircraftBasicDao.getMainAircraftBasic(vo.getOverviewID());
+//			basicID=(ab==null?"":ab.getBasicID());
+			jo=dao.loadModelParam(vo);
+			return jo;
+		case "create":
+		case "modify":
+			jo=dao.findModelParam(vo);
+
+			Map<String, List<String>> m=searchTagService.findAllCheckboxTypeList();
+			for(Object obj:(JSONArray)jo.get("paramMap")){
+				for(Object obj1:(JSONArray)((JSONObject)obj).get("dataMap")){
+					JSONObject el=(JSONObject)obj1;
+					if(el.get("elType")!=null&&el.getString("elType").equals("checkbox")){
+						String s=StringUtils.join((m.get(el.get("elTypeValue"))).toArray(),",");
+						el.put("checkboxVal", s);
+						//System.out.println(StringUtils.join(((List)el.get("checkboxVal")).toArray(),","));
+					}
+				}
+			}
+		break;
+		}
+		return jo;
 	}
 
 	@Override
@@ -246,14 +274,16 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public void findArchiveGrid(DataVo vo) {
-		vo.setRecordsTotal(aircraftArchiveDao.count(null));
-		vo.setData(aircraftArchiveDao.find(null, vo.getStart(),vo.getLength()));
+		AircraftArchive archive=new AircraftArchive();
+		archive.setOverviewID(vo.getOverviewID());
+		vo.setRecordsTotal(aircraftArchiveDao.count(archive));
+		vo.setData(aircraftArchiveDao.find(archive, vo.getStart(),vo.getLength()));
 		
 		if(vo.getData()!=null){
 			for(Object obj:vo.getData()){
 				AircraftArchive ao=(AircraftArchive)obj;
 				User user=userService.findOne(ao.getEditor());
-				ao.setEditor(user.getUsername());
+				ao.setEditor(user.getCname()==null?user.getUsername():user.getCname());
 			}
 		}
 	}
@@ -276,7 +306,7 @@ public class DataServiceImpl implements DataService {
 			for(Object obj:vo.getData()){
 				AircraftPicture ao=(AircraftPicture)obj;
 				User user=userService.findOne(ao.getEditor());
-				ao.setEditor(user.getUsername());
+				ao.setEditor(user.getCname()==null?user.getUsername():user.getCname());
 			}
 		}
 	}

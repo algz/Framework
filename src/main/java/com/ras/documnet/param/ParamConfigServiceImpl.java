@@ -51,7 +51,12 @@ public class ParamConfigServiceImpl implements ParamConfigService {
 	@Override
 	@Transactional
 	public void modifyTag(SearchParam tag) {
-		dao.modifyTag(tag);
+		try {
+			dao.modifyTag(tag);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -66,9 +71,15 @@ public class ParamConfigServiceImpl implements ParamConfigService {
 
 	@Override
 	@Transactional
-	public void delTag(String[] ids) {
-		dao.delTag(ids);
-		
+	public String delTag(String[] ids) {
+		try {
+			dao.delTag(ids);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return e.getLocalizedMessage();
+		}
+		return null;
 	}
 
 }

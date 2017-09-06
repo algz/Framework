@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
+import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.util.Common;
+
 import java.util.*;
 
 /**
@@ -17,34 +20,49 @@ import java.util.*;
 public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
-    private ResourceDao resourceDao;
+    private ResourceDao dao;
+    
+//    @Autowired
+//    private Userservice user
 //    @Autowired
 //    private PasswordHelper passwordHelper;
 //    @Autowired
 //    private RoleService roleService;
 
 
+    /**
+     * 查询所有资源
+     */
     @Override
-    public List<Resource> findAll() {
-        return resourceDao.findAll();
+    public List<Resource> findAll() {	
+    	return dao.findAll();
     }
 
+	@Override
+	public List<Resource> findAll(Resource resource, Integer start, Integer length) {
+		return dao.findAll(resource, start, length);
+	}
+
+	@Override
+	public Integer countAll(Resource resource) {
+		return dao.countAll(resource);
+	}
+    /**
+     * 查询指定权限的所有资源
+     * @param roleList
+     * @return
+     */
+    @Override
+    public List<Resource> findAllByRoleids(List<String> roleList) {  	
+    	return dao.findResourceByRole(roleList);
+    }
 
     /**
-     * 查询所有菜单,匹配URL,指定激活菜单.
+     * 查询当前用户的所有菜单,匹配URL,指定激活菜单.
      */
-    public List<Resource> findAll(String requestPath) {
-    	List<Resource> menuList=findAll();
+    public List<Resource> findAllByUser(User user,String requestPath) {
+    	List<Resource> menuList=findAllByRoleids(user.getRoleIds());
     	setMenuActive(menuList,requestPath);
-//    	for(Resource m:menuList){
-//    		if(setMenuActive(menuList,requestPath)){
-//    			m.setActive("1");
-//    		}
-//    		if(m.getUrl()!=null&&matcher.match(m.getUrl()+"**", requestPath)){
-//    			m.setActive("1");
-//    			break;
-//    		}
-//    	}
         return menuList;
     }
     
@@ -69,4 +87,5 @@ public class ResourceServiceImpl implements ResourceService {
     	}
     	return false;
     }
+
 }

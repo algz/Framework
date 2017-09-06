@@ -75,11 +75,11 @@
 									</script>
 								</div>
 							    </c:when>
-							    <c:when test="${searchTag.ui_type=='text'||searchTag.ui_type=='number'}">
+							    <c:when test="${searchTag.ui_type=='text'||searchTag.ui_type=='number'||searchTag.ui_type=='textArea'}">
 							    <!-- 文本框 -->
 							    <div class="btn-group" data-toggle="buttons">
 									<div >
-										<input name="${searchTag.enname }" class="col-xs-5 input-sm" type="text" >
+										<input name="${searchTag.enname }" class="col-xs-6 input-large" type="text" >
 									</div>
 								</div>
 							    </c:when>
@@ -143,6 +143,7 @@
 							<input type="hidden" id="selectBasicID">
 							<i class="ace-icon fa fa-fighter-jet  blue"></i>
 						</span>
+						<button id="clearModelSelectBtn" class="btn btn-sm btn-default" type="button">清空</button>
 					</div>
 					<div>
 						<table id="searchTable" class="table table-striped table-bordered table-hover">

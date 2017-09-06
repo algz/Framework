@@ -52,8 +52,8 @@ public class User implements Serializable {
 	@Column(name="PHOTO")
     private String photo; //用户图片
 	
-	@Column(name="FULLNAME")
-	private String fullName;
+	@Column(name="CNAME")
+	private String cname;
     
 	// 不能设置FetchType.LAZY,因为user保存到session(登陆)后,再使用关联查询(此时原会话关闭,启动的是新会话),会报异常could not initialize proxy - no Session
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -89,8 +89,10 @@ public class User implements Serializable {
      */
 	public List<String> getRoleIds() {
 		List<String> list=new ArrayList<String>();
-		for(Role role:this.roles){
-			list.add(role.getId());
+		if(this.roles!=null){
+			for(Role role:this.roles){
+				list.add(role.getId());
+			}
 		}
 		return list;
 	}
@@ -150,12 +152,12 @@ public class User implements Serializable {
         return username + salt;
     }
     
-    public String getFullName() {
-		return fullName;
+    public String getCname() {
+		return cname;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setCname(String cname) {
+		this.cname = cname;
 	}
 
 	public String getDepartment() {

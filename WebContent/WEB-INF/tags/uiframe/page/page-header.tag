@@ -18,6 +18,7 @@
 <!-- 标签属性 -->
 <%@attribute name="header_h1"  rtexprvalue="true" required="true" description="主标题" %>
 <%@attribute name="header_small"  rtexprvalue="true" required="true" description="子标题" %>
+<c:if test="${header_h1!=''&&header_small!='' }">
 
 <div class="page-header">
 	<h1>
@@ -28,3 +29,4 @@
 		</small>
 	</h1>
 </div><!-- /.page-header -->
+</c:if>

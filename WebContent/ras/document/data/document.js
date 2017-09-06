@@ -283,7 +283,7 @@ $(function() {
 						}
 						});
 				}else{
-					bootbox.confirm("是否删除当前数行?",function(result){
+					bootbox.confirm("将删除机型相关的所有图片、文档等数据,是否删除当前机型?",function(result){
 						if(result){
 							$.ajax({
 								type:"POST",
@@ -324,6 +324,7 @@ $(function() {
 								dataID:selectModelParamRowData.basicID
 							});
 							approvalModal.complete=function(data){
+								tablemodelparam.ajax.reload();
 								alert(data.responseText);
 							}
 						}
@@ -390,7 +391,9 @@ $(function() {
 //						bootbox.alert("系统暂时仅支持一条数源来源.");
 //						return ;
 //					}
-					window.location.href="addmodelparampage?overviewID="+selectModelRowData.overviewID+"&option=create"//+window.location.href; 
+				var url="addmodelparampage?overviewID="+selectModelRowData.overviewID+"&option=create"//+window.location.href; 
+//				window.location.href=url; //本窗口打开
+				window.open(url); //新窗口打开
 				}
 			})
 			
@@ -401,8 +404,10 @@ $(function() {
 				if(tablemodelparam.row('.selected').length==0){
 					bootbox.alert("请选择机型参数后在修改参数!");
 				}else{
-					window.location.href="addmodelparampage?overviewID="+tablemodel.row(".selected").data().overviewID+
-					"&basicID="+tablemodelparam.row('.selected').data().basicID+"&option=modify"; 
+					var url="addmodelparampage?overviewID="+tablemodel.row(".selected").data().overviewID+
+					"&basicID="+tablemodelparam.row('.selected').data().basicID+"&option=modify";
+					//window.location.href=url
+					window.open(url);
 				}
 			})
 			

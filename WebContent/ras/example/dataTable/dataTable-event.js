@@ -4,3 +4,9 @@ var dataTable = $('#table').DataTable();
 dataTable.on( 'init.dt', function () {
 	//......
 })
+
+//2.行单击
+dataTable.on('click', 'tr', function () {
+    var data = dataTable.row( this ).data();
+    alert( 'You clicked on '+data.id+'\'s row' );
+});

@@ -48,7 +48,7 @@ $(function(){
 					"title" : "数据来源",
 					data:'dataSources',
 					render:function(data,type,row,meta){
-						return "<a href='../searchparam/searchsummarize?overviewID="+row.overviewID+"&basicID="+row.basicID+"&option=load'>"+data+"</a>";   
+						return "<a target='_blank' href='../searchparam/searchsummarize?overviewID="+row.overviewID+"&basicID="+row.basicID+"&option=load'>"+data+"</a>";   
 					}
 				},{
 					"title" : "标签",

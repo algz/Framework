@@ -28,31 +28,56 @@
 
 		
 		<page:page page="${page }">
-			<!-- PAGE CONTENT BEGINS -->
+			<!-- PAGE CONTENT BEGINS 
 			ras_resource.jsp
 			authentication  [ɔːˌθentɪ'keɪʃn] n. 证明；鉴定
 authorization [ˌɔːθərə'zeɪʃn] n. 授权(书)；批准
-authority  [ə'θɔːrəti] n. 权力；官方；当局；职权；权威
+authority  [ə'θɔːrəti] n. 权力；官方；当局；职权；权威-->
 			<div class="row">
-				<div class="col-xs-12">
-					
+				<div class="col-xs-6">
 					<div class="table-header">
+						权限管理
+					</div>
+
+					<!-- <div class="table-responsive"> -->
+					<div class="btn-group">
+						<button class="btn btn-sm" type="button">添加</button>
+						<button class="btn btn-sm" type="button">修改</button>
+						<button class="btn btn-sm" type="button">删除</button>
+					</div>
+					<!-- <div class="dataTables_borderWrap"> -->
+					<div>
+										
+						<table id="table-role" class="table table-striped table-bordered table-hover">
+						</table>
+					</div>
+				</div>
+				<div class="col-xs-6" disable="disable">
+					
+					<div class="table-header"  >
 						资源管理
 					</div>
 
 					<!-- <div class="table-responsive"> -->
 					<div class="btn-group">
-						<a class="btn btn-sm" type="button" href="./addmodel">授权</a>
-						<!-- <button class="btn btn-sm" type="button">修改</button>
-						<button class="btn btn-sm" type="button">删除</button> -->
+						<!-- <button class="btn btn-sm" type="button">添加</button>
+						<button class="btn btn-sm" type="button">修改</button>
+						<button class="btn btn-sm" type="button">删除</button>-->
+						<button class="btn btn-sm" disabled type="button">授权</button> 
 					</div>
+					<label class="btn btn-sm  inline">
+						<small class="muted smaller-90">隐藏公共资源:</small>
+						<input class="ace ace-switch ace-switch-5" id="hidePublicResourceBtn" type="checkbox" >
+						<span class="lbl middle" ></span>
+					</label>
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
 										
-						<table id="table-authority" class="table table-striped table-bordered table-hover">
+						<table id="table-resource" class="table table-striped table-bordered table-hover">
 						</table>
 					</div>
 				</div>
+			
 			</div>
 			
 

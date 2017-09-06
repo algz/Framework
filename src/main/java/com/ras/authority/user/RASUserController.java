@@ -18,8 +18,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ras.authority.AuthorityService;
-import com.ras.authority.AuthorityVo;
+import com.ras.authority.resource.RASResourceVo;
+import com.ras.authority.role.RASRoleVo;
+import com.ras.authority.resource.RASResourceService;
 import com.ras.index.Page;
 import com.ras.tool.CommonTool;
 
@@ -28,7 +29,7 @@ import com.ras.tool.CommonTool;
 public class RASUserController{
 	
 	@Autowired
-	private AuthorityService service;
+	private RASUserService service;
 	
 	@RequestMapping({"","/"})
 	public ModelAndView AuthorityIndex(){
@@ -40,11 +41,16 @@ public class RASUserController{
 		return new ModelAndView("ras/authority/user/ras_user",map);
 	}
 	
-	@RequestMapping("/findauthritygrid")
-	public void findAuthrityGrid(AuthorityVo<?> vo,HttpServletRequest request,HttpServletResponse response){
-//    	Map<String, Object> map=new HashMap<String, Object>();
-//    	String modelName=request.getParameter("modelName");
-    	service.findAuthrityGrid(vo);
+	@RequestMapping("/findusergrid")
+	public void findAuthrityGrid(RASUserVo vo,HttpServletRequest request,HttpServletResponse response){
+    	service.findUserGrid(vo);
     	CommonTool.writeJSONToPage(response,vo );
+	}
+	
+	@RequestMapping("/saveuserrole")
+	public void saveUserRole(RASRoleVo vo,HttpServletRequest request,HttpServletResponse response){
+		//String[] roleids=request.getParameterValues("roleid");
+		service.saveUserRole(vo.getUserid(), vo.getRoleid(),vo.getOperate());
+		CommonTool.writeJSONToPage(response, "{\"success\":true}");
 	}
 }

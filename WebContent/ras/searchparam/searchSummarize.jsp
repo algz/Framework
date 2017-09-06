@@ -30,6 +30,7 @@
 			<!-- PAGE CONTENT BEGINS -->
 			<div class="row">
 				<div class="col-sm-12">
+					
 					<!-- #section:elements.tab -->
 					<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">

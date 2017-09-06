@@ -11,30 +11,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.core.shiro.authority.userManager.UserDao;
 
 @Repository
 public class SyswareUserDaoImpl implements SyswareUserDao {
 
+    @Autowired
+    private UserDao userDao;
+	
 	@Autowired
 	private SessionFactory sf;
 	
 	@Transactional
 	@Override
 	public User findByUsername(String loginName) {
-		User user=new User();
-		String sql="select * from SYSWARE_USER_VIEW where login_Name='"+loginName+"'";
-		Map<String,String> map=(Map<String,String>)sf.getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).uniqueResult();
-		if(map==null){
-			return null;
-		}else{
-			sql="select count(1) from ALGZ_USER t where t.username='"+loginName+"'";
-			BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
-			if(count.intValue()==0){
-				sql="insert into ALGZ_USER (id,Username,Password) "
-						+ "values('"+map.get("USER_ID")+"','"+map.get("LOGIN_NAME")+"','"+map.get("LOGIN_PASSWORD")+"')";
-				sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
+		User user=userDao.findByUsername(loginName);
+		if(user==null){
+			String sql="select * from SYSWARE_USER_VIEW where login_Name='"+loginName+"'";
+			Map<String,String> map=(Map<String,String>)sf.getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).uniqueResult();
+			if(map==null){
+				return null;
 			}
-			
+			user=new User();
+			user.setUsername(map.get("LOGIN_NAME"));
+			user.setPassword("111111");
+			user.setCname(map.get("USER_NAME"));
+			userDao.createUser(user);
+//			sql="insert into ALGZ_USER (id,Username,Password) "
+//					+ "values('"+map.get("USER_ID")+"','"+map.get("LOGIN_NAME")+"','111111')";
+//			sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
 		}
 		
 		return user;

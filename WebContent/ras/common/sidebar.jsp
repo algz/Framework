@@ -11,7 +11,7 @@
 				<script type="text/javascript">
 					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
 				</script>
-
+ 
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<button class="btn btn-success">

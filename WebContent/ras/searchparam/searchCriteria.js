@@ -30,10 +30,17 @@ $(function() {
 				dataTable.settings()[0].ajax.data={data:params};
 				dataTable.ajax.reload(); //必须用   
 				
-				$('#selectModelName').val("");
-				$('#selectBasicID').val("");
+//				$('#selectModelName').val("");
+//				$('#selectBasicID').val("");
 			})
 
+			$('#clearModelSelectBtn').on('click',function(){
+				$('#selectModelName').val("");
+				$('#selectBasicID').val("");
+				
+				$("#searchTable :checked").removeAttr("checked")
+			})
+			
 			// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
 			var dataTable = $('#searchTable')
 					// .wrap("<div class='dataTables_borderWrap' />") 
@@ -83,8 +90,9 @@ $(function() {
 									    //meta:它下面有三个参数
 									    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
 									    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
-									    return data;
-										//return "<a href='./searchsummarize?overviewID="+row.overviewID+"&option=load'>"+data+"</a>";
+									    //return data;
+									    //"<a target='_blank' href='./searchsummarize?overviewID="+row.overviewID+"&basicID="+row.basicID+"&option=load'>"+data+"</a>";
+										return "<a target='_blank' href='./searchsummarize?overviewID="+row.overviewID+"&option=load'>"+data+"</a>";
 									}
 								}, {
 									"title" : "中文名称",
@@ -120,7 +128,7 @@ $(function() {
 			        	'<td width="50">' +
 			        	'<label class="pos-rel"><input class="ace" type="checkbox" value="'+data[i].basicID+'"><span class="lbl"></span></label></td>'+
 			            '<td>'+
-			            	"<a href='./searchsummarize?overviewID="+data[i].overviewID+"&basicID="+data[i].basicID+"&option=load'>"+data[i].dataSource+"</a>"+
+			            	"<a target='_blank' href='./searchsummarize?overviewID="+data[i].overviewID+"&basicID="+data[i].basicID+"&option=load'>"+data[i].dataSource+"</a>"+
 			            '</td>'+
 			        '</tr>';
 		}
@@ -147,7 +155,6 @@ $(function() {
 			org_val=org_val.indexOf(",")==0?org_val.substring(1):org_val;
 			$('#selectBasicID').val(org_val);
 		}
-
 	})
 	
 	/**
@@ -232,7 +239,7 @@ $(function() {
 		    })
 	
 	function StandardPost(url,args){
-        var form = $("<form method='post'></form>"),
+        var form = $("<form method='post' target='_blank'></form>"),
             input;
         form.attr({"action":url});
         $.each(args,function(key,value){        	
@@ -341,7 +348,7 @@ $(function() {
 //				$("#modelName").val(arr);
 				$("#modelName").val($('#selectModelName').val());
 				
-				$('#modal-form').modal().on('show.bs.modal',function(){
+				$('#modal-form').on('show.bs.modal',function(){
 					$("#xAxisBtn").val("");
 					$("#xAxisBtn").trigger("chosen:updated");
     				$("#yAxisBtn").val("");
@@ -351,7 +358,7 @@ $(function() {
 						chart=null;
 						//chart.destroy();
 					}
-				});
+				}).modal();
 			})
     
 		})

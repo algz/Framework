@@ -29,12 +29,8 @@
 		
 		<page:page page="${page }">
 			<!-- PAGE CONTENT BEGINS -->
-			ras_user.jsp
-			authentication  [ɔːˌθentɪ'keɪʃn] n. 证明；鉴定
-authorization [ˌɔːθərə'zeɪʃn] n. 授权(书)；批准
-authority  [ə'θɔːrəti] n. 权力；官方；当局；职权；权威
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-xs-6">
 					
 					<div class="table-header">
 						用户权限
@@ -42,14 +38,34 @@ authority  [ə'θɔːrəti] n. 权力；官方；当局；职权；权威
 
 					<!-- <div class="table-responsive"> -->
 					<div class="btn-group">
-						<a class="btn btn-sm" type="button" href="./addmodel">授权</a>
-						<!-- <button class="btn btn-sm" type="button">修改</button>
+						<button class="btn btn-sm" type="button">添加</button>
+						<button class="btn btn-sm" type="button">修改</button>
+						<button class="btn btn-sm" type="button">删除</button>
+					</div>
+					<!-- <div class="dataTables_borderWrap"> -->
+					<div>
+										
+						<table id="table-user" class="table table-striped table-bordered table-hover">
+						</table>
+					</div>
+				</div>
+				
+				<div class="col-xs-6">
+					
+					<div class="table-header">
+						角色权限
+					</div>
+
+					<!-- <div class="table-responsive"> -->
+					<div class="btn-group">
+					 	<button id="authorizeBtn" disabled class="btn btn-sm" type="button">授权</button>
+						<!-- <a class="btn btn-sm" type="button" href="./addmodel">授权</a>
 						<button class="btn btn-sm" type="button">删除</button> -->
 					</div>
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
 										
-						<table id="table-authority" class="table table-striped table-bordered table-hover">
+						<table id="table-role" class="table table-striped table-bordered table-hover">
 						</table>
 					</div>
 				</div>

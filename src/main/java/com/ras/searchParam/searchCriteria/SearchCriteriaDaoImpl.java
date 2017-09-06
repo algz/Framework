@@ -128,7 +128,7 @@ public class SearchCriteriaDaoImpl implements SearchCriteriaDao {
 				if(tag.getEnname().toUpperCase().equals(entry.getKey().toUpperCase())){
 					switch (tag.getUi_type()){
 						case "text":
-							paramSQL.append(" and Upper("+entry.getKey()+") like '%"+entry.getValue().toUpperCase()+"%' ");
+							paramSQL.append(" and Upper("+entry.getKey()+") like '"+entry.getValue().toUpperCase()+"%' ");
 							break;
 						case "number":
 							paramSQL.append(" and "+entry.getKey()+" = "+entry.getValue()+" ");

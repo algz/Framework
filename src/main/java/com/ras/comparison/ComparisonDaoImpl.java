@@ -11,7 +11,12 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ras.personal.report.Report;
+import com.ras.personal.report.ReportContentKey;
+import com.ras.personal.report.ReportContentVal;
 import com.ras.searchParam.SearchParam;
+
+import algz.platform.util.Common;
 
 @Repository
 public class ComparisonDaoImpl implements ComparisonDao {
@@ -46,6 +51,7 @@ public class ComparisonDaoImpl implements ComparisonDao {
 		paramSQL.append(" left join ras_aircraft_capability ac on ac.basicid=ab.id ");
 		paramSQL.append(" left join ras_aircraft_dynamic ad on ad.basicid=ab.id ");
 		paramSQL.append(" left join ras_aircraft_system asys on asys.basicid=ab.id ");
+		paramSQL.append(" left join ras_aircraft_other aother on aother.basicid=ab.id ");
 //		paramSQL.append(" where ao.modelname in (:params)");
 		paramSQL.append(" where ab.id in (:params)");
 		List<Map<String,String>> mapList=sf.getCurrentSession().createSQLQuery(paramSQL.toString())
@@ -101,4 +107,29 @@ public class ComparisonDaoImpl implements ComparisonDao {
 		return null;*/
 	}
 
+	@Override
+	public void saveReport(String reportName,String reportDes, String[] reportContent) {
+		Report report=new Report();
+		report.setReportName(reportName);
+		report.setReportDes(reportDes);
+		report.setEditor(Common.getLoginUser().getUserid());
+		sf.getCurrentSession().save(report);
+		for(String rec:reportContent){
+			String[] arr=rec.split(",");
+			ReportContentKey contentKey=new ReportContentKey();
+			contentKey.setReportID(report.getReportID());
+			contentKey.setContentKey(arr[0]);
+			sf.getCurrentSession().save(contentKey);
+			
+			for(int i=1;i<arr.length;i++){
+				ReportContentVal contentVal=new ReportContentVal();
+				contentVal.setContentKeyID(contentKey.getReportContentKeyID());
+				contentVal.setContentVal(arr[i]);
+				contentVal.setContentValSeq(i+"");
+				sf.getCurrentSession().save(contentVal);
+			}
+		}
+		
+	}
+	
 }

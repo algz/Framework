@@ -10,7 +10,7 @@ public interface ParamConfigDao {
 	
 	public String addTag(SearchParam tag);
 	
-	public void modifyTag(SearchParam tag);
+	public void modifyTag(SearchParam tag)throws Exception;
 	
-	public void delTag(String[] ids);
+	public void delTag(String[] ids)throws Exception;
 }

@@ -54,7 +54,7 @@
 
 			
 			<div class="hr hr8 hr-dotted"></div>
-			<div id="tab_row" class="row hidden">
+			<div id="tab_row" class="row hidden1">
 				<div class="col-sm-12">
 					<tab:tab titles="参数,图片,文档" paths="param.jsp,picture.jsp,archive.jsp"/>
 				</div><!-- /.col -->	

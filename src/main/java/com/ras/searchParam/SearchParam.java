@@ -58,6 +58,16 @@ WARN: HHH000113: GUID identifier generated: 55E39EEA498647AD80CB79A5EF78EC9D
 	@Column(name="ONLYREAD")
 	private String onlyRead;
 	
+	@Column(name="UNIT")
+	private String unit;
+	
+	@Column(name="REMARK")
+	private String remark;
+	
+	//@Transient
+	@Column(name="parent_id")
+	private String parent_id;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 //	@LazyToOne(LazyToOneOption.PROXY)
 	@JoinColumn(name="PARENT_ID",updatable=false,insertable=false)
@@ -70,9 +80,7 @@ WARN: HHH000113: GUID identifier generated: 55E39EEA498647AD80CB79A5EF78EC9D
 //	 @LazyCollection(LazyCollectionOption.FALSE)
 	private Set<SearchParam> searchTags;
 
-	//@Transient
-	@Column(name="parent_id")
-	private String parent_id;
+
 	
 	public Long getId() {
 		return id;
@@ -160,7 +168,24 @@ WARN: HHH000113: GUID identifier generated: 55E39EEA498647AD80CB79A5EF78EC9D
 		this.parent_id = parent_id;
 	}
 
+	public String getUnit() {
+		return unit;
+	}
 
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+
+	
 	
 	
 	

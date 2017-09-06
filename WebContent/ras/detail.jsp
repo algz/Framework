@@ -25,7 +25,7 @@
 
 	<body class="no-skin">
 		<!-- #section:basics/navbar.layout -->
-		<jsp:include  page="common/navbar1.jsp"/> 
+		<jsp:include  page="common/navbar.jsp"/> 
 		<!-- /section:basics/navbar.layout -->
 		
 		<div class="main-container" id="main-container">

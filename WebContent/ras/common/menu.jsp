@@ -2,6 +2,7 @@
 <%@page import="org.springframework.context.ApplicationContext" %>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@page import="algz.platform.core.shiro.authority.resourceManager.*" %>
+<%@page import="algz.platform.util.Common" %>
 <%@page import="java.util.*" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="menu" tagdir="/WEB-INF/tags/uiframe/menu" %> 
@@ -27,7 +28,7 @@ strBackUrl=httpRequest.getAttribute("javax.servlet.include.request_uri")+"111";
 
 	//获取ApplicationContext.xml文件中定义的BEAN
 	ResourceService resourceService=(ResourceService)ac.getBean("resourceServiceImpl");
-	List<Resource> list=resourceService.findAll(pathUrl);
+	List<Resource> list=resourceService.findAllByUser(Common.getLoginUser(),pathUrl);
 	request.setAttribute("menus", list);
 	
 
@@ -38,7 +39,7 @@ strBackUrl=httpRequest.getAttribute("javax.servlet.include.request_uri")+"111";
 				<script type="text/javascript">
 					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
 				</script>
-
+<%-- 
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 				    <!-- 屏幕大窗口状态 -->
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
@@ -72,7 +73,7 @@ strBackUrl=httpRequest.getAttribute("javax.servlet.include.request_uri")+"111";
 						<span class="btn btn-danger"></span>
 					</div>
 				</div><!-- /.sidebar-shortcuts -->
-
+--%>
 				<menu:menu menus="${menus }" hover="hover" />
 
 				<!-- #section:basics/sidebar.layout.minimize -->

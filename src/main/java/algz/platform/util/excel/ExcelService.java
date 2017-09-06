@@ -8,7 +8,7 @@ import org.springframework.web.servlet.View;
 
 public interface ExcelService {
 
-	public abstract View createExcelView(ModelMap model,HttpServletRequest request,
+	public abstract ExcelView createExcelView(ModelMap model,HttpServletRequest request,
 			HttpServletResponse response) throws Exception;
 
 }

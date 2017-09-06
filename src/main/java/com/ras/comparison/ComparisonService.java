@@ -7,4 +7,6 @@ public interface ComparisonService {
 	public void findModelGird(ComparisonVo vo);
 	
 	public List<?> findComparisonDetailGrid(String[] modelNames,String[] basicID);
+	
+	public void saveReport(String reportName,String reportDes,String[] reportContent);
 }

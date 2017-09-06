@@ -26,6 +26,16 @@ $(function(){
 		        },							
 				//deferLoading:0, //延迟加载(值为0,即默认不加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
 				"columns" : [{
+									data:null,
+									class : "center",
+									width:50,
+//									"defaultContent": '',
+									render: function(data, type, row, meta){
+										//icon expand-icon glyphicon glyphicon-minus -
+										//icon expand-icon glyphicon glyphicon-plus + 
+										return '<i class="icon expand-icon glyphicon glyphicon-plus "></i>';
+									}
+								},{
 						"title" : "",/* data:'name', */
 						data:null,
 						sorting : false,
@@ -76,53 +86,154 @@ $(function(){
 				}
 	});
 	
+	function template (data ) {
+		var template='<table class="subTable table table-striped table-bordered table-hover" ><tbody>';
+		for(var i=0;i<data.length;i++){
+			template+='<tr>'+
+			        	'<td width="50">' +
+			        	'<label class="pos-rel"><input class="ace" type="checkbox" value="'+data[i].basicID+'"><span class="lbl"></span></label></td>'+
+			            '<td>'+
+			            	"<a href='./searchsummarize?overviewID="+data[i].overviewID+"&basicID="+data[i].basicID+"&option=load'>"+data[i].dataSource+"</a>"+
+			            '</td>'+
+			        '</tr>';
+		}
+		template+='</tbody></table>';
+		return template;
+	}
+	
+	$('#comparison-table tbody').on('click', 'td .expand-icon', function () {
+        var tr = $(this).closest('tr');
+        var row = dataTable.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            $(this).removeClass('glyphicon-minus');
+            
+        }else {
+            // Open this row
+        	if(row.child()==null){
+            	$.ajax({
+            		method:'Post',
+            		url:'../searchparam/searchcriteriasubgird',
+            		data:{
+            			overviewID:row.data().overviewID
+            		},
+            		success:function(data){
+            			row.child(template(data.data) ).show();
+            		}
+            	})
+            }else{
+            	row.child.show();
+            }
+            
+            $(this).addClass('glyphicon-minus');
+        }
+    } );
+	
 	$("form").submit(function(e){
 		var s=$(":hidden[name=modelName]").val();
+		
 		if(s==""){
 			e.preventDefault();
 			alert("请选择机型!")
 		}
 	})
 	
-	$(".table-header").on('click','button.close',function(){
-		$(this).parent().remove();
-		var s=$(":hidden[name=modelName]");
-		s.val("");
-		$(".table-header span").each(function(i){
-			var v=$(this).clone().children().remove().end().text();
-			s.val(s.val()+(i!=0?",":"")+v)
-		})
-	})
+//	$(".table-header").on('click','button.close',function(){
+//		$(this).parent().remove();
+//		var s=$(":hidden[name=modelName]");
+//		s.val("");
+//		$(".table-header span").each(function(i){
+//			var v=$(this).clone().children().remove().end().text();
+//			s.val(s.val()+(i!=0?",":"")+v)
+//		})
+//	})
 	
 			/**
 		     * Grid行选 多选
 		     */
 //		    var selectModelParamRowData=null;
-			$('#comparison-table tbody').on('click', 'tr', function () {
-				var data=dataTable.rows(this).data()[0];
-				if(data==null){
-					return;
-				}
-				var element=$(":hidden[name=modelName]");
-				var s=true;
-				element.val("");
-				$(".table-header span").each(function(i){
-					var v=$(this).clone().children().remove().end().text();
-					if(v==data.modelName){
-						s=false;
-						return ;
-					}
-					element.val(v+(element.val()==""?"":(","+element.val())))
-				})
-				 if(s){
-				 	$(".table-header").append('<span class="btn btn-xs">'+data.modelName+'<button class="close" type="button">×</button></span> ');
-				 }
-				 element.val(data.modelName+(element.val()==""?"":",")+element.val())
-			});
+//			$('#comparison-table tbody').on('click', 'tr', function () {
+//				var data=dataTable.rows(this).data()[0];
+//				if(data==null){
+//					return;
+//				}
+//				var element=$(":hidden[name=modelName]");
+//				var s=true;
+//				element.val("");
+//				$(".table-header span").each(function(i){
+//					var v=$(this).clone().children().remove().end().text();
+//					if(v==data.modelName){
+//						s=false;
+//						return ;
+//					}
+//					element.val(v+(element.val()==""?"":(","+element.val())))
+//				})
+//				 if(s){
+//				 	$(".table-header").append('<span class="btn btn-xs">'+data.modelName+'<button class="close" type="button">×</button></span> ');
+//				 }
+//				 element.val(data.modelName+(element.val()==""?"":",")+element.val())
+//			});
 	
+	$('#comparison-table').on('click','.subTable :checkbox',function(){
+		var modelName=$($(this).closest('.subTable').closest('tr').prev('tr').children('td')[2]).text();
+		if(modelName==null){
+			return;
+		}
+		var element=$(":hidden[name=modelName]");
+//		var s=true;
+//		element.val("");
+//		$(".table-header span").each(function(i){
+//			var v=$(this).clone().children().remove().end().text();
+//			if(v==modelName){
+//				s=false;
+//				return ;
+//			}
+//			element.val(v+(element.val()==""?"":(","+element.val())))
+//		})
+//		 if(s){
+//		 	$(".table-header").append('<span class="btn btn-xs">'+modelName+'<button class="close" type="button">×</button></span> ');
+//		 }
+//		 element.val(modelName+(element.val()==""?"":",")+element.val())
+		///////////////////
+		var org_text=$(":hidden[name=modelName]").val();
+		var org_val=$(":hidden[name=basicID]").val() 
+		var text=$(this).closest('tr').find('a').text()+"("+modelName+")";
+		var val=$(this).val();
+		if(this.checked){
+			//添加
+			if(org_val.indexOf(val)=="-1"){
+				$(".table-header").append('<span class="btn btn-xs">'+modelName+'<button class="close" type="button"></button></span> ');
+			 	element.val(modelName+(element.val()==""?"":",")+element.val())
+				$(":hidden[name=modelName]").val(org_text==""?text:(org_text+","+text));
+				$(":hidden[name=basicID]").val(org_val==""?val:org_val+","+val);
+			}
+
+		}else{
+			//删除
+			$(".table-header span").each(function(i){
+				var v=$(this).clone().children().remove().end().text();
+				if(v==modelName){
+					$(this).remove();
+				}
+				//element.val(v+(element.val()==""?"":(","+element.val())))
+			})
+			org_text=org_text.replace(","+text,"").replace(text,"").replace(",,",",");
+			org_text=org_text.indexOf(",")==0?org_text.substring(1):org_text;
+			$(":hidden[name=modelName]").val(org_text);
+			org_val=org_val.replace(","+val,"").replace(val,"").replace(",,",",");
+			org_val=org_val.indexOf(",")==0?org_val.substring(1):org_val;
+			$(":hidden[name=basicID]").val(org_val);
+		}
+	})
+			
 	
 	$("#submitBtn").click(function(){
-		dataTable.settings()[0].ajax.data={modelName:$("#modelName").val().trim()};		
+		dataTable.settings()[0].ajax.data={
+			modelName:$("#modelName").val(),//$(":hidden[name=modelName]").val().trim(),
+			basicID:$(":hidden[name=basicID]").val().trim()
+			};		
 		dataTable.ajax.reload();
 	})
 })

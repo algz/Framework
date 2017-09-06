@@ -13,4 +13,6 @@ public interface AnalyzeService {
 	public List<?> findModelForTypeahead(String modelName);
 	
 	public JSONArray analyzeChart(String[] modelNames,String[] axis);
+	
+	public JSONArray getAircraftAll();
 }

@@ -20,6 +20,8 @@ public interface DataDao {
 	
 	public Map<String,String> addModelParamPage(DataVo vo);
 	
+	public JSONObject loadModelParam(DataVo vo);
+	
 	public JSONObject findModelParam(DataVo vo);
 	
 	public void delModelImageFile(String overviewID);

@@ -12,8 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftPicture.AircraftPicture;
-import com.ras.aircraftTag.AircraftTag;
-import com.ras.aircraftTag.AircraftTagDao;
 import com.ras.tool.CommonTool;
 
 import algz.platform.util.Common;
@@ -21,21 +19,27 @@ import algz.platform.util.Common;
 @Repository
 public class AircraftArchiveDaoImpl implements AircraftArchiveDao {
 
-	@Autowired
-	private AircraftTagDao aircraftTagDao;
+//	@Autowired
+//	private AircraftTagDao aircraftTagDao;
 	
 	@Autowired
 	private SessionFactory sf;
 	
 	public Integer count(AircraftArchive archive){
-		String sql="select count(1) from RAS_AIRCRAFT_ARCHIVE";
+		String sql="select count(1) from RAS_AIRCRAFT_ARCHIVE raa where 1=1 ";
+		if(archive.getOverviewID()!=null){
+			sql+=" and raa.overviewid='"+archive.getOverviewID()+"'";
+		}
 		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
 		return count.intValue();
 	}
 	
 	@Override
 	public List<AircraftArchive> find(AircraftArchive archive,Integer start,Integer length) {
-		String sql="select * from RAS_AIRCRAFT_ARCHIVE t";
+		String sql="select * from RAS_AIRCRAFT_ARCHIVE raa where 1=1 ";
+		if(archive.getOverviewID()!=null){
+			sql+=" and raa.overviewid='"+archive.getOverviewID()+"'";
+		}
 		return sf.getCurrentSession().createSQLQuery(sql)
 									 .addEntity(AircraftArchive.class)
 								     .setFirstResult(start)
@@ -87,7 +91,7 @@ public class AircraftArchiveDaoImpl implements AircraftArchiveDao {
 			String hql="delete AircraftArchive t where t.archiveID='"+id+"'";
 			sf.getCurrentSession().createQuery(hql).executeUpdate();
 			
-			aircraftTagDao.delRelationID(id);
+//			aircraftTagDao.delRelationID(id);
 		}
 		
 

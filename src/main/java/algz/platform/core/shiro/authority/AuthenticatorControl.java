@@ -47,6 +47,7 @@ public class AuthenticatorControl {
 //                return "/login";  
 //            }  
             UsernamePasswordToken token=new UsernamePasswordToken(user.getUsername(), user.getPassword());
+            //token.setRememberMe(true);  //通过令牌设置“记住我”的功能。  
             //使用权限工具进行用户登录，登录成功后跳到shiro配置的successUrl中，与下面的return没什么关系！  
             subject.login(token);  
 

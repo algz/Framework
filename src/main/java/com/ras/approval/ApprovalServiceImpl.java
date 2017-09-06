@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.ras.tool.CommonTool;
 import com.ras.ws.client.CXFClientUtil;
 
 import algz.platform.core.shiro.authority.roleManager.Role;
@@ -42,28 +43,42 @@ public class ApprovalServiceImpl implements ApprovalService {
 	private ApprovalDao dao;
 	
 	@Autowired
-	private UserService userservice;
-	
-	@Autowired
 	private RoleService roleservice;
 	
 	
 	@Value("${P2M_webservice}")
 	private String P2M_webservice;
 	
+	@Value("${P2M_method}")
+	private String P2M_method;
+	
 	/**
 	 * 提交审批
 	 * @param approval
 	 * @return
+	 * @throws Exception 
 	 */
 	@Transactional
 	@Override
-	public String submitApproval(Approval approval) {
+	public String submitApproval(Approval approval) throws Exception {
+		
 		approval.setSubmitter(Common.getLoginUser().getUserid()); //提交人
-		approval.setApprovalStatus("1");
-		String msg=dao.saveApproval(approval);
-		if(msg!=null){
-			return msg;
+
+		//如果是数据管理员,则直接审批通过
+		if(CommonTool.isDataManager()){
+			approval.setApprovalStatus("2");//审批状态:0或空未审批,1审批中,2审批完成
+			approval.setApprovalResult("1"); //审批结果:1同意;0不同意
+			String msg=dao.saveApproval(approval);
+			if(msg!=null){
+				return msg;
+			}
+			return "数据管理员直接审批通过!";
+		}else{
+			approval.setApprovalStatus("1");
+			String msg=dao.saveApproval(approval);
+			if(msg!=null){
+				return msg;
+			}
 		}
 		
 		//准备提交其它系统的webservice数据
@@ -78,12 +93,14 @@ public class ApprovalServiceImpl implements ApprovalService {
 		m.put("approvalUserIds", users.get(0).getUsername()); //审批人id=其它系统loginname
 		
 		String param=writeToXmlString(m);
-		Object[] s=CXFClientUtil.invoke(P2M_webservice, "SayHi", param);
-		Map<String,String> retMap=readerXmlToObject(s[0].toString());
-		if(retMap.get("receiveapproval").equals("true")){
-			approval.setP2mApprovalID(retMap.get("approvalID"));
+		Object[] s=CXFClientUtil.invoke(P2M_webservice, P2M_method, param);
+		Map<String,String> retMap=readerXmlToObject(s[0].toString().replace("\n  ", ""));
+		if(retMap.get("result")!=null&&retMap.get("result").equals("true")){
+			approval.setP2mApprovalID(retMap.get("approvalId"));
+		}else{
+			throw new Exception(retMap.get("errorInfo"));
 		}
-		return retMap.get("returnreason");
+		return retMap.get("errorInfo");
 		
 	}
 
@@ -166,4 +183,10 @@ public class ApprovalServiceImpl implements ApprovalService {
         }  
         return m;
     }
+
+
+	@Override
+	public void findApprovalGrid(ApprovalVo vo) {
+		dao.findApprovalGrid(vo);
+	}
 }

@@ -17,9 +17,9 @@ public interface UserDao {
 
     User findOne(String userId);
 
-    List<User> findAll();
 
-    public List<User> findAll(Integer start, Integer limit);
+    public List<User> findAll(User user,Integer start, Integer limit);
+    public Integer countAll(User user);
     
     User findByUsername(String username);
 

@@ -6,17 +6,22 @@
 var Dtable = $('#table').DataTable();
 
 //1.单选.首先获取datatable对象(注意大小写`DataTable()`)：
-$('#table tbody').on('click', 'tr', function () {
-    if ($(this).hasClass('selected') ) {
+//所有 table 有效,需放在所有 dataTable 后面
+$('table tbody').on('click', 'tr', function () {
+	/* if ($(this).hasClass('selected') ) {
        $(this).removeClass('selected');
     } else {
-       table.$('tr.selected').removeClass('selected');
+       $(this).siblings(".selected").removeClass('selected');
        $(this).addClass('selected');
-    }
+    } */
+	$(this).siblings(".selected").removeClass('selected'); //.siblings() 筛选所有同辈元素
+	$(this).toggleClass('selected');
 })
 
+
 //2多选(必须放到 Dtable配置后下面)
-$('#table tbody').on('click', 'tr', function () {
+//所有 table 有效,需放在所有 dataTable 后面
+$('table tbody').on('click', 'tr', function () {
 	/*多选框的多选
 	var curCheckbox=$(this).find(':checkbox')[0];
     if(curCheckbox==null){
@@ -27,26 +32,23 @@ $('#table tbody').on('click', 'tr', function () {
     $(this).toggleClass('selected');
 })
 
-//3.获取选中的行
 var Dtable = $('#demo').DataTable();
-$('button').click(function () {
-    alert( Dtable.rows('.selected').data().length +' row(s) selected' );
-});
+//3.获取选中的行
+Dtable.rows('.selected').data().length;
+//获取当前行: Dtable.rows(this).data().length
 
 //4.删除选中的行
-$('button').click(function () {
-    //单行删除
-    //Dtable.row('.selected').remove().draw(false);
-    //多行删除
-    Dtable.rows('.selected').remove().draw(false);
-});
+//单行删除
+Dtable.row('.selected').remove().draw(false);
+//多行删除
+Dtable.rows('.selected').remove().draw(false);
+
 
 //5.刷新Grid
-$('#table-param').DataTable()==Dtable;
 Dtable.settings()[0].ajax.data={key:val};
-Dtable.ajax.reload();
+Dtable.ajax.reload(); //如果Dtable = $('#table').dataTable(); 刷新代码为 Dtable.api().ajax.reload();
 
-/*6.序号
+/**6.序号
 {
 	class : "center",
 	title : "序号", 

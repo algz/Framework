@@ -46,4 +46,9 @@ public class SearchParamServiceImpl implements SearchParamService {
 	public JSONObject addNoteForTagInput(String overviewID, String[] inputNames) {
 		return dao.addNoteForTagInput(overviewID, inputNames);
 	}
+
+	@Override
+	public Map<String, List<String>> findAllCheckboxTypeList() {
+		return dao.findAllCheckboxTypeList();
+	}
 }

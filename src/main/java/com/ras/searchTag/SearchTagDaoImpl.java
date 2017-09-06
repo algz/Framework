@@ -19,8 +19,6 @@ import com.ras.aircraftArchive.AircraftArchive;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftPicture.AircraftPicture;
 import com.ras.aircraftPicture.AircraftPictureDao;
-import com.ras.aircraftTag.AircraftTag;
-import com.ras.aircraftTag.AircraftTagDaoImpl;
 import com.ras.tool.CommonTool;
 import com.sun.org.apache.bcel.internal.generic.Type;
 
@@ -33,8 +31,8 @@ import javassist.util.proxy.ProxyFactory;
 @Repository
 public class SearchTagDaoImpl implements SearchTagDao {
 	
-	@Autowired
-	private AircraftTagDaoImpl aircraftTagDao;
+//	@Autowired
+//	private AircraftTagDaoImpl aircraftTagDao;
 	
 	@Autowired
 	private AircraftPictureDao aircraftPictureDao;
@@ -62,7 +60,8 @@ public class SearchTagDaoImpl implements SearchTagDao {
 	public void findTagSearchForParamGird(SearchTagVo vo) {
 		String sql="from ras_aircraft_overview ao "
 				+ "inner join ras_aircraft_basic ab on ab.overviewid=ao.id "
-				+ "where Lower(ab.tag) like '%"+vo.getTag().toLowerCase()+"%' ";
+				+ "where Lower(ab.tag) like '%"+vo.getTag().toLowerCase()+"%' "
+				+ " or Lower(ao.modelName) like '%"+vo.getTag().toLowerCase()+"%' ";
 		
 		//权限控制
 		if(!CommonTool.isDataManager()){

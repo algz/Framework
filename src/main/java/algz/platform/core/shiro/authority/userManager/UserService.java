@@ -34,8 +34,8 @@ public interface UserService {
 
     public List<User> findAll();
     
-    public List<User> findAll(Integer start,Integer limit);
-
+    public List<User> findAll(User user,Integer start, Integer limit);
+    public Integer countAll(User user);
     /**
      * 根据用户名查找用户
      * @param username

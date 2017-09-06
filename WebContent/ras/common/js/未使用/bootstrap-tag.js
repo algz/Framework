@@ -1,5 +1,5 @@
 /* ==========================================================
- * bootstrap-tag.js v2.2.5
+ * bootstrap-tag.js v2.3.0
  * https://github.com/fdeschenes/bootstrap-tag
  * ==========================================================
  * Copyright 2012 Francois Deschenes.
@@ -68,7 +68,11 @@
               if ( event.keyCode != 9 ) event.preventDefault()
               that.process()
             } else if ( event.keyCode == 188 ) {
-              if ( !that.element.siblings('.typeahead').length || that.element.siblings('.typeahead').is(':hidden') ) {
+              if ( !that.options.autocompleteOnComma ) {
+                event.preventDefault()
+                that.process()
+              }
+              else if ( !that.element.siblings('.typeahead').length || that.element.siblings('.typeahead').is(':hidden') ) {
                 event.preventDefault()
               } else {
                 that.input.data('typeahead').select()
@@ -87,7 +91,7 @@
             that.element.siblings('.tag').removeClass('tag-important')
           }
         })
-        .bs_typeahead({
+        .typeahead({
           source: that.options.source
         , matcher: function ( value ) {
             return ~value.toLowerCase().indexOf(this.query.toLowerCase()) && (that.inValues(value) == -1 || that.options.allowDuplicates)
@@ -95,7 +99,7 @@
         , updater: $.proxy(that.add, that)
         })
 
-      $(that.input.data('bs_typeahead').$menu).on('mousedown', function() {
+      $(that.input.data('typeahead').$menu).on('mousedown', function() {
         that.skip = true
       })
 
@@ -121,7 +125,7 @@
       $('<span/>', {
         'class' : "tag"
       })
-      .text(value)
+      .text(value.toString())
       .append($('<button type="button" class="close">&times;</button>')
         .on('click', function () {
           that.remove(that.element.siblings('.tag').index($(this).closest('.tag')))
@@ -185,6 +189,7 @@
   $.fn.tag.defaults = {
     allowDuplicates: false
   , caseInsensitive: true
+  , autocompleteOnComma: false
   , placeholder: ''
   , source: []
   }
@@ -203,4 +208,4 @@
       that.tag(that.data())
     })
   })
-}(window.jQuery);
+}(window.jQuery)
