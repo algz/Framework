@@ -1,5 +1,6 @@
 package com.ras.searchTag;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -123,7 +124,7 @@ public class SearchTagController {
      */
     @RequestMapping(value={"/findtagsearchgird"})
     public void findTagSearchGird(SearchTagVo vo,HttpServletRequest request,HttpServletResponse response) throws NoSuchMethodException, IllegalAccessException{
-    	if(vo.getTag()!=null){
+    	if(vo.getTag()!=null&&!vo.getTag().equals("")){
     		service.findTagSearchGird(vo);
     	}
     	MethodHandles.Lookup lookup = MethodHandles.lookup();  
@@ -131,6 +132,24 @@ public class SearchTagController {
         
 		CommonTool.writeJSONToPage(response, vo,mh);
 		
+    }
+    
+    /**
+     * 查找所有的标签名称
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value="/findtagfortypeahead")
+    public void findTagForTypeahead(HttpServletRequest request,HttpServletResponse response){
+    	String tagName=request.getParameter("tagName");
+    	if(tagName!=null){
+        	try {
+        		JSONArray ja=JSONArray.fromObject(service.findTagForTypeahead(tagName));
+    			response.getWriter().print(ja);
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    	}
     }
     
 }

@@ -26,8 +26,6 @@
 
 	<body >
 
-
-		
 		<page:page page="${page }">
 			<!-- PAGE CONTENT BEGINS -->
 			<div>
@@ -36,26 +34,26 @@
 				</h3>
 				<div class="row">
 					<div class="col-xs-12">
-						<!-- PAGE CONTENT BEGINS -->
 						<form class="form-horizontal" role="form" action="./savemodel" method="post">
-							<input name="overviewID" type="hidden" value="${model.overviewID }"/>
-							<form:form-group id="modelName" label="机型名" value="${model.modelName }" simpleValidate="required"/>
-							<form:form-group id="modelCname" label="中文名称" value="${model.modelCname }" />
-							<form:form-group id="modelEname" label="英文名称" value="${model.modelEname }"/>
-							<%-- <form:form-group id="tag" label="标签名称" value="${model.tag }"/> --%>
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right" > 上传图片 </label>
-								<div class="col-xs-10 col-sm-5">
-									<span class="block input-icon input-icon-right">
-										<input id="upfile-image" name='file' type="file" >
-									</span>
+								<input name="overviewID" type="hidden" value="${model.overviewID }"/>
+								<form:form-group id="modelName" label="机型名" value="${model.modelName }" simpleValidate="required"/>
+								<form:form-group id="modelCname" label="中文名称" value="${model.modelCname }" />
+								<form:form-group id="modelEname" label="英文名称" value="${model.modelEname }"/>
+								<form:form-group id="tag" label="标签名称" value="${model.tag }"/>
+								<form:form-group id="category" label="分类名称" value="${model.category }"/>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" > 上传图片 </label>
+									<div class="col-xs-10 col-sm-5">
+										<span class="block input-icon input-icon-right">
+											<input id="upfile-image" name='file' type="file" >
+										</span>
+									</div>
 								</div>
-							</div>
-							
-							<form:form-action >
-								<form:form-button buttonType="submit" id="submitBtn" label="提交" icon="fa-check" buttonClass="btn-info"/>
-								<form:form-button id="canle" label="取消" url="./"/>
-							</form:form-action>
+								
+								<form:form-action >
+									<form:form-button buttonType="submit" id="submitBtn" label="提交" icon="fa-check" buttonClass="btn-info"/>
+									<form:form-button id="canle" label="取消" url="./"/>
+								</form:form-action>
 						</form>
 					</div><!-- /.col -->
 				</div>
@@ -70,6 +68,10 @@
 		</plugin_css>
 		<plugin_js>
 		
+		<!-- 文本框扩展查询 -->
+		<script src="<%=basePath%>ras/common/js/typeahead.jquery.js"></script>			
+
+		
 		<!-- 文件上传 -->
 		<script src="<%=basePath%>ras/common/js/fileinput/fileinput.js"></script>
 		
@@ -79,6 +81,33 @@
 		
 <script type="text/javascript">
 	$(function(){
+		
+		/**
+		   标签
+		*/
+		$('#tag').typeahead(null,{
+			   source:function(query,process,aysprocess) {
+			   		var objs=$.get("../../searchtag/findtagfortypeahead",{tagName:query},function(data){
+//			       		var data=['name1','name2'];
+			   			aysprocess(eval(data)); //异步加载
+			   			//process(eval(data)); //同步加载
+			   		});//['name1','name2']
+			    	}
+		});
+		
+		/**
+		   机型分类
+		*/
+		$('#category').typeahead(null,{
+			   source:function(query,process,aysprocess) {
+			   		var objs=$.get("./findcategorynamefortypeahead",{categoryName:query},function(data){
+//			       		var data=['name1','name2'];
+			   			aysprocess(eval(data)); //异步加载
+			   			//process(eval(data)); //同步加载
+			   		});//['name1','name2']
+			    	}
+		});
+		
 		 /**
          * 表单验证
          */

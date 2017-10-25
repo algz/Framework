@@ -8,5 +8,6 @@ public interface SearchTagService {
 	
 	public void findTagSearchGird(SearchTagVo vo);
 	
+	public List<?> findTagForTypeahead(String tagName);
 	
 }

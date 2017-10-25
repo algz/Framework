@@ -21,7 +21,7 @@ public interface RoleService {
      * @param username
      * @return
      */
-    public List<User> findUsernameByRole(Role role);
+    public List<User> findUsernameByRoleNames(String... roleName);
     
     public List<Role> findAll(Role role,Integer start,Integer length);
     public Integer countAll(Role role);

@@ -5,13 +5,18 @@ $(function(){
 		bootbox.setDefaults("locale","zh_CN"); 
 		bootbox.confirm("是否导出Excel?",function(result){
 				if(result){
-					$.ajax({
-						url:'',
-						data:'',
-						success:function(data){
-							alert(1+data)
-						}
-					})
+					window.location="/algz/excel/exportexcel?className=personalServiceImpl&methodName=exportReportToExcel&reportID="+$('#reportID').val()
+//					$.ajax({
+//						url:'/algz/excel/exportexcel',
+//						data:{
+//							className:'personalServiceImpl', //bean 名 =首字母小写的类名
+//							methodName:'exportReportToExcel',
+//							reportID:$('#reportID').val()
+//						},
+//						success:function(data){
+//							alert(1+data)
+//						}
+//					})
 				}
 			})
 	})
@@ -54,7 +59,7 @@ $(function(){
 //				bAutoWidth : false,
 				serverSide : true, // 开启服务器模式
 				ajax : {
-					url : "./findpersonalreportcontentgrid",
+					url : "./report/findpersonalreportcontentgrid",
 					data:{
 						reportID:$('#reportID').val()
 					}

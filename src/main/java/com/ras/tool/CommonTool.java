@@ -15,11 +15,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -27,19 +27,24 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.collection.internal.PersistentBag;
 import org.hibernate.proxy.pojo.javassist.JavassistLazyInitializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import algz.platform.core.shiro.authority.roleManager.Role;
 import algz.platform.util.Common;
-import algz.platform.util.json.JSONPropertyFilter;
-import algz.platform.util.json.JSONTools;
 import javafx.util.Callback;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -389,7 +394,7 @@ public class  CommonTool{
 	/**
 	 * 判断是否是数据管理员
 	 * @param roles
-	 * @return true 是数据管理员;false 不是数据管理员
+	 * @return true 是数据管理员,通过;false 不是数据管理员,添加查询自己编辑的数据.
 	 */
 	public static boolean isDataManager(){
 		List<Role> roles=Common.getLoginUser().getRoles();
@@ -402,6 +407,86 @@ public class  CommonTool{
 		}
 
 		return false;
+	}
+
+	/**
+	 * 回调接口,只能有一个方法.
+	 * 回调=接口+匿名类; 匿名类=lambda.
+	 * @author algz
+	 *
+	 */
+	public interface MethodCallBack  {
+		public String callBack(Field f, Object val);
+	}
+	
+	/**
+	 * 
+	 * @param sf
+	 * @param sql
+	 * @param example
+	 * @param start
+	 * @param length
+	 * @param MethodCallBack 参数回调(回调接口只能有一个方法)
+	 * @return
+	 */
+	public static <T> List<T> findEntitiesByProperty(SessionFactory sf,StringBuilder sql,Object example,Integer start,Integer length,MethodCallBack callback) {
+//		StringBuilder sql=new StringBuilder("select distinct * from "+tableName+" where 1=1 ");
+		
+		Field[] fs = example.getClass().getDeclaredFields();
+		try {
+			for (Field f : fs) {
+				f.setAccessible(true); 
+				Object val = f.get(example);
+				if(val!=null&&!val.equals("")){
+					//参数回调
+					if(callback!=null){
+						sql.append(callback.callBack(f,val));
+					}else{
+						Column col=f.getAnnotation(Column.class);
+						sql.append(" and LOWER("+col.name()+") = '"+val.toString().toLowerCase()+"'");
+						
+					}
+					
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		SQLQuery query=sf.getCurrentSession().createSQLQuery(sql.toString())
+						 .addEntity(example.getClass());
+		if(start!=null){
+			query.setFirstResult(start);
+		}
+		if(length!=null){
+			query.setMaxResults(length);
+		}
+		return query.list();
+	}
+	
+	/**
+	 * 复制对象
+	 * @param example
+	 * @return
+	 */
+	public static <T> T copyObject(T example) {
+//		String tableName=example.getClass().getAnnotation(Table.class).name();
+//		StringBuilder sql=new StringBuilder("select distinct * from "+tableName+" where 1=1 ");
+//		List<T> list=CommonTool.<T>findEntitiesByProperty(sf, sql, example, 0, 1, null);
+//		if(list.size()!=0){
+			T newObje=null;
+			try {
+				newObje=(T)example.getClass().newInstance();
+				BeanUtils.copyProperties(newObje, example);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} 
+			return newObje;
+//		}else{
+//			return null;
+//		}
 	}
 	
 //	 private static void printType (Object object) {

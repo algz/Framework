@@ -103,8 +103,12 @@ public class ArchiveDataController{
 	 */
     @RequestMapping(value={"/findarchivegrid"})
     public void findArchiveGrid(DataVo vo,HttpServletResponse response){
-    	service.findArchiveGrid(vo);
-		CommonTool.writeJSONToPage(response, vo);
+    	if(vo.getOverviewID()!=null){
+        	service.findArchiveGrid(vo);
+    	}
+    	CommonTool.writeJSONToPage(response, vo);
+    	
+
     }
 	
 	/**

@@ -13,8 +13,16 @@ public class SimpleSearchVo<T> extends ReturnVo<T> {
 	
 	private Map<String,String> paramMap;
 	
+	private String showPerson;
 	
 	
+	
+	public String getShowPerson() {
+		return showPerson;
+	}
+	public void setShowPerson(String showPerson) {
+		this.showPerson = showPerson;
+	}
 	public String getOnlyRead() {
 		return onlyRead;
 	}

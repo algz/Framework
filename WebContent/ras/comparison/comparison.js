@@ -1,4 +1,38 @@
 $(function(){
+
+	/**查询按钮
+	 */
+	$("#submitQueryBtn").click(function(){
+//		alert($('.chosen-select').val);
+		dataTable.settings()[0].ajax.data={
+			overviewIDs:$('.chosen-select').val()//,//$("#modelName").val(),//$(":hidden[name=modelName]").val().trim(),
+			//basicID:$(":hidden[name=basicID]").val().trim()
+			};		
+		dataTable.ajax.reload();
+	})
+	
+	/**机型下拉选择框
+	*/
+	$('#modelNameSelect').on('chosen:ready',function(e, params){
+		$.ajax({
+			url:'../analyze/getallaircraftforselect?d='+new Date(),
+			success:function(data){
+				var objs=JSON.parse(data);
+				for(var i=0;i<objs.length;i++){
+					$(".chosen-select").append("<option value='"+objs[i].overviewID+"'>"+objs[i].modelName+"</option>");
+					$(".chosen-select").trigger("chosen:updated");
+				}
+
+//				alert(data);
+			}
+		})
+	}).chosen({
+		allow_single_deselect : true,
+		width : '90%',
+		placeholder_text_multiple:'请选择一项'
+		//disable_search:true //关闭搜索框,默认为false.
+	})
+	
 	var dataTable=$('#comparison-table').DataTable({
 				//"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]], //定义每页显示数据数量
 				// "paging": false, //是否开启本地分页
@@ -93,7 +127,7 @@ $(function(){
 			        	'<td width="50">' +
 			        	'<label class="pos-rel"><input class="ace" type="checkbox" value="'+data[i].basicID+'"><span class="lbl"></span></label></td>'+
 			            '<td>'+
-			            	"<a href='./searchsummarize?overviewID="+data[i].overviewID+"&basicID="+data[i].basicID+"&option=load'>"+data[i].dataSource+"</a>"+
+			            	"<a href='../simplesearch/searchsummarize?overviewID="+data[i].overviewID+"&basicID="+data[i].basicID+"&option=load'>"+data[i].dataSource+"</a>"+
 			            '</td>'+
 			        '</tr>';
 		}
@@ -228,14 +262,6 @@ $(function(){
 		}
 	})
 			
-	
-	$("#submitBtn").click(function(){
-		dataTable.settings()[0].ajax.data={
-			modelName:$("#modelName").val(),//$(":hidden[name=modelName]").val().trim(),
-			basicID:$(":hidden[name=basicID]").val().trim()
-			};		
-		dataTable.ajax.reload();
-	})
 })
 
 

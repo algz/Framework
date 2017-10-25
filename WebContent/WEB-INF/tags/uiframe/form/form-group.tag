@@ -13,9 +13,9 @@
 <%@attribute name="style" rtexprvalue="true" required="false" description="样式" %>
 <%@attribute name="extData" rtexprvalue="true" required="false" description="扩展数据" %>
 <%@attribute name="simpleValidate" rtexprvalue="true" required="false" description="验证类型: required number email url digits(整数)"%>
-<%@attribute name="isMultiple" rtexprvalue="true" required="false" description="是否多文件上传.1支持,0或null(默认)不支持"%>
+<%@attribute name="isMultiple" rtexprvalue="true" required="false" description="type=file,是否多文件上传.1支持,0或null(默认)不支持;type=select,是否支持多选.1多选"%>
 
-<div class="form-group ${hidden!=null&&hidden!='false'?'hidden':''} ">
+<div id='form-${id }' class="form-group ${hidden!=null&&hidden!='false'?'hidden':''} ">
 	<label class="col-sm-3 control-label no-padding-right" for="${id }"> ${label } </label>
 	<div class="col-xs-10 col-sm-7">
 		<span class="block input-icon input-icon-right">

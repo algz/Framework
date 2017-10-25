@@ -28,115 +28,115 @@ public class AircraftCapability{
 	/**
 	 * 起飞速度(km/hr)
 	 */
-	@Column(name="TAKEOFF_SPEED")
+	@Column(name="TAKEOFFSPEED")
 	private Double takeoffSpeed;
 
 	/**
 	 * 着陆速度(km/hr)
 	 */
-	@Column(name="LANDING_SPEED",columnDefinition="number(10,4)")
+	@Column(name="LANDINGSPEED",columnDefinition="number(10,4)")
 	private Double landingSpeed;
 
 	/**
 	 * 起飞滑跑距离(m)
 	 */
-	@Column(name="TAKEOFF_DISTANCE",columnDefinition="number(10,4)")
+	@Column(name="TAKEOFFDISTANCE",columnDefinition="number(10,4)")
 	private Double takeoffDistance;
 
 	/**
 	 * 着陆滑跑距离(m)
 	 */
-	@Column(name="LANDING_DISTANCE",columnDefinition="number(10,4)")
+	@Column(name="LANDINGDISTANCE",columnDefinition="number(10,4)")
 	private Double landingDistance;
 
 	/**
 	 * 最大爬升率(m/s)
 	 */
-	@Column(name="MAX_CLIMB_RATE",columnDefinition="number(10,4)")
+	@Column(name="MAXCLIMBRATE",columnDefinition="number(10,4)")
 	private Double maxClimbRate;
 
 	/**
 	 * 最大稳定盘旋角速度实数	°/s
 	 */
-	@Column(name="MAX_SCAV",columnDefinition="number(10,4)")
+	@Column(name="MAXSCAV",columnDefinition="number(10,4)")
 	private Double maxSCAV;
 
 	/**
 	 * 最大瞬时盘旋角速度实数	°/s
 	 */
-	@Column(name="MAX_ICAV",columnDefinition="number(10,4)")
+	@Column(name="MAXICAV",columnDefinition="number(10,4)")
 	private Double maxICAV;
 
 	/**
 	 * 最大过载上限
 	 */
-	@Column(name="MAX_OVERLOAD_UP_LIMIT",columnDefinition="number(10,4)")
+	@Column(name="MAXOVERLOADUPLIMIT",columnDefinition="number(10,4)")
 	private Double maxOverloadUpLimit;
 
 	/**
 	 * 最大过载下限
 	 */
-	@Column(name="MAX_OVERLOAD_DOWN_LIMIT",columnDefinition="number(10,4)")
+	@Column(name="MAXOVERLOADDOWNLIMIT",columnDefinition="number(10,4)")
 	private Double maxOverloadDownLimt;
 
 	/**
 	 * 实用升限
 	 */
-	@Column(name="PRACTICAL_CEILING",columnDefinition="number(10,4)")
+	@Column(name="PRACTICALCEILING",columnDefinition="number(10,4)")
 	private Double practicalCeiling;
 
 	/**
 	 * 理论升限（theoretical ceiling）
 	 */
-	@Column(name="THEORETICAL_CEILING",columnDefinition="number(10,4)")
+	@Column(name="THEORETICALCEILING",columnDefinition="number(10,4)")
 	private Double theoreticalCeiling;
 
 	/**
 	 * 最大平飞速度（max level speed）
 	 */
-	@Column(name="MAX_LEVEL_SPEED",columnDefinition="number(10,4)")
+	@Column(name="MAXLEVELSPEED",columnDefinition="number(10,4)")
 	private Double maxLevelSpeed;
 
 	/**
 	 * 最大平飞马赫数（The maximum level flight Mach number）
 	 */
-	@Column(name="MAX_LEVEL_FLIGHT_MACH",columnDefinition="number(10,4)")
+	@Column(name="MAXLEVELFLIGHTMACH",columnDefinition="number(10,4)")
 	private Double maxLevelFlightMach;
 	
 	/**
 	 * 最大航程（机内油）（maximum range）
 	 */
-	@Column(name="MAX_RANGE_ENGINE_OIL",columnDefinition="number(10,4)")
+	@Column(name="MAXRANGEENGINEOIL",columnDefinition="number(10,4)")
 	private Double maxRangeEngineOil;
 
 	/**
 	 * 最大航程（带副油箱）（maximum range With drop tank）
 	 */
-	@Column(name="MAX_RANGE_FUEL_TANK",columnDefinition="number(10,4)")
+	@Column(name="MAXRANGEFUELTANK",columnDefinition="number(10,4)")
 	private Double maxRangeFuelTank;
 
 	/**
 	 * 作战半径（对空）（The air combat radius）
 	 */
-	@Column(name="FIGHT_RADIUS_AIR",columnDefinition="number(10,4)")
+	@Column(name="FIGHTRADIUSAIR",columnDefinition="number(10,4)")
 	private Double fightRadiusAir;
 
 	/**
 	 * 作战半径（对地）（The combat radius）
 	 */
-	@Column(name="FIGHT_RADIUS_SURFACE",columnDefinition="number(10,4)")
+	@Column(name="FIGHTRADIUSSURFACE",columnDefinition="number(10,4)")
 	private Double fightRadiusSurface;
 	
 	/**
 	 * 最大续航时间（机内油）（maximum endurance）
 	 */
-	@Column(name="MAX_ENDURANCE",columnDefinition="number(10,4)")
+	@Column(name="MAXENDURANCE",columnDefinition="number(10,4)")
 	private Double maxEndurance;
 	
 	/**
 	 * 外键
 	 */
-	@Column(name="BASIC_ID")
+	@Column(name="BASICID")
 	private String basicID;
 
 	public String getCapabilityID() {

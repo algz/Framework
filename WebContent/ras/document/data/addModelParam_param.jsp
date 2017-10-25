@@ -29,6 +29,7 @@
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
 				<div class="form-horizontal" role="form">
+								
 				
 					<c:forEach var="basicItem" items="${dataParam.dataMap }">
 					<%
@@ -78,18 +79,21 @@
 	</div>
 
 	<script type="text/javascript">
+
+	
 	$(function(){
+		
 		
 		$("#modelParamForm").submit(function(){
 			alert("提交成功!");
-		    window.close();  
+		    //window.close();  
 		}); 
 		
 		$('.chosen-select').chosen({
 			allow_single_deselect : true,
 			width : '100%',
 			disable_search:true //关闭搜索框,默认为false.
-		}); 
+		});
 		
 		/*$("select[extCheckbox]").each(function(index,element){
 			$.ajax({

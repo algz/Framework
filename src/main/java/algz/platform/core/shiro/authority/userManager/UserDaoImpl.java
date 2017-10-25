@@ -80,7 +80,10 @@ public class UserDaoImpl implements UserDao {
     	String hql="from User";
     	Query query= sf.getCurrentSession().createQuery(hql);
     	if(start!=null){
-    		query.setFirstResult(start).setMaxResults(limit);
+    		query.setFirstResult(start);
+    		if(limit!=null){
+    			query.setMaxResults(limit);
+    		}
     	}
 		return query.list();
 	}

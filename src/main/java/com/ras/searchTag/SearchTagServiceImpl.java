@@ -54,4 +54,9 @@ public class SearchTagServiceImpl implements SearchTagService{
 		}
 	}
 
+	@Override
+	public List<?> findTagForTypeahead(String tagName) {
+		return dao.findTagForTypeahead(tagName);
+	}
+
 }

@@ -113,47 +113,34 @@
 					<div class="tabbable">
 						<ul class="nav nav-tabs padding-18">
 							<tab:tab-nav id="report" active="active" label="报告"/>
-							<tab:tab-nav id="picture"  label="收藏记录"/>
+							<tab:tab-nav id="favorites"  label="收藏记录"/>
 						</ul>
 					
 						<div class="tab-content no-border padding-24">
 							<tab:tab-panel id="report" active="active">
 								<div class="row">
 										<div class="col-xs-12 col-sm-12">
+											<div class="btn-group">
+												<button id="modifyReport" class="btn btn-purple btn-sm" type="button">修改</button>
+												<button id="delReport" class="btn btn-purple btn-sm" type="button">删除</button>
+											</div>
 											<table id="report-table" class="table table-striped table-bordered table-hover"></table>
-											 <!-- <div class="widget-box transparent"> 
-												<div class="widget-header widget-header-small">
-													<h4 class="widget-title smaller">
-														<i class="ace-icon fa fa-check-square-o bigger-110"></i>
-														关于
-													</h4>
-												</div>
-	
-												<div class="widget-body">
-													<div class="widget-main">
-														<p>
-															...
-														</p>
-														<p>
-															...
-														</p>
-														<p>
-															...
-														</p>
-														<p>
-															...
-														</p>
-													</div>
-												</div>
-											</div> -->
 										</div>
-	
-									</div>
+								</div>
+							</tab:tab-panel>
+							<tab:tab-panel id="favorites" >
+								<div class="row">
+										<div class="col-xs-12 col-sm-12">
+											<div class="btn-group">
+												<button id="modifyFavorites" class="btn btn-purple btn-sm" type="button">修改</button>
+												<button id="delFavorites" class="btn btn-purple btn-sm" type="button">删除</button>
+											</div>
+											<table id="favoretes-table" class="table table-striped table-bordered table-hover"></table>
+										</div>
+								</div>
 							</tab:tab-panel>
 							<tab:tab-panel id="picture" >
-							 
 							</tab:tab-panel>
-						
 						</div>
 					</div>
 				
@@ -194,6 +181,10 @@
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 			<!-- 配置后,需设置 "language":dataTables_zh  -->
 			<script src="<%=basePath%>ras/common/js/dataTables/i18n/dataTables_zh.lang"></script>
+			
+			<!-- 提示框 -->
+			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
+			
 		</plugin_js>
 		<script type="text/javascript" src="personal.js"></script>		
 

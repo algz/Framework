@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ras.index.Page;
+import com.ras.searchParam.SearchParamService;
 import com.ras.searchParam.searchCriteria.SearchCriteriaVo;
 import com.ras.tool.CommonTool;
 
@@ -35,21 +36,24 @@ public class SimpleSearchControl{
 	@Autowired
 	private SimpleSearchService service;
 	
+	@Autowired
+	private SearchParamService searchParamService;
+	
 	@RequestMapping(value={"","/"})
 	public ModelAndView indexPage(){
     	Map<String, Object> map=new HashMap<String, Object>();
-    	Iterator it=SecurityUtils.getSubject().getSession().getAttributeKeys().iterator();
-    	while(it.hasNext()){
-    		Object key=it.next();
-    		Object val=SecurityUtils.getSubject().getSession().getAttribute(key);
-    		System.out.println(key+"="+val);
-    	}
+//    	Iterator it=SecurityUtils.getSubject().getSession().getAttributeKeys().iterator();
+//    	while(it.hasNext()){
+//    		Object key=it.next();
+//    		Object val=SecurityUtils.getSubject().getSession().getAttribute(key);
+//    		System.out.println(key+"="+val);
+//    	}
     	
     	Page page=new Page();
     	page.setHeader_h1("普通查询");
     	page.setHeader_small("查询");
     	map.put("page", page);
-//    	map.put("tag", vo.getTag());
+    	map.put("searchTags", searchParamService.findAllParent());
         return new ModelAndView("ras/simplesearch/simpleSearch",map);
 	}
 	
@@ -87,7 +91,7 @@ public class SimpleSearchControl{
     }
     
     /**
-     * 查询搜索标签表格
+     * 查询搜索标签树
      * @param vo
      * @param request
      * @param response
@@ -102,4 +106,36 @@ public class SimpleSearchControl{
 		CommonTool.writeJSONToPage(response, service.getSearchTreeNode(null));
 		
     }
+    
+    @RequestMapping(value={"/addnotefortaginput"})
+    public void addNoteForTagInput(HttpServletRequest request,HttpServletResponse response){
+    	String overviewID=request.getParameter("overviewID");
+    	String inputNames=request.getParameter("inputName");
+    	if(overviewID==null||inputNames==null){
+    		//return "{\"success\":false}";
+    	}
+    	JSONObject jo=service.addNoteForTagInput(overviewID, inputNames.split(","));
+    	jo.put("\"success\"", true);
+//    	String msg="{\"success\":true,"
+//    			+ "inputs:[{name:'aircraftType',vals:[{dataSource:'飞机手册1',inputValue:'美国1'},{dataSource:'飞机手册2',inputValue:'美国2'}]}]}";
+		CommonTool.writeJSONToPage(response, jo);
+    	//return msg;//"{\"success\":true}";
+    }
+    
+    /**
+     * 查询搜索标签表格
+     * @param vo
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value={"/searchsubmodelgrid"})
+    public void searchSubModelGrid(HttpServletRequest request,HttpServletResponse response){
+    	String overviewID=request.getParameter("overviewID");
+    	if(overviewID!=null){
+    		JSONObject jo=service.searchSubModelGrid(overviewID);
+    		jo.put("success", true);
+    		CommonTool.writeJSONToPage(response, jo);
+    	}
+    }
+    
 }

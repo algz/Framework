@@ -139,7 +139,7 @@
 $(function(){
 	//查询按钮
 	$('#submitBtn').click(function(){
-		var tagName=$('#tagName').val()
+		var tagName=$('#tag').val()
 		if(tagName!=""){
 			$("#tab_row").removeClass("hidden")
 			$('#paramTable').DataTable().ajax.reload();

@@ -1,7 +1,5 @@
 package com.ras.approval;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -32,9 +30,7 @@ import com.ras.ws.client.CXFClientUtil;
 import algz.platform.core.shiro.authority.roleManager.Role;
 import algz.platform.core.shiro.authority.roleManager.RoleService;
 import algz.platform.core.shiro.authority.userManager.User;
-import algz.platform.core.shiro.authority.userManager.UserService;
 import algz.platform.util.Common;
-import algz.platform.util.xml.StAXUtil;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
@@ -51,6 +47,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	@Value("${P2M_method}")
 	private String P2M_method;
+	
+	@Value("${P2M_dataCheckURL}")
+	private String P2M_dataCheckURL;
+	
+	@Value("${P2M_dataApprovalURL}")
+	private String P2M_dataApprovalURL;
 	
 	/**
 	 * 提交审批
@@ -81,16 +83,22 @@ public class ApprovalServiceImpl implements ApprovalService {
 			}
 		}
 		
+		
 		//准备提交其它系统的webservice数据
 		Map<String,String> m=new LinkedHashMap<String,String>();
 		m.put("paramToken_ras", approval.getApprovalID());
 		m.put("taskName", "数据审批");//任务名称
-		m.put("url", "");
+		//url1=数据校验员;url=数据审核员.
+		String url1=P2M_dataCheckURL+"?approvalID="+approval.getApprovalID();
+		String url2=P2M_dataApprovalURL+"?approvalID="+approval.getApprovalID();
+		m.put("url", url1+","+url2);
 		m.put("startUserId", Common.getLoginUser().getUsername());//发起人id,p2m login_name
-		Role role=new Role();
-		role.setRolename("dataManager");
-		List<User> users=roleservice.findUsernameByRole(role);
-		m.put("approvalUserIds", users.get(0).getUsername()); //审批人id=其它系统loginname
+		
+		//数据校验员,数据审核员
+		List<User> users=roleservice.findUsernameByRoleNames("dataCheck","dataApproval");
+		String username1=users.get(0).getUsername();//数据校验员
+		String username2=users.get(1).getUsername();//数据审核员
+		m.put("approvalUserIds", username1+","+username2); //审批人id=其它系统loginname
 		
 		String param=writeToXmlString(m);
 		Object[] s=CXFClientUtil.invoke(P2M_webservice, P2M_method, param);
@@ -188,5 +196,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public void findApprovalGrid(ApprovalVo vo) {
 		dao.findApprovalGrid(vo);
+	}
+
+
+	@Override
+	public Approval findOne(Approval approval) {
+		return dao.findOne(approval);
 	}
 }

@@ -8,6 +8,7 @@ $(function(){
 //			alert(data)
 //		}
 //	})
+
 	
 	//创建报告
 	$('#createReportBtn').on('click',function(){
@@ -25,7 +26,7 @@ $(function(){
 			if(!$(dataTable.row(index).node()).hasClass('hidden')){
 				for(var i=0;i<data.length;i++){
 					if(i!=0){
-						val+=",";
+						val+="，";
 					}
 					val+=data[i]||"";
 				}
@@ -48,13 +49,16 @@ $(function(){
 		});
 		
 		$.ajax({
-			url:'./savereport',
+			url:'../personal/report/savereport',
 			data:{
 				reportDes:reportDes,
 				reportName:reportName,
 				reportContent:reportContent
 			},
 			success:function(data){
+				if(data.success){
+					$.gritter.add('报告保存成功!');
+				}
 			}
 		})
 		$("#createReport-form").modal('hide');
@@ -129,6 +133,7 @@ $(function(){
 				ajax : {
 					url : "./findcomparisondetailgrid",
 					data:{
+						overviewID:$("#overviewID").val(),
 						modelName:$("#modelName").val(),
 						basicID:$("#basicID").val()
 					}

@@ -7,6 +7,8 @@
  */
 package com.ras.aircraftPicture;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +56,12 @@ public class AircraftPicture{
 	
 	@Column(name="EDITOR")
 	private String editor;
+	
+	/**
+	 * 修改日期
+	 */
+	@Column(name="MODIFY_DATE",insertable=false,updatable=false)
+	private Date modifyDate;
 	
 	/**
 	 * 权限级别:1只能允许自己可视;2部门内允许可视;3或空完全可视
@@ -176,6 +184,10 @@ public class AircraftPicture{
 
 	public void setEditor(String editor) {
 		this.editor = editor;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
 	}
 	
 	

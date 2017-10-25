@@ -1,5 +1,14 @@
 package algz.platform.util;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+
+import com.ras.aircraftOverview.AircraftOverview;
+import com.ras.tool.CommonTool;
+
 import algz.platform.core.shiro.authority.userManager.User;
 
 //import java.io.BufferedReader;
@@ -38,8 +47,6 @@ public class Common {
 	public static User getLoginUser() { 
 		return (User)org.apache.shiro.SecurityUtils.getSubject().getSession().getAttribute("LoginUser"); 
 	 }
-	
-	
 	
 //	/**
 //	 * 判断变量是否为空

@@ -37,22 +37,51 @@ $(function(){
 					}
 				},{
 					"title" : "机型名", 
-					data:'modelName'
+					data:'modelName',
+					render:function(data,type,row,meta){
+						return "<a target='_blank' href='../simplesearch/searchsummarize?overviewID="+row.overviewID+"&option=load'>"+data+"</a>";   
+					}
 				}, {
 					"title" : "中文名", 
 					data:'modelCname'
 				}, {
 					"title" : "英文名",
 					data:'modelEname'
-				}, {
+				}, /* {
 					"title" : "数据来源",
 					data:'dataSources',
 					render:function(data,type,row,meta){
 						return "<a target='_blank' href='../searchparam/searchsummarize?overviewID="+row.overviewID+"&basicID="+row.basicID+"&option=load'>"+data+"</a>";   
 					}
-				},{
+				}, */{
 					"title" : "标签",
 					data:'tag'
+				}, {
+					"title" : "创建日期",
+					data:'modifyDate',
+//					type:'date',
+					sorting : false,
+					render:function(data, type, row, meta){
+					    if(data==null){
+					    	return "";
+					    }
+					    var d=new Date(data.time); //new Date().setTime(data.time);
+					    return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
+					}
+				},{
+					"title" : "权限级别", 
+					data:'permissionLevel',
+					render:function(data, type, row, meta){
+						if(data==""||data=='1'){
+							return "个人可视";
+						}else if(data=='2'){
+							return "部门可视";
+						}else if(data=="3"){
+							return "所内可视";
+						}else{
+							return "未知";
+						}
+					}
 				}],
 		"language" : dataTables_zh // 多语言配置
 		});

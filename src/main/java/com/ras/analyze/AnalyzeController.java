@@ -61,7 +61,7 @@ public class AnalyzeController {
 //    			list.remove(tag);
 //    		}
 //    	}
-    	map.put("aircraftAll", service.getAircraftAll());
+    	map.put("aircraftAll", service.getAircraftAll(false));
     	map.put("searchTags", searchParamService.findAllParent());
     	
         return new ModelAndView("ras/analyze/analyze",map);
@@ -106,6 +106,21 @@ public class AnalyzeController {
     	axis[1]=request.getParameter("yAxis");
     	try {
     		JSONArray ja=service.analyzeChart(overviewID, axis);
+			response.getWriter().print(ja);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * 获取所有机型(按权限)
+     * @param request
+     * @param response
+     */
+    @RequestMapping("/getallaircraftforselect")
+    public void getAllAircraftForSelect(HttpServletRequest request,HttpServletResponse response){
+    	try {
+    		JSONArray ja=service.getAircraftAll(false);
 			response.getWriter().print(ja);
 		} catch (IOException e) {
 			e.printStackTrace();

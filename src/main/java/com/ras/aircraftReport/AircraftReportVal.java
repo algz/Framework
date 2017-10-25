@@ -1,4 +1,4 @@
-package com.ras.personal.report;
+package com.ras.aircraftReport;
 
 import java.util.Set;
 
@@ -25,8 +25,8 @@ import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name="RAS_REPORT_CONTENT_VAL")
-public class ReportContentVal{
+@Table(name="RAS_AIRCRAFT_REPORT_VAL")
+public class AircraftReportVal{
 
 	@Id
     @Column(name = "ID")

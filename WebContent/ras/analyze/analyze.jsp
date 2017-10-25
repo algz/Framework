@@ -68,7 +68,7 @@
 										<td class="hidden1-480">
 											<input name="xAxis" type="hidden">
 											<input id="xAxisTxt" disabled="disabled" type="text" placeholder="" />
-											<button id="xAxisBtn" class="btn">选择</button>
+											<button id="xAxisBtn" class="btn btn-primary">选择</button>
 										</td>
 									</tr>
 
@@ -79,7 +79,7 @@
 										<td class="hidden1-480">
 											<input name="yAxis" type="hidden">
 											<input id="yAxisTxt" disabled="disabled" type="text" placeholder="" />
-											<button id="yAxisBtn" class="btn">选择</button>
+											<button id="yAxisBtn" class="btn btn-primary">选择</button>
 											<!-- <span class="label label-sm label-warning">Expiring</span> -->
 										</td>
 									</tr>
@@ -100,13 +100,32 @@
 					</div>
 				</div>
 			</div>
-			<div class="hr hr8 hr-dotted"></div>
-			<select id="chartType">
-				<option value="scatter">散点图</option>
-				<option value="column">矩形图</option>
-			</select>
-			<div id="highchart" ></div>
 
+<!-- 图表 -->
+<div id="modal-chart" class="modal fade" tabindex="-1">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            	<span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title">图表分析</h4>
+            </div>
+            <div class="modal-body">
+				<select id="chartType" >
+					<option value="scatter">散点图</option>
+					<option value="column">矩形图</option>
+				</select>
+
+				<div id="analyze-highchart" ></div>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 坐标轴选择 -->
 <div id="modal-form" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -149,13 +168,17 @@
 		</page:page>
 		<plugin_css>
 			<link rel="stylesheet" href="<%=basePath%>ras/common/css/chosen/chosen.css" />	
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/highcharts/highcharts.css" />	
 		</plugin_css>
 		<plugin_js>
 			<!-- dataTable.js 表格-->
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+			
 			<!-- highcharts.js 图表-->
 			<script src="<%=basePath%>ras/common/js/highcharts/highcharts.js"></script>
+			<script src="<%=basePath%>ras/common/js/highcharts/modules/exporting.js"></script>
+			<script src="<%=basePath%>ras/common/js/highcharts/plugins/highcharts-zh_CN.js"></script>
 
 			<!-- 文本框扩展查询 -->
 			<script src="<%=basePath%>ras/common/js/typeahead.jquery.js"></script>

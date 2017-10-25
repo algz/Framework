@@ -5,26 +5,37 @@ package com.ras.documnet.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.persistence.Table;
+
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftBasic.AircraftBasicDao;
+import com.ras.aircraftCapability.AircraftCapability;
+import com.ras.aircraftDynamic.AircraftDynamic;
 import com.ras.aircraftOverview.AircraftOverview;
+import com.ras.aircraftTag.AircraftTag;
+import com.ras.aircraftTag.AircraftTagDao;
 import com.ras.searchParam.SearchParamDao;
 import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
+import com.sun.org.apache.bcel.internal.generic.Type;
 
 import algz.platform.core.shiro.authority.userManager.User;
 import algz.platform.util.Common;
@@ -44,6 +55,10 @@ public class DataDaoImpl implements DataDao {
 	
 	@Autowired
 	private AircraftBasicDao aircraftBasicDao;
+	
+	@Autowired
+	private AircraftTagDao aircraftTagDao;
+
 	
 	@Autowired
 	private SessionFactory sf;
@@ -108,6 +123,13 @@ public class DataDaoImpl implements DataDao {
 		//级联删除,可以通过配置数据库作级联;也可以程序控制.
 //		String[] tableNames={"WEIGHT"/*,"LAYOUT","CAPABILITY","DYNAMIC","SYSTEM"*/};
 		
+		if(ids==null){
+			//删除所有相关的数据
+			String sql="delete from ras_aircraft_basic ab where ab.overviewid='"+overviewID+"'";
+			sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
+			return;
+		}
+		
 		String sql="delete from ras_aircraft_basic ab where ab.id in (:ids)";
 		sf.getCurrentSession().createSQLQuery(sql).setParameterList("ids", ids).executeUpdate();
 		
@@ -144,6 +166,12 @@ public class DataDaoImpl implements DataDao {
 		for(String id:ids){
 			AircraftOverview ao=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, id);
 			
+			aircraftTagDao.del(null, ao.getOverviewID(), "RAS_AIRCRAFT_OVERVIEW");
+			
+			//删除所有关联的机型参数
+			this.delModelParam(null, ao.getOverviewID());
+			
+			//删除相关文件
 			FileUtil.deleteFile(new File(CommonTool.PHOTO_DIR+ao.getModelName()));
 			FileUtil.deleteFile(new File(CommonTool.ARCHIVE_DIR+ao.getModelName()));
 			sf.getCurrentSession().delete(ao);
@@ -162,11 +190,12 @@ public class DataDaoImpl implements DataDao {
 		if(vo.getBasicID()==null){
 			ab=aircraftBasicDao.getMainAircraftBasic(vo.getOverviewID());
 			basicID=ab.getBasicID();
-		}else if(vo.getOverviewID()==null&&vo.getBasicID()!=null){
+		}else {//if(vo.getOverviewID()==null&&vo.getBasicID()!=null){
 			ab=(AircraftBasic)sf.getCurrentSession().get(AircraftBasic.class, vo.getBasicID());
 			vo.setOverviewID(ab.getOverviewID());
 		}
 		AircraftOverview overview=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, vo.getOverviewID());
+		
 		
 		//添加主要只读数据.
 		Map<String,String> paramMap=new HashMap<String,String>();
@@ -180,6 +209,7 @@ public class DataDaoImpl implements DataDao {
 		JSONObject jo=new JSONObject();
 		jo.put("modelName", overview.getModelName());//用于显示页面标题
 		jo.put("dataSource", ab.getDataSources());
+		jo.put("permissionLevel", overview.getPermissionLevel());//用于区别公有数据
 		//basic表格,需要同时加载进overview表格数据
 		
 
@@ -232,6 +262,11 @@ public class DataDaoImpl implements DataDao {
 			vo.setOverviewID(basic.getOverviewID());
 		}
 		AircraftOverview overview=(AircraftOverview)sf.getCurrentSession().get(AircraftOverview.class, vo.getOverviewID());
+		
+		if(vo.getBasicID()==null){
+			AircraftBasic basic=aircraftBasicDao.getMainAircraftBasic(overview.getOverviewID());
+			vo.setBasicID(basic.getBasicID());
+		}
 		
 		switch(vo.getOption()){
 		case "load":
@@ -497,18 +532,43 @@ public class DataDaoImpl implements DataDao {
 	@Override
 	public void findTableModelGrid(DataVo vo) {
 		
-		String hql="from AircraftOverview where 1=1  ";
+		String sql="from ras_aircraft_overview ao where 1=1  ";
 		if(vo.getModelName()!=null){
-			hql+=" and lower(modelName) like '%"+vo.getModelName().toLowerCase()+"%'";
+			sql+=" and lower(modelName) like '%"+vo.getModelName().toLowerCase()+"%'";
 		}
 
-		Long count=(Long)sf.getCurrentSession().createQuery("select count(1) "+hql).uniqueResult();
+		//权限控制
+		if(!CommonTool.isDataManager()){
+			User curUser=Common.getLoginUser();
+			sql+=" and (ao.editor='"+curUser.getUserid()+"' and ao.PERMISSION_LEVEL='1')";
+		}
+		
+		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select count(1) "+sql).uniqueResult();
 		vo.setRecordsTotal(count.intValue());
 		if(count.intValue()==0){
 			return;
 		}
-		List list= sf.getCurrentSession().createQuery(hql)
-				     .setFirstResult(vo.getStart())
+		
+		sql="select ao.id overviewID,ao.modelName,ao.modelCname,ao.modelEname,"
+				+ "(select ao1.modelname from ras_aircraft_overview ao1 where ao1.id=ao.parent_id) parentID,"
+				+ "(select u.cname from ALGZ_USER u where u.id=ao.editor) editor,"
+				+ "ao.modify_date modifyDate,ao.permission_level permissionLevel "+sql;
+//		sql="select * "+sql;
+		List list= sf.getCurrentSession().createSQLQuery(sql+" order by modifyDate desc")
+//				     .addEntity(AircraftOverview.class)
+				.addScalar("overviewID")
+				.addScalar("modelName")
+				.addScalar("modelCname")
+				.addScalar("modelEname")
+				.addScalar("parentID")
+				.addScalar("editor")
+				.addScalar("modifyDate")
+				.addScalar("permissionLevel")
+				
+				
+//				.addScalar("basicid",StandardBasicTypes.STRING)
+				.setResultTransformer(Transformers.aliasToBean(AircraftOverview.class))
+					 .setFirstResult(vo.getStart())
 				     .setMaxResults(vo.getLength())
 				     .list();//query.setProperties(ab).list();//.setEntity("ab", ab).list();
 		vo.setData(list);
@@ -572,5 +632,30 @@ public class DataDaoImpl implements DataDao {
 	public List findTableSQL(String tableName) {
 		return sf.getCurrentSession().createSQLQuery("select name from "+tableName).list();
 		
+	}
+
+	@Override
+	public List<?> findCategoryNameForTypeahead(String categoryName) {
+		String sql="select t.category from ras_aircraft_overview t where LOWER(t.category) LIKE '%"+categoryName.toLowerCase()+"%'";
+		return sf.getCurrentSession().createSQLQuery(sql).list();
+	}
+	
+	public <T> T copyObject(T example) {
+		String tableName=example.getClass().getAnnotation(Table.class).name();
+		StringBuilder sql=new StringBuilder("select distinct * from "+tableName+" where 1=1 ");
+		List<T> list=CommonTool.<T>findEntitiesByProperty(sf, sql, example, 0, 1, null);
+		if(list.size()!=0){
+			T newObje=null;
+			try {
+				newObje=(T)example.getClass().newInstance();
+				BeanUtils.copyProperties(newObje, list.get(0));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			return newObje;
+		}else{
+			return null;
+		}
 	}
 }

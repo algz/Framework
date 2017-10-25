@@ -59,29 +59,29 @@ public class SearchTagDaoImpl implements SearchTagDao {
 	@Override
 	public void findTagSearchForParamGird(SearchTagVo vo) {
 		String sql="from ras_aircraft_overview ao "
-				+ "inner join ras_aircraft_basic ab on ab.overviewid=ao.id "
-				+ "where Lower(ab.tag) like '%"+vo.getTag().toLowerCase()+"%' "
-				+ " or Lower(ao.modelName) like '%"+vo.getTag().toLowerCase()+"%' ";
+				+ "inner join ras_aircraft_basic ab on ab.overviewid=ao.id and ab.maininfo='1' "
+//				+ "where Lower(ab.tag) like '%"+vo.getTag().toLowerCase()+"%' "
+				+ " where Lower(ao.tag) like '%"+vo.getTag().toLowerCase()+"%' ";
 		
 		//权限控制
 		if(!CommonTool.isDataManager()){
 			User curUser=Common.getLoginUser();
-			sql+=" and (ab.editor='"+curUser.getUserid()+"' or ab.PERMISSION_LEVEL in ('2','3'))";
+			sql+=" and ((ao.editor='"+curUser.getUserid()+"' and ao.PERMISSION_LEVEL='1') or ao.PERMISSION_LEVEL in ('2','3'))";
 		}
 		
 		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select count(1) "+sql).uniqueResult();
 		vo.setRecordsTotal(count.intValue());
 		if(count.intValue()!=0){
-			List list=sf.getCurrentSession().createSQLQuery("select ao.id overviewID,ao.modelName,ao.modelCname,ao.modelEname,ab.dataSources,ab.tag,ab.id basicID  "+sql)
-//					  .addEntity(AircraftOverview.class)
-					  .addScalar("overviewID", StandardBasicTypes.STRING)
-					  .addScalar("modelName")
-					  .addScalar("modelCname")
-					  .addScalar("modelEname")
-					  .addScalar("tag")
-					  .addScalar("dataSources")
-					  .addScalar("basicID")
-					  .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+			List list=sf.getCurrentSession().createSQLQuery("select * "+sql)
+					  .addEntity(AircraftOverview.class)
+//					  .addScalar("overviewID", StandardBasicTypes.STRING)
+//					  .addScalar("modelName")
+//					  .addScalar("modelCname")
+//					  .addScalar("modelEname")
+//					  .addScalar("tag")
+//					  .addScalar("dataSources")
+//					  .addScalar("basicID")
+//					  .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
 					  .setFirstResult(vo.getStart())
 					  .setMaxResults(vo.getLength())
 					  .list();
@@ -135,5 +135,12 @@ public class SearchTagDaoImpl implements SearchTagDao {
 					  .list();
 			vo.setData(list);
 		}
+	}
+
+
+	@Override
+	public List<?> findTagForTypeahead(String tagName) {
+		String sql="select t.tag_name from RAS_AIRCRAFT_TAG t where LOWER(t.tag_name) LIKE '%"+tagName.toLowerCase()+"%'";
+		return sf.getCurrentSession().createSQLQuery(sql).list();
 	}
 }

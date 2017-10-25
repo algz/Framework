@@ -52,6 +52,7 @@ import com.ras.aircraftArchive.AircraftArchive;
 import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftPicture.AircraftPicture;
+import com.ras.analyze.AnalyzeService;
 import com.ras.index.Page;
 import com.ras.searchParam.SearchParam;
 import com.ras.tool.CommonTool;
@@ -69,6 +70,9 @@ public class DataController{
 		
 	@Autowired
 	private DataService service;
+	
+	@Autowired
+	private AnalyzeService analyzeService;
 	
 	@RequestMapping({"","/"})
 	public ModelAndView DocumentIndex(){
@@ -202,6 +206,23 @@ public class DataController{
 	}
     
 	/**
+	 * 创建子机型
+	 * @param photo
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping({"/savesubmodel"})
+	public void saveSubModel(HttpServletRequest request, HttpServletResponse response){
+        String msg="{\"success\":true}";
+        String parentID=request.getParameter("parentID");
+        String modelName=request.getParameter("modelName");
+        service.saveSubModel(modelName,parentID);
+
+      //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
+        CommonTool.writeJSONToPage(response,msg ); 
+	}
+	
+	/**
 	 * 保存机型参数
 	 */
 	@RequestMapping({"/savemodelparam"})
@@ -300,8 +321,7 @@ public class DataController{
             ao.setPhotoFile(file);
             service.saveModelPhotoFile(ao);
         }
-
-
+        
       //$.ajax({success:...}),要跳到success函数,必须返回值success为双引号括起来,单引号不跳到.error.
         CommonTool.writeJSONToPage(response,ao ); 
 	}
@@ -330,7 +350,38 @@ public class DataController{
 		CommonTool.writeJSONToPage(response,m); 
 	}
 	    
-	      
-	      
+	/**
+	 * 查找所有的机型分类
+	 * @param request
+	 * @param response
+	 */
+    @RequestMapping(value="/findcategorynamefortypeahead")
+    public void findCategoryNameForTypeahead(HttpServletRequest request,HttpServletResponse response){
+    	String categoryName=request.getParameter("categoryName");
+    	if(categoryName!=null){
+        	try {
+        		JSONArray ja=JSONArray.fromObject(service.findCategoryNameForTypeahead(categoryName));
+    			response.getWriter().print(ja);
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    }
+    
+	/**
+	 * 查找所有的机型分类
+	 * @param request
+	 * @param response
+	 */
+    @RequestMapping(value="/findaircraftall")
+    public void findAircraftAll(HttpServletRequest request,HttpServletResponse response){
+		try {
+			JSONArray ja = analyzeService.getAircraftAll(true);// JSONArray.fromObject(service.findCategoryNameForTypeahead(categoryName));
+			response.getWriter().print(ja);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
 
 }

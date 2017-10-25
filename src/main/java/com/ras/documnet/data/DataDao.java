@@ -37,4 +37,9 @@ public interface DataDao {
 	public void saveModelPhotoFile(AircraftOverview ao);
 	
 	public List findTableSQL(String tableName);
+	
+	public List<?> findCategoryNameForTypeahead(String categoryName); 
+	
+	public <T> T copyObject(T example);
+	
 }

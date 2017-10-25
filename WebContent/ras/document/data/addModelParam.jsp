@@ -28,6 +28,7 @@
 	<body>
 
 		<page:page page="${page }">
+		
 			<!-- PAGE CONTENT BEGINS -->
 			<div class="row">
 				<div class="col-sm-12">
@@ -58,19 +59,28 @@
 		</page:page>
 		
 		<plugin_css>
-		
+			<!-- bootstrap-tag -->
 			<link rel="stylesheet" href="<%=basePath%>ras/common/css/bootstrap-tag/bootstrap-tag.css" />	
 		
+			<!-- select2 -->
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/select2/select2.css" />
+
+
 		
 			<link rel="stylesheet" href="<%=basePath%>ras/common/css/chosen/chosen.css" />	
 		
 			<link rel="stylesheet" href="<%=basePath%>ras/common/css/fileinput/fileinput.css" />
-			<link href="<%=basePath%>ras/common/css/fileinput/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/>
+			<!-- <link href="<%=basePath%>ras/common/css/fileinput/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/> -->
 		</plugin_css>
 		<plugin_js>
+		
+			<!-- select2 -->
+			<script src="<%=basePath%>ras/common/js/select2/select2.js"></script>
+		
 			<!-- bootstrap-tag -->
 			<script src="<%=basePath%>ras/common/js/bootstrap-tag/bootstrap2.typeahead.js"></script>
 			<script src="<%=basePath%>ras/common/js/bootstrap-tag/bootstrap-tag.js"></script>
+			
 			
 			<!-- bootbox.js 提示框 -->
 			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>

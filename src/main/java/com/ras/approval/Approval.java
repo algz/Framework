@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -40,11 +41,18 @@ public class Approval {
 	private String dataTable;
 	
 	/**
-	 * 审批的数据权限级别:1只能允许自己可视;2部门内允许可视;3或空完全可视
+	 * 审批的数据权限级别:1只能允许自己可视;2部门内允许可视;3或空完全可视;4范围可视,关联范围可视用户表.
 	 */
 	@Column(name="PERMISSION_LEVEL")
 	private String permissionLevel;
 
+	/**
+	 * 权限可视范围
+	 * permissionLevel=4,userid以逗号分隔.
+	 */
+	@Column(name="PERMISSION_USER_RANGE")
+	private String permissionUserRange;
+	
 	/**
 	 * 审批结果:1同意;0不同意
 	 */
@@ -87,9 +95,15 @@ public class Approval {
 	@Column(name="APPROVAL_STATUS")
 	private String approvalStatus;
 	
+	/**
+	 * P2M返回的流程ID
+	 */
 	@Column(name="P2M_APPROVAL_ID")
 	private String p2mApprovalID;
 	
+	/**
+	 * P2M返回的审批结果
+	 */
 	@Column(name="RETURNREASON")
 	private String returnReason;
 	
@@ -195,6 +209,14 @@ public class Approval {
 
 	public void setApprovalStatus(String approvalStatus) {
 		this.approvalStatus = approvalStatus;
+	}
+
+	public String getPermissionUserRange() {
+		return permissionUserRange;
+	}
+
+	public void setPermissionUserRange(String permissionUserRange) {
+		this.permissionUserRange = permissionUserRange;
 	}
 
 

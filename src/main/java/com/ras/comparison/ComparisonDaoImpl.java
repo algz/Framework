@@ -11,9 +11,10 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.ras.personal.report.Report;
-import com.ras.personal.report.ReportContentKey;
-import com.ras.personal.report.ReportContentVal;
+import com.ras.aircraftOverview.AircraftOverview;
+import com.ras.aircraftReport.AircraftReport;
+import com.ras.aircraftReport.AircraftReportKey;
+import com.ras.aircraftReport.AircraftReportVal;
 import com.ras.searchParam.SearchParam;
 
 import algz.platform.util.Common;
@@ -29,7 +30,7 @@ public class ComparisonDaoImpl implements ComparisonDao {
 	public List<?> findComparisonDetailGrid(String[] modelNames,String[] basicID) {
 		List<String[]> retList=new <String[]>ArrayList();
 		//加载所有Tag
-		String sql="select * from RAS_SEARCH_param t where t.parent_id!=0 and t.enname is not null";
+		String sql="select * from RAS_SEARCH_param t where t.parent_id!=0 and t.enname is not null ";
 		List<SearchParam> searchTagList=sf.getCurrentSession().createSQLQuery(sql).addEntity(SearchParam.class).list();
 		
 		//读取所有指定条件的数据
@@ -107,29 +108,25 @@ public class ComparisonDaoImpl implements ComparisonDao {
 		return null;*/
 	}
 
+	
+
 	@Override
-	public void saveReport(String reportName,String reportDes, String[] reportContent) {
-		Report report=new Report();
-		report.setReportName(reportName);
-		report.setReportDes(reportDes);
-		report.setEditor(Common.getLoginUser().getUserid());
-		sf.getCurrentSession().save(report);
-		for(String rec:reportContent){
-			String[] arr=rec.split(",");
-			ReportContentKey contentKey=new ReportContentKey();
-			contentKey.setReportID(report.getReportID());
-			contentKey.setContentKey(arr[0]);
-			sf.getCurrentSession().save(contentKey);
-			
-			for(int i=1;i<arr.length;i++){
-				ReportContentVal contentVal=new ReportContentVal();
-				contentVal.setContentKeyID(contentKey.getReportContentKeyID());
-				contentVal.setContentVal(arr[i]);
-				contentVal.setContentValSeq(i+"");
-				sf.getCurrentSession().save(contentVal);
-			}
-		}
+	public void findModelGird(ComparisonVo vo) {
 		
+		String sql=" from ras_aircraft_overview t where t.id in (:ids)";
+		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select count(1)"+sql)
+									   .setParameterList("ids", vo.getOverviewID().split(","))
+									   .uniqueResult();
+		vo.setRecordsTotal(count.intValue());
+		
+		List list=sf.getCurrentSession().createSQLQuery("select t.*"+sql)
+					.addEntity(AircraftOverview.class)
+					.setFirstResult(vo.getStart())
+					.setMaxResults(vo.getLength())
+					.setParameterList("ids", vo.getOverviewID().split(","))
+					.list();
+		vo.setData(list);
 	}
+
 	
 }

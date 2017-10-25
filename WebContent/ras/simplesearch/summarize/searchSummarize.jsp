@@ -20,8 +20,8 @@
 		<meta name="description" content="top menu &amp; navigation" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-		<jsp:include  page="../common/common_css.jsp"/> 
-		<jsp:include  page="../common/common_js.jsp"/> 
+		<jsp:include  page="../../common/common_css.jsp"/> 
+		<jsp:include  page="../../common/common_js.jsp"/> 
 	</head>
 
 	<body >
@@ -99,6 +99,8 @@
 			
 			<!-- 图片放大查看(jquery弹出层插件jquery.ColorBox)  -->
 			<script src="<%=basePath%>ras/common/js/jquery.colorbox.js"></script>
+			
+			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
 			
 			<!-- JS编辑器 
 			<script src="<%=basePath%>ras/common/js/jquery.hotkeys.js"></script>

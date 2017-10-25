@@ -15,6 +15,8 @@ public class DataVo<T> extends ReturnVo<T>{
 	
 	private String modelName;
 	
+//	private String archiveName;
+	
 	private String option;
 	
 	private String photoCategory;

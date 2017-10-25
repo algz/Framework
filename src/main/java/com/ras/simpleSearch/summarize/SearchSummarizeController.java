@@ -1,4 +1,4 @@
-package com.ras.searchParam.summarize;
+package com.ras.simpleSearch.summarize;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,13 +38,12 @@ import net.sf.json.JsonConfig;
  */
 
 @Controller   
-@RequestMapping(value="/ras/searchparam/searchsummarize")
+@RequestMapping(value="/ras/simplesearch/searchsummarize")
 public class SearchSummarizeController {
 	
 	@Autowired
 	private DataService dataService;
   
-    
     /**
      * 查询关键字
      * @param request
@@ -79,7 +78,7 @@ public class SearchSummarizeController {
         	map.put("surfaceGraph",dataService.findModelImageParam("其它图",vo.getOverviewID()));
     	}
     	
-        return new ModelAndView("ras/searchparam/searchSummarize",map);
+        return new ModelAndView("ras/simplesearch/summarize/searchSummarize",map);
     }
     
     @RequestMapping("/savemodelparam")

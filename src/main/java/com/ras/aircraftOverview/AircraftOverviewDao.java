@@ -2,6 +2,8 @@ package com.ras.aircraftOverview;
 
 import java.util.List;
 
+import com.ras.aircraftBasic.AircraftBasic;
+
 public interface AircraftOverviewDao {
 
 	public List<AircraftOverview> findAll();
@@ -13,4 +15,6 @@ public interface AircraftOverviewDao {
 	public void save(AircraftOverview ab);
 	
 	public void saveOrUpdate(AircraftOverview ao);
+	
+	public AircraftOverview copy(AircraftOverview example);
 }

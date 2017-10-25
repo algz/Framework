@@ -30,6 +30,12 @@ public class AircraftArchiveDaoImpl implements AircraftArchiveDao {
 		if(archive.getOverviewID()!=null){
 			sql+=" and raa.overviewid='"+archive.getOverviewID()+"'";
 		}
+		if(archive.getTag()!=null){
+			sql+=" and raa.tag like '%"+archive.getTag()+"%'";
+		}
+		if(archive.getArchiveName()!=null){
+			sql+=" and raa.ARCHIVE_NAME like '%"+archive.getArchiveName()+"%'";
+		}
 		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery(sql).uniqueResult();
 		return count.intValue();
 	}
@@ -40,6 +46,12 @@ public class AircraftArchiveDaoImpl implements AircraftArchiveDao {
 		if(archive.getOverviewID()!=null){
 			sql+=" and raa.overviewid='"+archive.getOverviewID()+"'";
 		}
+		if(archive.getTag()!=null){
+			sql+=" and raa.tag like '%"+archive.getTag()+"%'";
+		}
+		if(archive.getArchiveName()!=null){
+			sql+=" and raa.ARCHIVE_NAME like '%"+archive.getArchiveName()+"%'";
+		}
 		return sf.getCurrentSession().createSQLQuery(sql)
 									 .addEntity(AircraftArchive.class)
 								     .setFirstResult(start)
@@ -49,7 +61,7 @@ public class AircraftArchiveDaoImpl implements AircraftArchiveDao {
 
 	@Override
 	public void saveOrUpdate(AircraftArchive archive) {
-		if(archive.getModelName()!=null){
+		if(archive.getModelName()!=null&&archive.getArchiveFile()!=null){
 			File file=CommonTool.saveFile(archive.getArchiveFile(), CommonTool.ARCHIVE_DIR+archive.getModelName()+File.separator);
 			if(file!=null){
 				archive.setArchiveUrl(CommonTool.ARCHIVE_URL_PREFIX+archive.getModelName()+"/"+file.getName());
@@ -79,22 +91,16 @@ public class AircraftArchiveDaoImpl implements AircraftArchiveDao {
 
 	@Override
 	public void del(String archiveID) {
-		String[] ids=archiveID.split(",");
-		for(String id:ids){
-			AircraftArchive archive=(AircraftArchive)sf.getCurrentSession().get(AircraftArchive.class, id);
+
+			AircraftArchive archive=(AircraftArchive)sf.getCurrentSession().get(AircraftArchive.class, archiveID);
 			String pathFile=CommonTool.ARCHIVE_DIR+archive.getArchiveUrl().replaceAll(CommonTool.ARCHIVE_URL_PREFIX, "");
 			//File file=CommonTool.saveFile(archive.getArchiveFile(), CommonTool.ARCHIVE_DIR+archive.getModelName()+File.separator);
 			File file=new File(pathFile);
 			if(file.exists()&&file.delete()){
 
 			}
-			String hql="delete AircraftArchive t where t.archiveID='"+id+"'";
+			String hql="delete AircraftArchive t where t.archiveID='"+archiveID+"'";
 			sf.getCurrentSession().createQuery(hql).executeUpdate();
-			
-//			aircraftTagDao.delRelationID(id);
-		}
-		
-
 	}
 
 	@Override

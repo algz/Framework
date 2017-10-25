@@ -76,7 +76,7 @@ $(function() {
 									    //meta:它下面有三个参数
 									    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
 									    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
-									    return "<a href='/algz/ras/searchparam/searchsummarize?basicID="+row.dataID+"'>"+data+"</a>";
+									    return "<a href='/algz/ras/simplesearch/searchsummarize?basicID="+row.dataID+"'>"+data+"</a>";
 									}
 								}, {
 									"title" : "数据类型",

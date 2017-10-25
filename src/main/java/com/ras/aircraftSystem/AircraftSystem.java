@@ -20,69 +20,69 @@ public class AircraftSystem{
 	@Column(name="ID")
 	@GenericGenerator(name="ALGZGenerator",strategy="guid")
 	@GeneratedValue(generator="ALGZGenerator")
-	private String id;
+	private String systemID;
 	
 	/**
 	 * 雷达型号
 	 */
-	@Column(name="RADAR-MODEL")
+	@Column(name="RADARMODEL")
 	private String radarModel;
 	
 	/**
 	 * 雷达作用距离
 	 */
-	@Column(name="RADAR-RANGE")
+	@Column(name="RADARRANGE")
 	private Double radarRange;
 	
 	/**
 	 * 飞控系统
 	 */
-	@Column(name="FLIGHT-CONTROL-SYSTEM")
+	@Column(name="FLIGHTCONTROLSYSTEM")
 	private String flightControlSystem;
 
 	/**
 	 * 航电系统特点（有源相控阵雷达、无源相控阵雷达、机械雷达、头盔瞄准、头盔显示、孔径综合、光电系统
 ）
 	 */
-	@Column(name="AVIONICS-SYSTEM")
+	@Column(name="AVIONICSSYSTEM")
 	private String avionicsSystem;
 	
 	/**
 	 * 机炮型号
 	 */
-	@Column(name="MACHINE-GUN-MODEL")
+	@Column(name="MACHINEGUNMODEL")
 	private String MachineGunModel;
 	
 	/**
 	 * 最大挂点数目
 	 */
-	@Column(name="MAX-MOUNT-POINT")
+	@Column(name="MAXMOUNTPOINT")
 	private Integer maxMountPoint;
 	
 	/**
 	 * 武器挂载方式（内置、半埋、外挂）
 	 */
-	@Column(name="WEAPONS-MOUNT")
+	@Column(name="WEAPONSMOUNT")
 	private String weaponsMount;
 	
 	/**
 	 * 可挂载武器
 	 */
-	@Column(name="OPTIONAL-WEAPONS-MOUNT")
+	@Column(name="OPTIONALWEAPONSMOUNT")
 	private String optionalWeaponsMount;
 	
 	/**
 	 * 外键
 	 */
-	@Column(name="BASIC_ID")
+	@Column(name="BASICID")
 	private String basicID;
 
-	public String getId() {
-		return id;
+	public String getSystemID() {
+		return systemID;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setSystemID(String id) {
+		this.systemID = id;
 	}
 
 	public String getRadarModel() {

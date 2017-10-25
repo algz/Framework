@@ -1,6 +1,7 @@
 package algz.platform.util.excel;
 
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -10,10 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
+
+import algz.platform.util.ApplicationContextFactoryUtil;
 
 /**
  * @author algz
@@ -23,14 +27,20 @@ public class ExcelView extends AbstractExcelView {
 
 	/**
 	 * create an Excel HSSFWorkbook document, given the model.
+	 * @param Map: filename
 	 */
 	@Override
-	protected void buildExcelDocument(Map<String, Object> model,
+	public void buildExcelDocument(Map<String, Object> model,
 			HSSFWorkbook workbook, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-
+		
+		Object bean=ApplicationContextFactoryUtil.getBean(model.get("className")+"");
+		//依次需要传入 class对象、方法名、参数类型
+		Method  mh = ReflectionUtils.findMethod(bean.getClass(), model.get("methodName")+"",null );  
+		ReflectionUtils.invokeMethod(mh,  bean,workbook,model);  
+		
         //设置下载时客户端Excel的名称       
-        String filename = encodeDownFileCName(model.get("filename")+"", request);//处理中文文件名    
+        String filename = encodeDownFileCName(model.get("filename")==null?"excel.xls":model.get("filename")+".xls", request);//处理中文文件名    
         
         response.setContentType("application/vnd.ms-excel");       
         response.setHeader("Content-disposition", "attachment;filename=" + filename);       

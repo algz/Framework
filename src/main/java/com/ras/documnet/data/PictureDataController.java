@@ -121,7 +121,7 @@ public class PictureDataController{
 	@RequestMapping({"/uppicturefile"})
 	public void upPictureFile(/*@RequestParam("file") MultipartFile file,*/ AircraftPicture photo,HttpServletRequest request, HttpServletResponse response){
         String msg="{\"success\":true}";
-        if(photo.getOverviewID()==null||photo.getOverviewID().equals("null")){
+        if(photo.getOverviewID()==null||photo.getOverviewID().equals("null")||photo.getPhotoFile()==null){
         	msg="{\"success\":false}";
         	//msg="{\"id\":\"ff8081814cdf6f22014cdf6fafb40000\"}";
         	CommonTool.writeJSONToPage(response,msg ); 

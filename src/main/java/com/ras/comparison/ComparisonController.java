@@ -54,16 +54,15 @@ public class ComparisonController {
     	page.setHeader_small("对比");
     	map.put("page", page);
     	
-    	
-
-    	
         return new ModelAndView("ras/comparison/comparison",map);
     }
     
     @RequestMapping(value={"/findmodelgird"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public void  findModelGird(ComparisonVo vo,HttpServletRequest request,HttpServletResponse response) {
     	//Map<String, Object> map=new HashMap<String, Object>();
-    	String modelName=request.getParameter("modelName");
+//    	String modelName=request.getParameter("modelName");
+    	String[] overviewIDs=request.getParameterValues("overviewIDs[]");
+    	vo.setOverviewID(String.join(",", overviewIDs));
     	service.findModelGird(vo);
     	CommonTool.writeJSONToPage(response,vo );
     	
@@ -74,7 +73,10 @@ public class ComparisonController {
     public ModelAndView  comparisonDetail(HttpServletRequest request,HttpServletResponse response) {
     	Map<String, Object> map=new HashMap<String, Object>();
     	String modelName=request.getParameter("modelName");
+    	
     	String basicID=request.getParameter("basicID");
+    	String overviewID=request.getParameter("overviewID");
+    	map.put("overviewID", overviewID);
     	map.put("modelName", modelName);
     	map.put("basicID", basicID);
     	Page page=new Page();
@@ -90,27 +92,15 @@ public class ComparisonController {
     
     @RequestMapping(value={"/findcomparisondetailgrid"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
     public void  findComparisonDetailGrid(ComparisonVo vo,HttpServletRequest request,HttpServletResponse response) {
-    	String modelName=request.getParameter("modelName");
-    	String basicID=request.getParameter("basicID");
+    	String[] modelName=request.getParameter("modelName").equals("")?null:request.getParameter("modelName").split(",");
+    	String[] basicID=request.getParameter("basicID").equals("")?null:request.getParameter("basicID").split(",");
+    	String[] overviewID=request.getParameter("overviewID").equals("")?null:request.getParameter("overviewID").split(",");
     	if(modelName!=null){
-    		vo.setData(service.findComparisonDetailGrid(modelName.split(","),basicID.split(",")));
+    		vo.setData(service.findComparisonDetailGrid(overviewID,modelName,basicID));
     	}
     	CommonTool.writeJSONToPage(response,vo );
     }
     
-    /**
-     * 生成报告
-     * @param request
-     * @param response
-     */
-    @RequestMapping(value={"/savereport"}) //@RequestMapping 注解的方法才是真正处理请求的处理器
-    public void  saveReport(HttpServletRequest request,HttpServletResponse response) {
-    	String reportName=request.getParameter("reportName");
-    	String reportDes=request.getParameter("reportDes");
-    	String[] reportContent=request.getParameterValues("reportContent[]");
-    	service.saveReport(reportName, reportDes, reportContent);
 
-    	CommonTool.writeJSONToPage(response," {\"success\":true}" );
-    }
     
 }

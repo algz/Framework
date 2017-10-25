@@ -58,9 +58,15 @@ public class ComparisonVo<T> extends ReturnVo<T>{
 		this.modelName = modelName;
 	}
 
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	
 }

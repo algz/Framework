@@ -12,4 +12,6 @@ public interface AircraftCapabilityDao {
 	public Integer count(AircraftCapability ab);
 	
 	public void saveOrUpdate(AircraftCapability ab);
+	
+	public AircraftCapability copy(AircraftCapability example);
 }

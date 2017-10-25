@@ -38,7 +38,7 @@ public class ExcelTestController {
 	       model.put("list", list);    
 	       ExcelView viewExcel = new ExcelView();    
 	       try {
-	    	   viewExcel=service.createExcelView(model, request, response);
+//	    	   viewExcel=service.createExcel(model);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

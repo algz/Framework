@@ -1,11 +1,11 @@
-package com.ras.personal;
+package com.ras.personal.report;
 
 import com.ras.tool.ReturnVo;
 
 /**
  * TbDeviceContractmanagement entity. @author MyEclipse Persistence Tools
  */
-public class PersonalVo<T> extends ReturnVo<T>{
+public class ReportVo<T> extends ReturnVo<T>{
 
 	// Fields
 	
@@ -16,7 +16,7 @@ public class PersonalVo<T> extends ReturnVo<T>{
 	// Constructors
 
 	/** default constructor */
-	public PersonalVo() {
+	public ReportVo() {
 	}
 
 

@@ -4,6 +4,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /** 
  * 当一个类实现了这个接口（ApplicationContextAware）之后，这个类就可以方便获得ApplicationContext中的所有bean。换句话说，就是这个类可以直接获取spring配置文件中，所有有引用到的bean对象。
@@ -11,25 +14,33 @@ import org.springframework.context.ApplicationContextAware;
  * Spring ApplicationContext 获取spring容器中的实例bean 
  * 
  */ 
+@Component
+@Lazy(false)
 public class ApplicationContextFactoryUtil implements ApplicationContextAware  {
 	 /** 
      * Spring 应用上下文环境 
-     */  
+     */
     private static ApplicationContext applicationContext;  
    
-    /** 
-     * 实现ApplicationContextAware接口的回调方法,设置上下文环境 
-     *  
-     * @param applicationContext 
-     * @throws BeansException 
-     */  
-    @SuppressWarnings("static-access")  
-    public void setApplicationContext(ApplicationContext applicationContext)  
-            throws BeansException  
-    {  
-        this.applicationContext = applicationContext;  
-    }  
+//    /** 
+//     * 实现ApplicationContextAware接口的回调方法,设置上下文环境 
+//     *  
+//     * @param applicationContext 
+//     * @throws BeansException 
+//     */  
+//    @SuppressWarnings("static-access")  
+//    public void setApplicationContext(ApplicationContext applicationContext)  
+//            throws BeansException  
+//    {  
+//        this.applicationContext = applicationContext;  
+//    }  
    
+	@Override
+	@SuppressWarnings("static-access")  
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext; 
+	}  
+    
 //    暂时不会用.
 //    /** 
 //     * @return ApplicationContext 
@@ -123,5 +134,7 @@ public class ApplicationContextFactoryUtil implements ApplicationContextAware  {
             throws NoSuchBeanDefinitionException  
     {  
         return applicationContext.getAliases(name);  
-    }  
+    }
+
+
 }

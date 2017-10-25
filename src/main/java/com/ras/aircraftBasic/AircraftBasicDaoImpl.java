@@ -8,8 +8,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Table;
 import javax.transaction.Transactional;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.id.GUIDGenerator;
@@ -17,6 +19,7 @@ import org.hibernate.id.UUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ras.aircraftCapability.AircraftCapability;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.tool.CommonTool;
 
@@ -174,12 +177,31 @@ public class AircraftBasicDaoImpl implements AircraftBasicDao {
 	
 	public AircraftBasic getMainAircraftBasic(String overviewID){
 		String sql="select * from ras_aircraft_basic ab where ab.maininfo='1' and ab.overviewid='"+overviewID+"'";
-		
-		if(!CommonTool.isDataManager()){
-			User curUser=Common.getLoginUser();
-			sql+=" and (ab.editor='"+curUser.getUserid()+"' or ab.PERMISSION_LEVEL in ('2','3'))";
-		}
+//		
+//		if(!CommonTool.isDataManager()){
+//			User curUser=Common.getLoginUser();
+//			sql+=" and (ab.editor='"+curUser.getUserid()+"' or ao.PERMISSION_LEVEL in ('2','3'))";
+//		}
 		
 		return (AircraftBasic)sf.getCurrentSession().createSQLQuery(sql).addEntity(AircraftBasic.class).setMaxResults(1).uniqueResult();
+	}
+
+	@Override
+	public AircraftBasic copy(AircraftBasic example) {
+		String tableName=example.getClass().getAnnotation(Table.class).name();
+		StringBuilder sql=new StringBuilder("select distinct * from "+tableName+" where 1=1 ");
+		List<AircraftBasic> list=CommonTool.<AircraftBasic>findEntitiesByProperty(sf, sql, example, 0, 1, null);
+		if(list.size()!=0){
+			AircraftBasic ac=new AircraftBasic();
+			try {
+				BeanUtils.copyProperties(ac, list.get(0));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			return ac;
+		}else{
+			return null;
+		}
 	}
 }

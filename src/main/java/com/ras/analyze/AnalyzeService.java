@@ -14,5 +14,5 @@ public interface AnalyzeService {
 	
 	public JSONArray analyzeChart(String[] modelNames,String[] axis);
 	
-	public JSONArray getAircraftAll();
+	public JSONArray getAircraftAll(boolean isParent);
 }

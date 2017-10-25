@@ -32,6 +32,7 @@
 			<!-- PAGE CONTENT BEGINS -->
 			<div class="row">
 				<div class="col-sm-12">
+					<input id="overviewID" type="hidden" value="${overviewID }" />
 					<input id="modelName" type="hidden" value="${modelName }" />
 					<input id="basicID" type="hidden" value="${basicID }" />
 					<label>
@@ -133,7 +134,9 @@
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
-		
+		<plugin_css>
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/gritter/jquery.gritter.css" />
+		</plugin_css>
 		<plugin_js>
 			<!-- dataTable.js -->
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
@@ -142,6 +145,7 @@
 			<!-- 图片放大查看 
 			<script src="<%=basePath%>ras/common/js/jquery.colorbox.js"></script>-->
 
+			<script src="<%=basePath%>ras/common/js/gritter/jquery.gritter.js"></script>
 
 		</plugin_js>
 		<script type="text/javascript" src="comparisonDetail.js"></script>		

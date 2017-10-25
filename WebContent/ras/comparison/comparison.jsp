@@ -29,9 +29,7 @@
 	
 	<body >
 	
-	<!-- 需加载到CSS的插件 -->
-	<plugin_css><link rel="stylesheet" href="<%=basePath%>ras/common/css/ui.jqgrid.css " /></plugin_css>
-	
+
 		<page:page page="${page }">
 		
 			<!-- PAGE CONTENT BEGINS -->
@@ -43,20 +41,26 @@
 					<div class="table-header">
 						筛选：
 					</div>
+					
+					<span class="input-group-btn">
+					<select id="modelNameSelect" class="chosen-select" multiple>
+					</select>
+						<button class="btn btn-purple btn-sm" id=submitQueryBtn type="button">
+							查询
+							<i class="icon-search icon-on-right bigger-110"></i>
+						</button>
+					</span>
 					<div>
-					<div class="row">
+					<!-- <div class="row">
 							<div class="col-xs-2">
+													
 								<div class="input-group">
+
 									<input id="modelName" class="form-control search-query" type="text" placeholder="机型名称" value="">
-									<span class="input-group-btn">
-										<button class="btn btn-purple btn-sm" id="submitBtn" type="button">
-											查询
-											<i class="icon-search icon-on-right bigger-110"></i>
-										</button>
-									</span>
+									
 								</div>
 							</div>
-						</div>
+						</div> -->
 					<table id="comparison-table" class="table table-striped table-bordered table-hover">
 						</table>
 					</div>
@@ -74,23 +78,21 @@
 			</div>
 			</form>
 			<!-- PAGE CONTENT ENDS -->
-		
-		
-		
-			<!-- PAGE CONTENT BEGINS -->
-			
-			
-			
-
-			
-			<!-- PAGE CONTENT ENDS -->
 		</page:page>
+			<!-- 需加载到CSS的插件 -->
+		<plugin_css>
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/ui.jqgrid.css " />
+
+			<link rel="stylesheet" href="<%=basePath%>ras/common/css/chosen/chosen.css" />	
+		</plugin_css>
 		<plugin_js>
 			<!-- dataTable.js -->
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
-			<script src="<%=basePath%>ras/common/js/bootstrap-tag.js"></script>
+			
+			<%-- <script src="<%=basePath%>ras/common/js/bootstrap-tag.js"></script> --%>
 
+			<script src="<%=basePath%>ras/common/js/chosen/chosen.jquery.js"></script>
 		</plugin_js>
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript" src="comparison.js"></script>

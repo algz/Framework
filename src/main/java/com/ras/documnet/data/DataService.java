@@ -37,8 +37,6 @@ public interface DataService {
 	
 	public JSONObject  addModelParamPage(DataVo vo);
 	
-	
-	
 	public JSONArray findModelImageParam(String category,String basicID);
 	
 	public void saveModelPhotoFile(AircraftOverview ao);
@@ -65,6 +63,9 @@ public interface DataService {
 	 */
 	public void saveModel(Map<String,String> map) throws Exception;
 	
+	public void saveSubModel(String modelName,String parentID);
+	
+	
 	public void saveModelParam(CaseInsensitiveMap map) throws Exception ;
 	
 	public void delModel(String[] ids);
@@ -74,4 +75,6 @@ public interface DataService {
 	public void setMainModelParam(String basicID,String overviewID);
 	
 	public List findTableSQL(String tableName);
+	
+	public List<?> findCategoryNameForTypeahead(String categoryName); 
 }

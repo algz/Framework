@@ -72,6 +72,18 @@ var dataTable = $('#table-dataTable')
 						"title" : "英文名",
 						data:'modelEname',
 						sorting : false
+					},{
+						"title" : "编辑日期",
+						data:'modifyDate',
+//									type:'date',
+						sorting : false,
+						render:function(data, type, row, meta){
+						    if(data==null){
+						    	return "";
+						    }
+						    var d=new Date(data.time); //new Date().setTime(data.time);
+						    return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
+						}
 					}],
 			"language" : dataTables_zh // 多语言配置
 			});

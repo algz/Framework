@@ -47,7 +47,7 @@ public class AircraftPictureDaoImpl implements AircraftPictureDao {
 			sql.append(" AND PHOTO.OVERVIEWID='"+photo.getOverviewID()+"' ");
 		}
 		if(photo.getTag()!=null&&!photo.getTag().equals("")){
-			sql.append(" and photo.tag='"+photo.getTag()+"' ");
+			sql.append(" and photo.tag like '%"+photo.getTag()+"%' ");
 		}
 		if(photo.getPhotoCategory()!=null){
 			sql.append(" AND PHOTO.PHOTO_CATEGORY='"+photo.getPhotoCategory()+"' ");
@@ -72,7 +72,7 @@ public class AircraftPictureDaoImpl implements AircraftPictureDao {
 			sql.append(" AND PHOTO.OVERVIEWID='"+photo.getOverviewID()+"' ");
 		}
 		if(photo.getTag()!=null&&!photo.getTag().equals("")){
-			sql.append(" and photo.tag='"+photo.getTag()+"' ");
+			sql.append(" and photo.tag like '%"+photo.getTag()+"%' ");
 		}
 		if(photo.getPhotoCategory()!=null){
 			sql.append(" AND PHOTO.PHOTO_CATEGORY='"+photo.getPhotoCategory()+"' ");

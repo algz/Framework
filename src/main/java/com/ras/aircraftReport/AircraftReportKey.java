@@ -1,4 +1,4 @@
-package com.ras.personal.report;
+package com.ras.aircraftReport;
 
 import java.util.List;
 import java.util.Set;
@@ -26,8 +26,8 @@ import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name="RAS_REPORT_CONTENT_KEY")
-public class ReportContentKey{
+@Table(name="RAS_AIRCRAFT_REPORT_KEY")
+public class AircraftReportKey{
 
 	@Id
     @Column(name = "ID")
@@ -44,7 +44,7 @@ public class ReportContentKey{
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "reportContentValID")
 	//@OrderBy(value = "id asc") //对@OneToMany获取的关联列表排序,在@OneToMany下面加个@OrderBy,参数值要对应Bean中的属性名
 //	 @LazyCollection(LazyCollectionOption.FALSE)
-	private List<ReportContentVal> reportContentValSet;
+	private List<AircraftReportVal> reportContentValSet;
 
 	public String getReportContentKeyID() {
 		return reportContentKeyID;
@@ -70,11 +70,11 @@ public class ReportContentKey{
 		this.reportID = reportID;
 	}
 
-	public List<ReportContentVal> getReportContentValSet() {
+	public List<AircraftReportVal> getReportContentValSet() {
 		return reportContentValSet;
 	}
 
-	public void setReportContentValSet(List<ReportContentVal> reportContentValSet) {
+	public void setReportContentValSet(List<AircraftReportVal> reportContentValSet) {
 		this.reportContentValSet = reportContentValSet;
 	}
 	

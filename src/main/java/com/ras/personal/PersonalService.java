@@ -1,14 +1,15 @@
 package com.ras.personal;
 
-import java.util.List;
+import java.util.Map;
 
-import com.ras.personal.report.Report;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import com.ras.aircraftReport.AircraftReport;
+
 
 public interface PersonalService {
 
-	public void findPersonalReportGrid(PersonalVo vo);
 	
-	public void findPersonalReportContentGrid(PersonalVo vo);
-	
-	public Report findPersonalReport(PersonalVo vo);
+	public void exportReportToExcel(HSSFWorkbook workbook,Map m);
 }

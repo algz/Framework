@@ -21,7 +21,7 @@ public interface SearchParamDao {
 	
 	public Map<String,String> searchSummarize(String overviewID);
 	
-	public JSONObject addNoteForTagInput(String overviewID,String[] inputNames);
+
 	
 	public Map<String,List<String>> findAllCheckboxTypeList();
 	

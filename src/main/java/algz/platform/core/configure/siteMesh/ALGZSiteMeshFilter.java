@@ -27,6 +27,7 @@ public class ALGZSiteMeshFilter extends ConfigurableSiteMeshFilter {
 //           .addDecoratorPaths("/platform/uiExample/uicomponent/*", "/platform/uiExample/main.jsp",   
 //                                             "/platform/decorators/top.jsp")  
            // 不被渲染的url路径.
+		   .addExcludedPath("/ras/relation/*")
 		   .addExcludedPath("/manager/*") 
 		   .addExcludedPath("/H+3.0/*") 
            //.addExcludedPath("/algz/*") //http://localhost:8080/algz/algz/algz.jsp 

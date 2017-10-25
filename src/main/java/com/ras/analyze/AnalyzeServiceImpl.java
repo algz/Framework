@@ -44,8 +44,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	}
 
 	@Override
-	public JSONArray getAircraftAll() {
-		List<AircraftOverview> list=aircraftOverviewDao.findAll();
+	public JSONArray getAircraftAll(boolean isParent) {
+		List<AircraftOverview> list=dao.getAircraftAll(isParent);
 		JSONArray ja=new JSONArray();
 		for(AircraftOverview ao : list){
 			JSONObject jo=new JSONObject();

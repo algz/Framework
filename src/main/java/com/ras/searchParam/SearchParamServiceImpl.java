@@ -24,7 +24,9 @@ public class SearchParamServiceImpl implements SearchParamService {
 	private SearchParamDao dao;
 	
 
-	
+	/**
+	 * 查找所有参数标签
+	 */
 	@Override
 	public List<SearchParam> findAllParent() {
 		return dao.findAllParent();
@@ -40,11 +42,6 @@ public class SearchParamServiceImpl implements SearchParamService {
 	@Transactional
 	public void save(SearchParam searchTag){
 		dao.save(searchTag);
-	}
-
-	@Override
-	public JSONObject addNoteForTagInput(String overviewID, String[] inputNames) {
-		return dao.addNoteForTagInput(overviewID, inputNames);
 	}
 
 	@Override

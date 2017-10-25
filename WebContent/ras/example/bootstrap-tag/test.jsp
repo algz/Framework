@@ -1,68 +1,61 @@
-<!DOCTYPE html>
-<html lang="zh">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="utf-8" />
-		<title>飞机论证参照模块</title>
 
-<!-- bootstrap & fontawesome -->
-<link rel="stylesheet" href="http://localhost:8080/algz/ras/common/css/bootstrap.css" />
-<link rel="stylesheet" href="http://localhost:8080/algz/ras/common/css/font-awesome.css" />
-		<link rel="stylesheet" href="http://localhost:8080/algz/ras/common/css/bootstrap-tag.css" />	
+<link rel="stylesheet" href="http://localhost:8080/algz/ras/common/css/bootstrap-tag.css" />	
 
-<script src='http://localhost:8080/algz/ras/common/js/jquery.js'></script>
-		<script src="//cdn.bootcss.com/bootstrap/2.3.1/js/bootstrap.js"></script>
-
-		<script src="bootstrap-tag-min.js"></script>
-
-	</head>
-
-	<body >
-
-<!-- 标签属性 -->
+<script src="bootstrap-tag-min.js"></script>
 
 
-<div class="main-content">
-	<div class="main-content-inner">
-		<div class="page-content">
 
-<!-- 标签属性 -->
-
-<div class="row">
-	<div class="col-xs-12">
-		<!-- PAGE CONTENT BEGINS -->
+<div class="form-group">
+	<label class="col-sm-3 control-label no-padding-right" for="form-field-tags">Tag input</label>
+	<div class="col-sm-9">
+		<!-- #section:plugins/input.tag-input -->
+		<div class="inline">
+			<input type="text" name="tags" id="form-field-tags" value="Tag Input Control" placeholder="Enter tags ..." />
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
 		
-			
-			<!-- PAGE CONTENT BEGINS -->
-			<div class="row">
-				<div class="col-sm-12">
-					<!-- #section:elements.tab -->
-					<div class="tabbable">
+		var tag_input = $('#form-field-tags');
+		try{
+			tag_input.tag(
+			  {
+				placeholder:tag_input.attr('placeholder'),
+				//enable typeahead by specifying the source array
+				source: ace.vars['US_STATES'],//defined in ace.js >> ace.enable_search_ahead
+				/**
+				//or fetch data from database, fetch those that match "query"
+				source: function(query, process) {
+				  $.ajax({url: 'remote_source.php?q='+encodeURIComponent(query)})
+				  .done(function(result_items){
+					process(result_items);
+				  });
+				}
+				*/
+			  }
+			)
 	
-						<div class="tab-content">
-						
-							<div id="param" class="tab-pane fade in active">
-								
-
+			//programmatically add a new
+			var $tag_obj = $('#form-field-tags').data('tag');
+			$tag_obj.add('Programmatically Added');
+		}
+		catch(e) {
+			//display a textarea for old IE, because it doesn't support this plugin or another one I tried!
+			tag_input.after('<textarea id="'+tag_input.attr('id')+'" name="'+tag_input.attr('name')+'" rows="3">'+tag_input.val()+'</textarea>').remove();
+			//$('#form-field-tags').autosize({append: "\n"});
+		}
+		
+	})
+	</script>
     
 
 
 
 <form id='modelParamForm' action="./savemodelparam" method="post">
-	<input name="overviewID" type="hidden" value="null"/>
-	<input name="basicID" type="hidden" value="null"/>
 	
 	<input type="text" name="tags" id='tags'>
 	
-
-	<div class="row">
-		<div class="col-sm-offset-6">
-			<div class="btn-group">
-				<input type="submit" id="addModelparam" class="btn btn-primary" value="保存"/>
-			</div>
-		</div>
-	</div>
-
 	<script type="text/javascript">
 	$(function(){
 		$('#tags').tag(
@@ -71,32 +64,6 @@
 					//enable typeahead by specifying the source array
 					source: ['US_STATES','us_a','us_aa','us_aaa']//defined in ace.js >> ace.enable_search_ahead
 				  });
-		
 	})
 	</script>
 </form>
-
-							</div>
-						</div>
-					</div>
-	
-					<!-- /section:elements.tab -->
-				</div><!-- /.col -->	
-			</div>
-			<p>
-			<!-- PAGE CONTENT ENDS -->
-		
-			
-		<!-- PAGE CONTENT ENDS -->
-	</div><!-- /.col -->
-</div><!-- /.row -->
-
-		</div><!-- /.page-content -->
-		</div>
-</div><!-- /.main-content -->
-		
-	
-			
-
-	</body>
-</html>

@@ -13,7 +13,7 @@ public interface SearchParamService {
 	
 	public void save(SearchParam searchTag);
 	
-	public JSONObject addNoteForTagInput(String overviewID,String[] inputNames);
+
 	
 	public Map<String,List<String>> findAllCheckboxTypeList();
 	

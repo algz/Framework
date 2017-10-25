@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.ras.aircraftCapability.AircraftCapability;
+
 public interface AircraftBasicDao {
 
 	public List<AircraftBasic> findAll();
@@ -23,4 +25,6 @@ public interface AircraftBasicDao {
 	public void setMaininfo(String basicID,String overviewID);
 	
 	public AircraftBasic getMainAircraftBasic(String overviewID);
+	
+	public AircraftBasic copy(AircraftBasic example);
 }

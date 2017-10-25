@@ -36,7 +36,7 @@
 					<div class="widget-title">筛选：
 						<span class="label"></span>
 						<input type="hidden" class="width-100" id="selectModelName" placeholder="选择的机型"  disabled>
-						<input type="hidden" id="selectBasicID">
+						<input type="hidden" id="selectOverviewID">
 					</div>
 					<!-- <div class="dataTables_borderWrap"> 
 					<div class="btn-group">
@@ -45,7 +45,7 @@
 						
 						<span class="input-icon" style="width:500px;">
 							<input type="text" class="width-100" id="selectModelName" placeholder="选择的机型"  disabled>
-							<input type="hidden" id="selectBasicID">
+							<input type="hidden" id="selectOverviewID">
 							<i class="ace-icon fa fa-fighter-jet  blue"></i>
 						</span>
 						<button id="clearModelSelectBtn" class="btn btn-sm btn-default" type="button">清空</button>
@@ -56,11 +56,11 @@
 					<div class="widget-main">
 									
 						<div class="row">
-							<div class="col-xs-5">
+							<div class="col-xs-4">
 								<div id="tree"></div>
 							</div>
 							
-							<div class="col-xs-7">
+							<div class="col-xs-8">
 								<!-- <h3 class="header smaller lighter blue"></h3> -->
 								<div class="table-header">
 									
@@ -73,6 +73,11 @@
 									<button id="comparisonModelparamBtn" class="btn btn-purple btn-sm" type="button">对比</button>
 									<button id="analyzeModelparamBtn" class="btn btn-purple btn-sm" type="button">分析</button>
 								</div>
+								<label class="btn btn-sm  inline">
+									<small class="muted smaller-90">隐藏个人:</small>
+									<input class="ace ace-switch ace-switch-5" id="showPersonDataBtn" type="checkbox" >
+									<span class="lbl middle" ></span>
+								</label>
 								<div>
 									<table id="searchTable" class="table table-striped table-bordered table-hover">
 									</table>
@@ -106,7 +111,7 @@
 
 
 
-<div id="modal-form" class="modal fade" tabindex="-1">
+<div id="modal-analyzeChart" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">        
@@ -129,7 +134,7 @@
 						<div class="col-sm-9">
 							<select class="chosen-select form-control" id="xAxisBtn" data-placeholder="请选择x轴...">
 							<option></option>
-							<c:forEach items="${tagSelect }" var="tag">
+							<c:forEach items="${searchTags }" var="tag">
 							<c:if test="${tag.searchTags.size()!=0 }">
 								<optgroup label="${tag.name }">
 									<c:forEach items="${tag.searchTags }" var="ctag">
@@ -149,7 +154,7 @@
 						<div class="col-sm-9">
 							<select class="chosen-select form-control" id="yAxisBtn" data-placeholder="请选择y轴...">
 							<option></option>
-							<c:forEach items="${tagSelect }" var="tag">
+							<c:forEach items="${searchTags }" var="tag">
 							<c:if test="${tag.searchTags.size()!=0 }">
 								<optgroup label="${tag.name }">
 									<c:forEach items="${tag.searchTags }" var="ctag">
@@ -175,7 +180,6 @@
 					</div>
 	            </form>         
 
-				
           		<div id="highchart" ></div>
           	
           	</div>
@@ -199,6 +203,8 @@
 			
 			<!-- highcharts.js 图表-->
 			<script src="<%=basePath%>ras/common/js/highcharts/highcharts.js"></script>
+			<script src="<%=basePath%>ras/common/js/highcharts/modules/exporting.js"></script>
+			<script src="<%=basePath%>ras/common/js/highcharts/plugins/highcharts-zh_CN.js"></script>
 		
 
 		

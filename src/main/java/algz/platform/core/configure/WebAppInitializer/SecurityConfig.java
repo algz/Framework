@@ -167,7 +167,7 @@ public class SecurityConfig {
 		filterChainMap.put("/login", "anon"); //不需要验证的URL
 		filterChainMap.put("/ras/ssologin/**", "anon");
 		filterChainMap.put("/ras/common/**", "anon"); //不需要验证的URL
-		filterChainMap.put("/ras/ws/**", "anon"); //不需要验证的URL
+		filterChainMap.put("/ras/relation/**", "anon"); //不需要验证的URL
 
 //		filterChainMap.put("/test/login", "anon"); 
 //		filterChainMap.put("/test/getVerifyCodeImage", "anon");

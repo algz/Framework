@@ -75,20 +75,7 @@ public class SearchParamController {
         return new ModelAndView("ras/searchparam/search",map);
     }
     
-    @RequestMapping(value={"/addnotefortaginput"})
-    public void addNoteForTagInput(HttpServletRequest request,HttpServletResponse response){
-    	String overviewID=request.getParameter("overviewID");
-    	String inputNames=request.getParameter("inputName");
-    	if(overviewID==null||inputNames==null){
-    		//return "{\"success\":false}";
-    	}
-    	JSONObject jo=service.addNoteForTagInput(overviewID, inputNames.split(","));
-    	jo.put("\"success\"", true);
-//    	String msg="{\"success\":true,"
-//    			+ "inputs:[{name:'aircraftType',vals:[{dataSource:'飞机手册1',inputValue:'美国1'},{dataSource:'飞机手册2',inputValue:'美国2'}]}]}";
-		CommonTool.writeJSONToPage(response, jo);
-    	//return msg;//"{\"success\":true}";
-    }
+   
     
     
     

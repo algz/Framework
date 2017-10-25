@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- 
 fade: 动画效果
 
@@ -20,6 +21,7 @@ $('#modal-form').modal('hide');
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+
 %>
 <%@tag pageEncoding="UTF-8"%>
 
@@ -47,6 +49,9 @@ $('#modal-form').modal('hide');
 							<option value="1">个人可视</option>
 							<option value="2">部门可视</option>
 							<option value="3">所内可视</option>
+							<option value="4">范围可视</option>
+						</form:form-group>
+						<form:form-group formClass="hidden" id="permissionUserRange" label="选择范围" type="select" hidden="true" isMultiple="1">
 						</form:form-group>
 					</form>
 	          	</div>
@@ -58,7 +63,38 @@ $('#modal-form').modal('hide');
     </div>
 </div>
 <script type="text/javascript">
+
 <!-- 
+
+	//动态加载JS
+	$.fn.chosen||document.write("<link rel='stylesheet' href='<%=basePath%>ras/common/css/chosen/chosen.css' />");
+	$.fn.chosen||document.write("<script src='<%=basePath%>ras/common/js/chosen/chosen.jquery.js'></script>")
+
+	$(function() {
+		$('#permission_level,#permissionUserRange').chosen({
+			allow_single_deselect : true,
+			width : '90%',
+			placeholder_text_multiple:'请选择一项'
+			//disable_search:true //关闭搜索框,默认为false.
+		})
+		
+		//加载所有用户
+		$.ajax({
+    		type:"POST",
+    		url:'<%=basePath%>/ras/approval/getuserall',
+   			complete :function(data){
+   				data=data.responseJSON;
+   				for(var i=0;i<data.length;i++){
+					$('#permissionUserRange').append("<option value='"+data[i].userid+"'>"+data[i].cname+"</option>");
+					$("#permissionUserRange").trigger("chosen:updated"); //必须设置,让chosen更新
+   				}
+   				
+   			}
+   		})
+	})
+
+
+
 	window.approvalModal={
 		dataID:null
 	};
@@ -69,6 +105,13 @@ $('#modal-form').modal('hide');
     	!config.dataID||$(':hidden[name=approval-dataID]').val(config.dataID);
     	!config.dataTable||$(':hidden[name=approval-dataTable]').val(config.dataTable);
 
+		//初始化文本框
+		$('#permission_level').val("");
+		$("#permission_level").trigger("chosen:updated"); //必须设置,让chosen更新
+		$('#permissionUserRange').val("");
+		$("#permissionUserRange").trigger("chosen:updated"); //必须设置,让chosen更新
+		$('#form-permissionUserRange').addClass('hidden');
+		
     	_approvalModal.modal();
 		if(callBack!=null){
 			callBack();
@@ -84,13 +127,26 @@ $('#modal-form').modal('hide');
     
     //提交
     approvalModal.submitApproval=function(callBack){
+    	var arr=$('#permissionUserRange option:selected');
+    	var range="";
+    	for(var i=0;i<arr.length;i++){
+    		var val=arr[i].value;
+    		if(val==""){
+    			continue;
+    		}
+    		if(range!=""){
+    			range+=",";
+    		};
+    		range+=val;
+    	};
     	$.ajax({
     		type:"POST",
     		url:'<%=basePath%>/ras/approval/submitapproval',
     		data:{
 	    			dataID:$(':hidden[name=approval-dataID]').val(),
 	    			dataTable:$(':hidden[name=approval-dataTable]').val(),
-	    			permissionLevel:$('#permission_level').val()
+	    			permissionLevel:$('#permission_level').val(),
+	    			permissionUserRange:range
     			},
    			complete :function(data){
    				approvalModal.hide();
@@ -102,8 +158,20 @@ $('#modal-form').modal('hide');
    		})
     };
     
+    //提交
     $('#approval-confirmBtn').on('click',function(){
     	approvalModal.submitApproval(approvalModal.complete);
     })
+    
+    //权限选择
+    $('#permission_level').on('change',function(){
+    	if(this.value==4){
+    		$('#form-permissionUserRange').removeClass('hidden');
+    	}else{
+    		$('#form-permissionUserRange').addClass('hidden');
+    	}
+    })
+    
+
 -->
 </script>

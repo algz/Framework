@@ -19,15 +19,19 @@ public class RoleDaoImpl implements RoleDao {
 	private SessionFactory sf;
 	
 	@Override
-	public List<User> findUsernameByRole(Role role) {
-		StringBuilder sql=new StringBuilder("select au.* from ALGZ_USER_ROLE aur "
+	public List<User> findUsernameByRoleName(String... roleNames) {
+		StringBuilder sql=new StringBuilder("select distinct au.* from ALGZ_USER_ROLE aur "
 				+ "inner join ALGZ_ROLE ar on aur.roleid=ar.id "
 				+ "inner join ALGZ_USER au on aur.userid=au.id where 1=1 ");
-		if(role.getId()!=null){
-			sql.append(" and ar.id='"+role.getId()+"'");
+		String roleName="";
+		for(int i=0;i<roleNames.length;i++){
+			if(!roleName.equals("")){
+				roleName+=",";
+			}
+			roleName+=("'"+roleNames[i].toLowerCase()+"'");
 		}
-		if(role.getRolename()!=null){
-			sql.append(" and ar.rolename='"+role.getRolename()+"'");
+		if(!roleName.equals("")){
+			sql.append(" and LOWER(ar.rolename) in ("+roleName+")");
 		}
 		return sf.getCurrentSession().createSQLQuery(sql.toString()).addEntity(User.class).list();
 	}

@@ -1,4 +1,109 @@
 $(function() {
+	//设置为中文
+	bootbox.setDefaults("locale","zh_CN"); 
+	
+	//子机型创建--查找所有主机型
+	$('#subModelSelectBtn').on("chosen:ready",function(){
+		$.ajax({
+			url:"./findaircraftall",
+			success:function(data){
+				var arr=eval(data);
+				$.each( arr, function(i, obj){
+					$('#subModelSelectBtn').append("<option value='"+obj.overviewID+"'>"+obj.modelName+"</option>");
+					$("#subModelSelectBtn").trigger("chosen:updated"); //必须设置,让chosen更新
+				})
+			}
+		})
+	})
+	.chosen({
+		allow_single_deselect : true,
+		width : '90%',
+		placeholder_text_multiple:'请选择一项'
+		//disable_search:true //关闭搜索框,默认为false.
+	})
+	
+	$('#subModel-confirmBtn').on('click',function(){
+		$.ajax({
+			url:"./savesubmodel",
+			data:{
+				modelName:$('#subModelName').val(),
+				parentID:$('#subModelSelectBtn').val()
+			},
+			success:function(){
+				tablemodel.ajax.reload();
+				$('#modal-subModel').modal('hide');
+			}
+		})
+	})
+	
+	
+	/**创建子机型
+	 */
+	$('#addSubModelBtn').on('click',function(){
+//		if(tablemodel.row('.selected').length==0){
+//			bootbox.alert("请选择一条机型数据!")
+//			return ;
+//		}else{
+		$('#subModelName').val("");
+		var val="";
+		if(tablemodel.row('.selected').length!=0){
+			val=tablemodel.row('.selected').data().overviewID
+		}
+		$('#subModelSelectBtn').val(val);
+		$("#subModelSelectBtn").trigger("chosen:updated"); //必须设置,让chosen更新
+		$('#modal-subModel').modal({
+		  keyboard: false
+		})
+//		}
+	})
+	
+	$('#modelNameTxt').typeahead(null,{
+       source:function(query,process,aysprocess) {
+       		var objs=$.get("../../analyze/findmodelfortypeahead",{modelName:query},function(data){
+//       		var data=['name1','name2'];
+       			aysprocess(eval(data))
+       			//process(eval(data))
+       		});//['name1','name2']
+    	}
+   });
+	
+	/**
+	 * 机型参数管理
+	 */
+	$("#modelParamManagerBtn").on('click',function(){
+		if(tablemodel.row('.selected').length==0){
+			bootbox.alert("请选择一条数据!")
+			return ;
+		}else{
+			$('#modal-modelParam').modal({
+			  keyboard: false
+			})
+		}
+	});
+	
+	/**
+	 * 送审
+	 */
+	$("#submitApprovalBtn").on('click',function(){
+		if(tablemodel.row('.selected').length==0){
+			bootbox.alert("请选择一条数据!")
+			return ;
+		}else{
+			bootbox.confirm("是否送审?",function(result){
+				if(result){
+					approvalModal.show({
+						dataID:selectModelRowData.overviewID
+					});
+					approvalModal.complete=function(data){
+						tablemodel.ajax.reload();
+						alert(data.responseText);
+					}
+				}
+			
+			});
+		}
+	});
+	
 	/**
 	 * 查询按钮
 	 */
@@ -15,7 +120,7 @@ $(function() {
 			bootbox.alert("请选择一个机型!");
 		}else{
 			var data=tablemodel.row(".selected").data()
-			window.location.href="picturemanager?overviewID="+data.overviewID+"&modelName="+data.modelName; 
+			window.open("picturemanager?overviewID="+data.overviewID+"&modelName="+data.modelName); 
 		}
 	})
 	
@@ -27,7 +132,7 @@ $(function() {
 			bootbox.alert("请选择一个机型!");
 		}else{
 			var data=tablemodel.row(".selected").data()
-			window.location.href="archivemanager?overviewID="+data.overviewID+"&modelName="+data.modelName; 
+			window.open("archivemanager?overviewID="+data.overviewID+"&modelName="+data.modelName); 
 		}
 	})
 	
@@ -47,12 +152,23 @@ $(function() {
 						// processing: true,//"<img src='./loading.gif' />"
 						serverSide : true, // 开启服务器模式
 						ajax : {
+							method:"POST",
 							url : "./findtablemodelgrid"
 						},
 						//deferLoading:1, //延迟加载(值为0,即不加载;不设置为默认自动加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
 						"columns" : [{
 									class : "center",
+									title : "序号", 
+									width:70,
+									//data:null,
+									render: function(data, type, row, meta){
+										　　var startIndex= meta.settings._iDisplayStart;//获取到本页开始的条数
+											return startIndex+meta.row+1;
+									}
+								},{
+									class : "center",
 									width:100,
+									width:50,
 									render : function(data, type, full, meta) {
 										return '<label class="position-relative"><input type="checkbox" class="ace" /><span class="lbl"></span></label>'
 									},
@@ -70,10 +186,44 @@ $(function() {
 									"title" : "英文名",
 									data:'modelEname',
 									sorting : false
+								},{
+									"title" : "主机型名",
+									data:'parentID',
+									sorting : false
 								}, {
-									"title" : "编辑人", 
+									"title" : "创建人", 
 									data:'editor', 
 									sorting : false
+								}, {
+									"title" : "创建日期",
+									data:'modifyDate',
+//									type:'date',
+									width:120,
+									sorting : false,
+									render:function(data, type, row, meta){
+									    if(data==null){
+									    	return "";
+									    }
+									    var d=new Date(data.time); //new Date().setTime(data.time);
+									    return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+									}
+								},{
+									"title" : "权限级别", 
+									data:'permissionLevel',
+									width:120,
+									render:function(data, type, row, meta){
+										if(data==""||data=='1'){
+											return "个人可视";
+										}else if(data=='2'){
+											return "部门可视";
+										}else if(data=="3"){
+											return "所内可视";
+										}else if(data=="4"){
+											return "范围可视";
+										}else{
+											return "未知";
+										}
+									}
 								}],
 						"language" : {
 							"lengthMenu" : "每页显示 _MENU_ 条记录",
@@ -194,8 +344,8 @@ $(function() {
 						} // 多语言配置
 						});
 		
-			/**
-			 * 机型Grid行选
+			/**机型Grid行选
+			 * 
 			 */
 			var selectModelRowData=null;
 			$('#table-model tbody').on('click', 'tr', function () {
@@ -210,7 +360,7 @@ $(function() {
 					 * 返回数组: table.rows('.selected').data();
 					 */
 //					 $(this).toggleClass('selected');
-				$("#modelTool").children().removeAttr('disabled');
+//				$("#modelTool").children().removeAttr('disabled');
 				if(!curCheckbox.checked){
 					//选中
 					tablemodel.$(':checked').attr('checked',false);//清除所有的选中框.
@@ -222,13 +372,13 @@ $(function() {
 					tablemodelparam.settings()[0].ajax.data={overviewID:selectModelRowData.overviewID};
 					tablemodelparam.ajax.reload();
 					
-					$("#modelTool").children().removeAttr('disabled');
-					//需要数据管理员权限才能修改,删除和送审
-		        	if(!algz.curUser.isDataManager&&selectModelRowData.editor!=algz.curUser.username){
-		        		//不是数据管理员
-		        		$("#modifyModel").attr('disabled',"true");
-		        		$("#delModel").attr('disabled',"true");
-		        	}
+//					$("#modelTool").children().removeAttr('disabled');
+//					//需要数据管理员权限才能修改,删除和送审
+//		        	if(!algz.curUser.isDataManager&&selectModelRowData.editor!=algz.curUser.username){
+//		        		//不是数据管理员
+//		        		$("#modifyModel").attr('disabled',"true");
+//		        		$("#delModel").attr('disabled',"true");
+//		        	}
 					
 				}else{
 					//取消
@@ -310,29 +460,7 @@ $(function() {
 		    
 			////////////////////////////////////////////////////
 			
-			/**
-			 * 送审
-			 */
-			$("#submitApprovalBtn").on('click',function(){
-				if(tablemodelparam.row('.selected').length==0){
-					bootbox.alert("请选择一条数据!")
-					return ;
-				}else{
-					bootbox.confirm("是否送审?",function(result){
-						if(result){
-							approvalModal.show({
-								dataID:selectModelParamRowData.basicID
-							});
-							approvalModal.complete=function(data){
-								tablemodelparam.ajax.reload();
-								alert(data.responseText);
-							}
-						}
-					
-					});
-				}
-
-			})
+			
 			
 			
 			/**

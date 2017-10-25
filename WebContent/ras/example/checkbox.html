@@ -17,8 +17,37 @@
 		</div>
 		<label class="btn btn-sm  inline">
 			<small class="muted smaller-90">隐藏系统标签:</small>
-			<input class="ace ace-switch ace-switch-5" id="id-button-borders" type="checkbox" checked="checked">
+			<input class="ace ace-switch ace-switch-5" id="showCheckBox" type="checkbox" checked="checked">
 			<span class="lbl middle" ></span>
 		</label>
 	</div>
 </div>
+
+<script>
+
+$("#showCheckBox").on('click',function(){
+	if($(this).attr("checked")==null){
+		//打开
+		$(this).attr("checked","checked");
+		
+/* 		dataTable.rows().data().each( function (data,index,meta) {
+			var flag=true;
+			for(var i=1;i<data.length;i++){
+				if(data[i]!=null){
+					flag=false;
+					break;
+				}
+			}
+			if(flag){
+				dataTable.row(index).child.hide();
+				$(dataTable.row(index).node()).addClass("hidden");
+			}
+		}); */
+	}else{
+		//关闭
+		$(this).removeAttr("checked")
+		
+		/* dataTable.$('tr').removeClass("hidden"); */
+	}
+})
+</script>

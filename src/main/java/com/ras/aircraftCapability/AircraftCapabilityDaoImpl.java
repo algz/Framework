@@ -3,15 +3,20 @@
  */
 package com.ras.aircraftCapability;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Table;
 import javax.transaction.Transactional;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.ras.tool.CommonTool;
 
 /**
  * @author algz
@@ -54,6 +59,26 @@ public class AircraftCapabilityDaoImpl implements AircraftCapabilityDao {
 		Query query= sf.getCurrentSession().createQuery(hql);
 		List list= query.setProperties(ac).list();//.setEntity("ab", ab).list();
 		return list;
+	}
+
+
+	@Override
+	public AircraftCapability copy(AircraftCapability example) {
+		String tableName=example.getClass().getAnnotation(Table.class).name();
+		StringBuilder sql=new StringBuilder("select distinct * from "+tableName+" where 1=1 ");
+		List<AircraftCapability> list=CommonTool.<AircraftCapability>findEntitiesByProperty(sf, sql, example, 0, 1, null);
+		if(list.size()!=0){
+			AircraftCapability ac=new AircraftCapability();
+			try {
+				BeanUtils.copyProperties(ac, list.get(0));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			return ac;
+		}else{
+			return null;
+		}
 	}
 
 	

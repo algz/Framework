@@ -28,37 +28,37 @@ public class AircraftDynamic{
 	/**
 	 * 发动机型号（Engine model ）
 	 */
-	@Column(name="ENGINE-MODEL")
+	@Column(name="ENGINEMODEL")
 	private String engineModel;
 	
 	/**
 	 * 发动机类型（engine type）
 	 */
-	@Column(name="ENGINE-TYPE")
+	@Column(name="ENGINETYPE")
 	private String engineType;
 	
 	/**
 	 * 发动机数量（number of engine）
 	 */
-	@Column(name="ENGINE-NUMBER")
+	@Column(name="ENGINENUMBER")
 	private Integer engineNumber;
 	
 	/**
 	 * 发动机单台最大推力（Single engine maximum thrust）
 	 */
-	@Column(name="ENGINE-MAX-THRUST")
+	@Column(name="ENGINEMAXTHRUST")
 	private Double engineMaxThrust;
 	
 	/**
 	 * 发动机单台最大功率（Single engine maximum power）
 	 */
-	@Column(name="ENGINE-MAX-POWER")
+	@Column(name="ENGINEMAXPOWER")
 	private Double engineMaxPower;
 	
 	/**
 	 * 外键
 	 */
-	@Column(name="BASIC_ID")
+	@Column(name="BASICID")
 	private String basicID;
 
 	public String getDynamicID() {

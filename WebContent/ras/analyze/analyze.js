@@ -6,6 +6,14 @@ $(function(){
 		//disable_search:true //关闭搜索框,默认为false.
 	})
 	
+	$('#chartType').on('change',function(){
+		$("#subbtn").trigger("click")
+	}).chosen({
+		allow_single_deselect : true,
+		width : '15%',
+		disable_search:true //关闭搜索框,默认为false.
+	})
+	
 	$("#dt-list-1 dd").each(function(index,el){
 		if($(el).find(".btn-group :input").length==0){
 			$(el).prev().remove();
@@ -25,7 +33,8 @@ $(function(){
        		});//['name1','name2']
     	}
    });
-$('#modelNameBtn').keydown(function(event){
+   
+   $('#modelNameBtn').keydown(function(event){
             var e = event || window.event || arguments.callee.caller.arguments[0];           
              if(e && e.keyCode==13){ // enter 键
                 var data=$('#modelNameBtn').typeahead('val');
@@ -80,6 +89,7 @@ $('#modelNameBtn').keydown(function(event){
 		$(".modal-body label").removeClass("active");
 	})
 	
+	//坐标轴选择框-确定按钮
 	$("#confirmBtn").on('click',function(e){
 		var title=$('#modal-form .modal-title').text();
 		var val=$(".modal-body label.active input").attr("name");
@@ -98,12 +108,13 @@ $('#modelNameBtn').keydown(function(event){
 	})
 	//////////////////////////////////
 	
+	//提交按钮
 	$("#subbtn").click(function(){
 //		    chart.addSeries({
 //                data:[200]
 //            });
-//		return;
-//		return;
+		
+		
 		var overviewID=$('#modelNameSelect').val(),//$(":input[name=modelName]").val(),
 			xAxis=$(":input[name=xAxis]").val(),
 			yAxis=$(":input[name=yAxis]").val();
@@ -119,8 +130,9 @@ $('#modelNameBtn').keydown(function(event){
 				yAxis:yAxis
 			},
 			success:function(data){
+				$("#modal-chart").modal();
 //				if(chart==null){
-					chart=Highcharts.chart("highchart",{
+					chart=Highcharts.chart("analyze-highchart",{
 				    	// Highcharts 配置
 						credits: {
 			            	enabled: false
@@ -177,10 +189,6 @@ $('#modelNameBtn').keydown(function(event){
 			}
 		})
 	})
-	
-	
-	
-	
 	
 })
 

@@ -12,8 +12,11 @@ import org.springframework.stereotype.Repository;
 
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.searchParam.SearchParam;
+import com.ras.tool.CommonTool;
 import com.sun.xml.internal.ws.util.StringUtils;
 
+import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.util.Common;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -69,7 +72,7 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 	@Override
 	public JSONArray analyzeChart(String[] overviewID, String[] axis) {
 		//modelName=f&xAxis=modelName&yAxis=modelCname
-		StringBuilder sql=new StringBuilder("select ab.dataSources||'('||modelname||')' modelname ");
+		StringBuilder sql=new StringBuilder("select modelname ");
 		for(int i=0;i<axis.length;i++){
 			if(axis[i].equals("")){
 				sql.append(",0");
@@ -115,19 +118,6 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 			jo.put("data", "[["+data+"]]");
 			ja.add(jo);
 		}
-//		for(Object[] objs:list){
-//			JSONObject jo=new JSONObject();
-//			jo.put("name", objs[0]);
-//			String data="";
-//			for(int i=1;i<objs.length;i++){
-//				if(i!=1){
-//					data+=",";
-//				}
-//				data+=objs[i];
-//			}
-//			jo.put("data", "[["+data+"]]");
-//			ja.add(jo);
-//		}
 		
 		return ja;//list;
 	}
@@ -151,6 +141,21 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 			break;
 		}
 		return sf.getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	}
+	
+	public List<AircraftOverview> getAircraftAll(boolean isParent ){
+		String sql = "select * from ras_aircraft_overview ao where 1=1 ";
+				//+ " inner join ras_aircraft_basic ab on ao.id=ab.OVERVIEWID where 1=1 ";
+		if(isParent){
+			sql+=" and (ao.PARENT_ID='0' or ao.PARENT_ID is null) ";
+		}
+		//权限控制
+		if(!CommonTool.isDataManager()){
+			User curUser=Common.getLoginUser();
+			sql+=" and (ao.editor='"+curUser.getUserid()+"' and ao.PERMISSION_LEVEL='1') or ao.PERMISSION_LEVEL in ('2','3') ";
+		}
+		
+		return sf.getCurrentSession().createSQLQuery(sql+" order by ao.modelname").addEntity(AircraftOverview.class).list();
 	}
 	
 }

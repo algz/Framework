@@ -30,10 +30,20 @@
  * @return {}
  */
 
-//1.select value获取  
+//1.获取选中的值
+//单选
 $(".chosen-select").val();
+//多选取值
+var els=$(".chosen-select option:selected");
+var val="";
+for(var i=0;i<els.length;i++){
+	if(val!=""){
+		val+=",";
+	}
+	val+=els[i].value; //els[i] 为html元素.
+}
 
-//2.select text获取，多选时请注意  
+//2.获取选中的文本(仅单选)，多选时请参照以上多选取值
 $(".chosen-select option:selected").text();
 
 //3.清除选中
@@ -60,4 +70,27 @@ $(".chosen-select").attr("multiple",true);
 $(".chosen-select").chosen({ 
         no_results_text : "未找到此选项!", 
         width:"70%" 
-}); 
+});
+
+//8.增加option
+//var sel= document.getElementById(".chosen-select"); 
+//sel.options.add(new Option("请选择","")); //dom方法增加,但也必须调用$(".chosen-select").trigger("chosen:updated");
+$(".chosen-select").append("<option value='"+1+"'>"+2+"</option>"); //jquery方法增加. 
+$(".chosen-select").trigger("chosen:updated"); //必须设置,让chosen更新
+
+//9.Chosen 实例化完成时触发(必须放到.chosen()前,进行绑定)
+$('.chosen-select').on('chosen:ready',function(e, params){
+	$.ajax({
+		url:'../analyze/getallaircraftforselect',
+		data:'',
+		success:function(data){
+			var obj=JSON.parse(data);
+			//.......
+		}
+	})
+}).chosen({
+	allow_single_deselect : true,
+	width : '40%',
+	placeholder_text_multiple:'请选择一项'
+	//disable_search:true //关闭搜索框,默认为false.
+})

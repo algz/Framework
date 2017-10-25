@@ -12,4 +12,6 @@ public interface SearchTagDao {
 	public void findTagSearchForArchiveGird(SearchTagVo vo);
 	
 	public void findTagSearchForPictureGird(SearchTagVo vo);
+	
+	public List<?> findTagForTypeahead(String tagName);
 }

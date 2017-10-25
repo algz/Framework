@@ -6,6 +6,7 @@ package com.ras.documnet.data;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,18 @@ import com.ras.aircraftBasic.AircraftBasic;
 import com.ras.aircraftBasic.AircraftBasicDao;
 import com.ras.aircraftCapability.AircraftCapability;
 import com.ras.aircraftCapability.AircraftCapabilityDao;
+import com.ras.aircraftDynamic.AircraftDynamic;
+import com.ras.aircraftDynamic.AircraftDynamicDao;
+import com.ras.aircraftLayout.AircraftLayout;
+import com.ras.aircraftLayout.AircraftLayoutDao;
 import com.ras.aircraftOverview.AircraftOverview;
 import com.ras.aircraftOverview.AircraftOverviewDao;
 import com.ras.aircraftPicture.AircraftPicture;
 import com.ras.aircraftPicture.AircraftPictureDao;
+import com.ras.aircraftSystem.AircraftSystem;
+import com.ras.aircraftSystem.AircraftSystemDao;
+import com.ras.aircraftTag.AircraftTag;
+import com.ras.aircraftTag.AircraftTagDao;
 import com.ras.aircraftWeight.AircraftWeight;
 import com.ras.searchParam.SearchParamDao;
 import com.ras.searchParam.SearchParamService;
@@ -42,6 +52,7 @@ import com.ras.tool.file.UploadFile;
 
 import algz.platform.core.shiro.authority.userManager.User;
 import algz.platform.core.shiro.authority.userManager.UserService;
+import algz.platform.util.Common;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -65,6 +76,15 @@ public class DataServiceImpl implements DataService {
 	private AircraftCapabilityDao aircraftCapabilityDao;
 	
 	@Autowired
+	private AircraftDynamicDao aircraftDynamicDao;
+	
+	@Autowired
+	private AircraftLayoutDao aircraftLayoutDao;
+	
+	@Autowired
+	private AircraftSystemDao aircraftSystemDao;
+	
+	@Autowired
 	private AircraftPictureDao aircraftPictureDao;
 	
 	@Autowired
@@ -72,6 +92,9 @@ public class DataServiceImpl implements DataService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AircraftTagDao aircraftTagDao;
 	
 	@Autowired
 	private DataDao dao;
@@ -85,19 +108,29 @@ public class DataServiceImpl implements DataService {
 	public void saveModel(Map<String, String> map) throws Exception{
 		AircraftOverview ao=new AircraftOverview();
 		CommonTool.mapToBean(map, ao);
+		ao.setPermissionLevel("1"); //所有新建的机型默认为个人.
+		ao.setParentID("0"); //所有主机型默认为0
 		aircraftOverviewDao.saveOrUpdate(ao);
+		
+		//添加备用标签
+		AircraftTag tag=new AircraftTag();
+		tag.setTagName(ao.getTag());
+		tag.setRelationTable("RAS_AIRCRAFT_OVERVIEW");
+		tag.setRelationID(ao.getOverviewID());
+		aircraftTagDao.saveOrUpdate(tag);
 	}
 
 	@Override
 	public void findTableModelGrid(DataVo vo) {
 		dao.findTableModelGrid(vo);
-		if(vo.getData()!=null){
-			for(Object obj:vo.getData()){
-				AircraftOverview ao=(AircraftOverview)obj;
-				User user=userService.findOne(ao.getEditor());
-				ao.setEditor(user.getCname()==null?user.getUsername():user.getCname());
-			}
-		}
+//		if(vo.getData()!=null){
+//			for(Object obj:vo.getData()){
+//				AircraftOverview ao=(AircraftOverview)obj;
+//				User user=userService.findOne(ao.getEditor());
+//				ao.setEditor(user.getCname()==null?user.getUsername():user.getCname());
+//			}
+//		}
+		
 //		AircraftOverview ao=new AircraftOverview();
 //		ao.setModelName(vo.getModelName());
 //		vo.setData(aircraftOverviewDao.findByProperty(ao));
@@ -227,6 +260,13 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public void saveModelParamPhotoFile(AircraftPicture photo) {
 		aircraftPictureDao.saveOrUpdate(photo);		
+		
+		//添加备用标签
+		AircraftTag tag=new AircraftTag();
+		tag.setTagName(photo.getTag());
+		tag.setRelationTable("RAS_AIRCRAFT_PICTURE");
+		tag.setRelationID(photo.getPhotoID());
+		aircraftTagDao.saveOrUpdate(tag);
 	}
 
 	@Transactional
@@ -234,6 +274,9 @@ public class DataServiceImpl implements DataService {
 	public void delPictureFile(String photoIDS) {
 		for(String photoID:photoIDS.split(",")){
 			aircraftPictureDao.del(photoID);
+			
+			//删除标签
+			aircraftTagDao.del(null, photoID, "RAS_AIRCRAFT_PICTURE");
 		}
 	}
 
@@ -261,6 +304,13 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public void saveModelParamArchiveFile(AircraftArchive archive) {
 		aircraftArchiveDao.saveOrUpdate(archive);	
+		
+		//添加备用标签
+		AircraftTag tag=new AircraftTag();
+		tag.setTagName(archive.getTag());
+		tag.setRelationTable("RAS_AIRCRAFT_ARCHIVE");
+		tag.setRelationID(archive.getArchiveID());
+		aircraftTagDao.saveOrUpdate(tag);
 	}
 
 	/**
@@ -268,14 +318,24 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Transactional
 	@Override
-	public void delArichiveFile(String archiveID) {
-		aircraftArchiveDao.del(archiveID);
+	public void delArichiveFile(String archiveIDs) {
+		String[] ids=archiveIDs.split(",");
+		for(String archiveID:ids){
+			aircraftArchiveDao.del(archiveID);
+			
+			//删除标签
+			aircraftTagDao.del(null, archiveID, "RAS_AIRCRAFT_ARCHIVE");
+		}
+
 	}
 
 	@Override
 	public void findArchiveGrid(DataVo vo) {
 		AircraftArchive archive=new AircraftArchive();
 		archive.setOverviewID(vo.getOverviewID());
+		if(vo.getTag()!=null&&!vo.getTag().equals("")){
+			archive.setTag(vo.getTag());
+		}
 		vo.setRecordsTotal(aircraftArchiveDao.count(archive));
 		vo.setData(aircraftArchiveDao.find(archive, vo.getStart(),vo.getLength()));
 		
@@ -309,6 +369,100 @@ public class DataServiceImpl implements DataService {
 				ao.setEditor(user.getCname()==null?user.getUsername():user.getCname());
 			}
 		}
+	}
+
+	@Override
+	public List<?> findCategoryNameForTypeahead(String categoryName) {
+		return dao.findCategoryNameForTypeahead(categoryName);
+	}
+
+	@Transactional
+	@Override
+	public void saveSubModel(String modelName, String parentID) {
+		AircraftOverview ao=new AircraftOverview();
+		ao.setOverviewID(parentID);
+		List<AircraftOverview> list=aircraftOverviewDao.findByProperty(ao, null, null);
+		
+		ao=new AircraftOverview();
+		if(list.size()==1){
+			try {
+				BeanUtils.copyProperties(ao, list.get(0));
+				ao.setOverviewID("");
+				ao.setAircraftBasicSet(null);
+				ao.setPrimaryAircraftBasicSet(null);
+				ao.setModelName(modelName);
+//				ao.setModelCname("");
+//				ao.setModelEname("");
+				ao.setPermissionLevel("1"); //所有新建的机型默认为个人.
+				ao.setParentID(parentID);
+				aircraftOverviewDao.saveOrUpdate(ao);
+				for(AircraftBasic tem:list.get(0).getAircraftBasicSet()){
+					
+					if(tem.getMainInfo()!=null&&tem.getMainInfo().equals("1")){
+						//基本信息
+						AircraftBasic ab=new AircraftBasic();
+						ab.setBasicID(tem.getBasicID());
+						ab=dao.copyObject(ab);
+//						ab=aircraftBasicDao.copy(ab);
+						ab.setBasicID("");
+						ab.setOverviewID(ao.getOverviewID());
+						ab.setEditor(Common.getLoginUser().getUserid());
+						aircraftBasicDao.saveOrUpdate(ab);
+						
+						//性能信息
+						AircraftCapability ac=new AircraftCapability();
+						ac.setBasicID(tem.getBasicID());
+						ac=dao.copyObject(ac);
+//						ac=aircraftCapabilityDao.copy(ac);
+						ac.setCapabilityID("");
+						ac.setBasicID(ab.getBasicID());
+						aircraftCapabilityDao.saveOrUpdate(ac);
+						
+						//动力信息
+						AircraftDynamic ad=new AircraftDynamic();
+						ad.setBasicID(tem.getBasicID());
+						ad=dao.copyObject(ad);
+						ad.setDynamicID("");
+						ad.setBasicID(ab.getBasicID());
+						aircraftDynamicDao.saveOrUpdate(ad);
+						
+						//布局信息
+						AircraftLayout al=new AircraftLayout();
+						al.setBasicID(tem.getBasicID());
+						al=dao.copyObject(al);
+						al.setLayoutID("");
+						al.setBasicID(ab.getBasicID());
+						aircraftLayoutDao.saveOrUpdate(al);
+						
+						//系统信息
+						AircraftSystem as=new AircraftSystem();
+						as.setBasicID(tem.getBasicID());
+						as=dao.copyObject(as);
+						as.setSystemID("");
+						as.setBasicID(ab.getBasicID());
+						aircraftSystemDao.saveOrUpdate(as);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+
+			
+
+
+		}else{
+			return;
+		}
+
+		
+		//添加备用标签
+		AircraftTag tag=new AircraftTag();
+		tag.setTagName(ao.getTag());
+		tag.setRelationTable("RAS_AIRCRAFT_OVERVIEW");
+		tag.setRelationID(ao.getOverviewID());
+		aircraftTagDao.saveOrUpdate(tag);
+		
 	}
 
 

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.FilterRegistration;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.util.IntrospectorCleanupListener;
 
 import algz.platform.core.configure.siteMesh.ALGZSiteMeshFilter;
+import algz.platform.core.license.LicenseManager;
 
 
 /**
@@ -31,9 +33,13 @@ import algz.platform.core.configure.siteMesh.ALGZSiteMeshFilter;
 @Order(1)
 public class AppInitializer implements WebApplicationInitializer {
 
-	public void onStartup(ServletContext servletContext){
+	public void onStartup(ServletContext servletContext)throws ServletException{
 		
-
+//      /** License管理  **/
+//		if (!LicenseManager.checkLicense(servletContext)) {
+//			throw new ServletException(LicenseManager.LicenseResult);
+//		}
+		
 		
 		  /** Spring配置,防止发生java.beans.Introspector内存泄露,应将它配置在ContextLoaderListener的前面   */
 	      servletContext.addListener(new IntrospectorCleanupListener());
@@ -97,6 +103,7 @@ public class AppInitializer implements WebApplicationInitializer {
 		siteMeshFilter.addMappingForUrlPatterns(null, true, "/*");
 		
 
+		
 		
 		/** 配置Log4j */
         //Log4jConfigListener  

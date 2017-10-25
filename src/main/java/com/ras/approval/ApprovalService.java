@@ -7,4 +7,6 @@ public interface ApprovalService {
 	public String submitApproval(Approval approval)throws Exception;
 	
 	public void findApprovalGrid(ApprovalVo vo);
+	
+	public Approval findOne(Approval approval);
 }
