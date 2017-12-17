@@ -6,7 +6,7 @@
 <%@attribute name="label"  rtexprvalue="true" required="false" description="标签名称" %>
 <%@attribute name="readonly"  rtexprvalue="true" required="false" description="是否只读.true为只读,空可 编辑." %>
 <%@attribute name="hidden" rtexprvalue="true" required="false" description="是否显示;默认为false." %>
-<%@attribute name="type" rtexprvalue="true" required="false" description="类型,text(默认),checkbox(多选框),select(下拉框),textArea(文本区).(不支持hidden,JSP脚本%不能用在JSP标签值中)" %>
+<%@attribute name="type" rtexprvalue="true" required="false" description="类型,text(默认),password,checkbox(多选框),select(下拉框),textArea(文本区).(不支持hidden,JSP脚本%不能用在JSP标签值中)" %>
 <%@attribute name="defaultText"  rtexprvalue="true" required="false" description="默认文本" %>
 <%@attribute name="value" rtexprvalue="true" required="false" description="文本值" %>
 <%@attribute name="formClass" rtexprvalue="true" required="false" description="样式类" %>
@@ -21,6 +21,9 @@
 		<span class="block input-icon input-icon-right">
 		<%if(type==null||type.equals("")||type.equals("text")){ %>
 			<input class="${formClass==null?'width-100':'' } ${simpleValidate==null?'':simpleValidate}" <%=style==null?"":"style='"+style+"'" %> id="${id }" name="${name==null?id:name }" ${readonly=='true'?'readonly':'' }   type="text" placeholder="${defaultText }" ${extData } <%=value==null?"":"value='"+value+"'"  %> >
+			<jsp:doBody/>
+		<%}else if(type.equals("password")){ %>
+		    <input class="${formClass==null?'width-100':'' } ${simpleValidate==null?'':simpleValidate}" <%=style==null?"":"style='"+style+"'" %> id="${id }" name="${name==null?id:name }" ${readonly=='true'?'readonly':'' }   type="password" placeholder="${defaultText }" ${extData } <%=value==null?"":"value='"+value+"'"  %> >
 			<jsp:doBody/>
 		<%}else if(type.equals("select")){ %>
 		    <form:form-select id="${id }" name="${name==null?id:name }" value="${value }" isMultiple="${isMultiple}" style="${style}"  readonly="${readonly}" defaultText="${defaultText}" extData="${extData }">

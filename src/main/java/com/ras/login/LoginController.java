@@ -23,7 +23,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ras.authority.user.RASUserService;
 import com.ras.index.Page;
+import com.ras.relationTable.sysware.user.SyswareUserDao;
+import com.ras.relationTable.sysware.user.SyswareUserService;
 import com.ras.searchParam.SearchParam;
 
 import algz.platform.core.shiro.authority.AuthenticatorControl;
@@ -34,6 +37,11 @@ import net.sf.json.JSONArray;
 @RequestMapping(value = "/ras")
 public class LoginController {
 
+    @Autowired
+    private SyswareUserService syswareUserService;
+    
+
+	
 	@Autowired
 	private AuthenticatorControl authenticatorControl;
 	
@@ -111,6 +119,8 @@ public class LoginController {
 ////            request.setAttribute("message_login", "用户名或密码不正确");  
 //        } 
 //    	model.addAttribute("error", error);
+		user.setPassword("111111");
+		syswareUserService.findByUsername(user.getUsername());
 		String url=authenticatorControl.login(user, model, request);
 		return url;//"redirect:/";
 //        return "/login123"; 

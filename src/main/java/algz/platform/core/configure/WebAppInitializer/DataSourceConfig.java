@@ -126,10 +126,10 @@ public class DataSourceConfig {
 	      return factoryBean;
 	  }
 
-		@Bean
-		public HibernateTransactionManager txManager(LocalSessionFactoryBean sessionFactory) throws PropertyVetoException {
-			HibernateTransactionManager txManager = new HibernateTransactionManager();
-			txManager.setSessionFactory(sessionFactory.getObject());
-			return txManager;
-		}  
+	@Bean
+	public HibernateTransactionManager txManager(LocalSessionFactoryBean sessionFactory) throws PropertyVetoException {
+		HibernateTransactionManager txManager = new HibernateTransactionManager();
+		txManager.setSessionFactory(sessionFactory.getObject());
+		return txManager;
+	}  
 }

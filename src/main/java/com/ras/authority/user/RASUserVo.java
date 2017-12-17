@@ -10,6 +10,14 @@ public class RASUserVo<T> extends ReturnVo<T>{
 	// Fields
 	private String userid;
 	
+	private String username;
+	
+	private String cname;
+	
+	private String password;
+	
+	private String department;
+	
 	private String roleid;
 	
 	private String operate;
@@ -42,6 +50,38 @@ public class RASUserVo<T> extends ReturnVo<T>{
 
 	public void setOperate(String operate) {
 		this.operate = operate;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getCname() {
+		return cname;
+	}
+
+	public void setCname(String cname) {
+		this.cname = cname;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
 	}
 
 	

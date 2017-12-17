@@ -24,12 +24,18 @@ import com.ras.authority.resource.RASResourceService;
 import com.ras.index.Page;
 import com.ras.tool.CommonTool;
 
+import algz.platform.core.shiro.authority.userManager.AUserService;
+import algz.platform.core.shiro.authority.userManager.User;
+
 @Controller
 @RequestMapping("/ras/authority/user")
 public class RASUserController{
 	
 	@Autowired
 	private RASUserService service;
+	
+	@Autowired
+	private AUserService auserService;
 	
 	@RequestMapping({"","/"})
 	public ModelAndView AuthorityIndex(){
@@ -51,6 +57,35 @@ public class RASUserController{
 	public void saveUserRole(RASRoleVo vo,HttpServletRequest request,HttpServletResponse response){
 		//String[] roleids=request.getParameterValues("roleid");
 		service.saveUserRole(vo.getUserid(), vo.getRoleid(),vo.getOperate());
+		CommonTool.writeJSONToPage(response, "{\"success\":true}");
+	}
+	
+	/**
+	 * 保存用户
+	 * @param vo
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/saveuser")
+	public void saveUser(RASUserVo vo,HttpServletRequest request,HttpServletResponse response){
+		//String[] roleids=request.getParameterValues("roleid");
+		service.saveUser(vo);
+//		User user=new User();
+//		user.setUsername("mmmmmmm");
+//		auserService.saveUser(user);
+		CommonTool.writeJSONToPage(response, "{\"success\":true}");
+	}
+	
+	/**
+	 * 删除用户
+	 * @param vo
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/deluser")
+	public void delUser(RASUserVo vo,HttpServletRequest request,HttpServletResponse response){
+		//String[] roleids=request.getParameterValues("roleid");
+		service.delUser(vo);
 		CommonTool.writeJSONToPage(response, "{\"success\":true}");
 	}
 }

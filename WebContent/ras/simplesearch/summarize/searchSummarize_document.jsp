@@ -15,7 +15,6 @@
 					全部文档
 					</h3>
 					<div class="table-header">
-						
 					</div>
 
 					<!-- <div class="table-responsive"> -->
@@ -45,7 +44,7 @@
 							// processing: true,//"<img src='./loading.gif' />"
 							serverSide : true, // 开启服务器模式
 							ajax : {
-								url : "../document/data/findarchivegrid",
+								url : "../document/datamanager/archivemanager/findarchivegrid",
 								type : 'POST',
 								data:{
 									overviewID:$(':hidden[name=overviewID]').val()

@@ -36,22 +36,22 @@ public class SimpleSearchDaoImpl implements SimpleSearchDao {
 		JSONArray ja=new JSONArray();
 
 		//权限控制
-		String authoritySQL="";
-		if(!CommonTool.isDataManager()){
-			User curUser=Common.getLoginUser();
-			authoritySQL=" and ((editor='"+curUser.getUserid()+"' and PERMISSION_LEVEL='1') or PERMISSION_LEVEL in ('2','3'))";
-		}
+		String authoritySQL=CommonTool.getAuthoritySQL(Common.getLoginUser().getUserid());
+//		if(!CommonTool.isDataManager()){
+//			User curUser=Common.getLoginUser();
+//			authoritySQL=" and ((editor='"+curUser.getUserid()+"') or PERMISSION_LEVEL in ('2','3'))";
+//		}
 		
-		String sql="select distinct aircrafttype from simpleSearchView v where aircrafttype is not null"+authoritySQL;
+		String sql="select distinct aircrafttype from simpleSearchView ao where aircrafttype is not null"+authoritySQL;
 		getChildNode(sql,ja,"飞机类型","aircrafttype");
 
-		sql="select distinct v.firstflightyear from simpleSearchView v where v.firstflightyear is not null"+authoritySQL+" order by firstflightyear desc ";
+		sql="select distinct firstflightyear from simpleSearchView ao where firstflightyear is not null"+authoritySQL+" order by firstflightyear desc ";
 		getChildNode(sql,ja,"首飞年份","firstflightyear");
 		
-		sql="select distinct v.producercountries from simpleSearchView v where v.producercountries is not null"+authoritySQL;
+		sql="select distinct producercountries from simpleSearchView ao where producercountries is not null"+authoritySQL;
 		getChildNode(sql,ja,"研发国别","producercountries");
 		
-		sql="select distinct substr(v.modelname,1,1) modelname from simpleSearchView v where v.modelname is not null"+authoritySQL+" order by modelname";
+		sql="select distinct substr(modelname,1,1) modelname from simpleSearchView ao where modelname is not null"+authoritySQL+" order by modelname";
 		getChildNode(sql,ja,"机型首字母","modelname");
 		
 		return ja;
@@ -107,10 +107,12 @@ public class SimpleSearchDaoImpl implements SimpleSearchDao {
 		sql+=tableSql+paramSql;
 		
 		//权限控制
-		if(!CommonTool.isDataManager()){
-			User curUser=Common.getLoginUser();
-			sql+=" and ((ao.editor='"+curUser.getUserid()+"' and ao.PERMISSION_LEVEL='1') or ao.PERMISSION_LEVEL in ('2','3'))";
-		}
+		sql+=CommonTool.getAuthoritySQL(Common.getLoginUser().getUserid());
+//		if(!CommonTool.isDataManager()){
+//			User curUser=Common.getLoginUser();
+//			//查看自已创建的和公共的权限
+//			sql+=" and ((ao.editor='"+curUser.getUserid()+"') or ao.PERMISSION_LEVEL in ('2','3'))";
+//		}
 		
 		
 		
@@ -325,6 +327,15 @@ public class SimpleSearchDaoImpl implements SimpleSearchDao {
 			break;
 		}
 		return sf.getCurrentSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	}
+
+	@Override
+	public List<AircraftOverview> searchSubModelGrid(String parentID) {
+		String sql=" select ao.* from ras_aircraft_overview ao where ao.parent_id='"+parentID+"' ";
+		sql+=CommonTool.getAuthoritySQL(Common.getLoginUser().getUserid());
+		
+		List list=sf.getCurrentSession().createSQLQuery(sql).addEntity(AircraftOverview.class).list();
+		return list;
 	}
 	
 }

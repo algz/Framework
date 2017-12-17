@@ -25,19 +25,25 @@ public class CXFClient{
 
 		JaxWsDynamicClientFactory clientFactory = JaxWsDynamicClientFactory.newInstance();
 		String url="";
-		boolean flag=true;
+		String flag="2";
 		Object[] result=null; 
 		Client client=null;
-		if(flag){
+		switch(flag){
+		case "1":
 			url="http://localhost:8080/axis2/services/SimpleService?wsdl";
 			client = clientFactory.createClient(url);
 			result = client.invoke("getGreeting", "D18183E1A19A4FF6B93DE3E7D31DF6B1");
-			
-			
-		}else{
+			break;
+		case "2":
 			url="http://localhost:8080/algz/ras/ws/endApproval?wsdl";
 			client = clientFactory.createClient(url);
 			result = client.invoke("endApproval", "D18183E1A19A4FF6B93DE3E7D31DF6B1","","1","");
+			break;
+		case "3":
+			url="http://localhost:8080/algz/ras/ws/SayHis?wsdl";
+			client = clientFactory.createClient(url);
+			result = client.invoke("endApproval", "1");
+		
 		}
 
 		if(result.length!=0){

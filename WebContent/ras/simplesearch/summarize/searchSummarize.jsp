@@ -53,6 +53,13 @@
 									文档
 								</a>
 							</li>
+							
+							<li >
+								<a data-toggle="tab" href="#product">
+									<i class="green ace-icon fa fa-home bigger-120"></i>
+									成品
+								</a>
+							</li>
 							<%--
 							<li>
 								<a data-toggle="tab" href="#discuss">
@@ -74,6 +81,9 @@
 							
 							<div id="docment" class="tab-pane fade">
 								<jsp:include page="./searchSummarize_document.jsp"></jsp:include>
+							</div>
+							<div id="product" class="tab-pane fade">
+								<jsp:include page="./searchSummarize_product.jsp"></jsp:include>
 							</div>
 							<%--
 							<div id="discuss" class="tab-pane fade">

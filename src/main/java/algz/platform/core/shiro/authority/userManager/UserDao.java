@@ -5,14 +5,15 @@ package algz.platform.core.shiro.authority.userManager;
 import java.util.List;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
+ * <p>User: a_lgz
+ * <p>Date: 2017-12-15
  * <p>Version: 1.0
  */
 public interface UserDao {
 
-    public User createUser(User user);
-    public User updateUser(User user);
+    public void saveUser(User user);
+    
+    public void updateAUser(User user);
     public void deleteUser(String userId);
 
     User findOne(String userId);

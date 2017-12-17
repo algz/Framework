@@ -1,18 +1,21 @@
 package algz.platform.core.shiro.authority.userManager;
 
 
+import org.hibernate.SessionFactory;
+import org.hibernate.engine.transaction.internal.jdbc.JdbcTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * <p>User: algz
- * <p>Date: 17-6-25
- * <p>Version: 1.0
- */
-@Service
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.Transaction;
+import javax.transaction.Transactional;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -22,19 +25,21 @@ public class UserServiceImpl implements UserService {
 //    @Autowired
 //    private RoleService roleService;
 
+	@Autowired
+	private SessionFactory sf;
+    
     /**
      * 创建用户
      * @param user
      */
-    public User createUser(User user) {
-        //加密密码
-//        passwordHelper.encryptPassword(user);
-        return dao.createUser(user);
-    }
-
+    @Transactional
     @Override
-    public User updateUser(User user) {
-        return dao.updateUser(user);
+    public void saveUser(User user) {
+        //加密密码
+//       passwordHelper.encryptPassword(user);
+         dao.saveUser(user);
+
+        // return null;
     }
 
     @Override
@@ -47,11 +52,12 @@ public class UserServiceImpl implements UserService {
      * @param userId
      * @param newPassword
      */
+    @Override
     public void changePassword(String userId, String newPassword) {
         User user =dao.findOne(userId);
         user.setPassword(newPassword);
 //        passwordHelper.encryptPassword(user);
-        dao.updateUser(user);
+        dao.saveUser(user);
     }
 
     @Override
@@ -79,6 +85,7 @@ public class UserServiceImpl implements UserService {
      * @param username
      * @return
      */
+	@Override
     public User findByUsername(String username) {
         return dao.findByUsername(username);
     }
@@ -88,6 +95,7 @@ public class UserServiceImpl implements UserService {
      * @param username
      * @return
      */
+	@Override
     public Set<String> findRoles(String username) {
         User user =findByUsername(username);
         if(user == null) {
@@ -101,6 +109,7 @@ public class UserServiceImpl implements UserService {
      * @param username
      * @return
      */
+	@Override
     public Set<String> findPermissions(String username) {
         User user =findByUsername(username);
         if(user == null) {
@@ -108,9 +117,4 @@ public class UserServiceImpl implements UserService {
         }
         return null;//roleService.findPermissions(user.getRoleIds().toArray(new Long[0]));
     }
-
-
-
-
-
 }

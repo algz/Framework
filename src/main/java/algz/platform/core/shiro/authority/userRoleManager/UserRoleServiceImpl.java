@@ -24,6 +24,12 @@ public class UserRoleServiceImpl implements UserRoleService {
 		return null;
 	}
 
+	@Override
+	public List<User> findUserByRoleName(String roleName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //    @Autowired
 //    private UserRoleDao userRoleDao;
 ////    @Autowired

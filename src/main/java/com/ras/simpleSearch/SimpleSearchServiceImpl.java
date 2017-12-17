@@ -60,7 +60,7 @@ public class SimpleSearchServiceImpl implements SimpleSearchService {
     	
     	AircraftOverview example=new AircraftOverview();
     	example.setParentID(overviewID);
-    	List<AircraftOverview> list=aircraftOverviewDao.findByProperty(example, null, null);
+    	List<AircraftOverview> list=dao.searchSubModelGrid(overviewID);//aircraftOverviewDao.findByProperty(example, null, null);
     	for(AircraftOverview ao:list){
     		JSONObject tem=CommonTool.beanToJSONObject(ao, true);
 //    		tem.put("dataSource", ao.getDataSources());

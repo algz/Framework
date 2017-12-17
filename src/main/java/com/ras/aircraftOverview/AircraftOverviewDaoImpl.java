@@ -51,11 +51,14 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 		String sql = "select * from ras_aircraft_overview ao "
 				+ " inner join ras_aircraft_basic ab on ao.id=ab.OVERVIEWID where 1=1 ";
 		
-		//权限控制
-		if(!CommonTool.isDataManager()){
-			User curUser=Common.getLoginUser();
-			sql+=" and (ao.editor='"+curUser.getUserid()+"' and ao.PERMISSION_LEVEL='1') or ao.PERMISSION_LEVEL in ('2','3') ";
-		}
+		sql+=CommonTool.getAuthoritySQL(Common.getLoginUser().getUserid());
+//		//权限控制
+//		if(!CommonTool.isDataManager()){
+//			User curUser=Common.getLoginUser();
+//			sql+=" and (ao.editor='"+curUser.getUserid()+"' and ao.PERMISSION_LEVEL='1') "
+//					+ "or ao.PERMISSION_LEVEL in ('2','3') "
+//					+ "or (ao.PERMISSION_LEVEL='4' and ao.editor in (select udp.userid from RAS_USER_DATA_PRIVILIDGE udp where udp.overviewid=ao.id))";
+//		}
 		
 		return sf.getCurrentSession().createSQLQuery(sql+" order by ao.modelname").addEntity(AircraftOverview.class).list();
 	}
@@ -115,10 +118,10 @@ public class AircraftOverviewDaoImpl implements AircraftOverviewDao {
 		//权限控制
 		if(!CommonTool.isDataManager()){
 			User curUser=Common.getLoginUser();
-			str.append(" and (ab.editor='"+curUser.getUserid()+"' or ab.permissionLevel in ('2','3'))");
+			str.append(" and (ao.editor='"+curUser.getUserid()+"' or ao.permissionLevel in ('2','3'))");
 		}
 		
-		
+//		CommonTool.findEntitiesByProperty(sf, sql, example, start, length, callback)
 		Field[] fs = ao.getClass().getDeclaredFields();
 		try {
 			for (Field f : fs) {

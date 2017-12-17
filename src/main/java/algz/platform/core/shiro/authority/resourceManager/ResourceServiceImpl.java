@@ -23,8 +23,6 @@ public class ResourceServiceImpl implements ResourceService {
     private ResourceDao dao;
     
 //    @Autowired
-//    private Userservice user
-//    @Autowired
 //    private PasswordHelper passwordHelper;
 //    @Autowired
 //    private RoleService roleService;

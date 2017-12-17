@@ -86,3 +86,9 @@ Dtable.ajax.reload(); //如果Dtable = $('#table').dataTable(); 刷新代码为 
 	}
 }
  */
+
+//8.表格一行中按钮点击函数
+$('#table-model tbody').on('click','tr button',function(){
+	var data = $('#table-model').DataTable().row($(this).parents('tr')).data();
+    alert("查看修改："+data.modelCname +","+ data.modelName );
+})	

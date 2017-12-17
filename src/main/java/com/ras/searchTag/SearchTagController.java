@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
-import com.ras.documnet.data.DataService;
+import com.ras.documnet.dataManager.DataService;
 import com.ras.index.Page;
 import com.ras.searchParam.SearchParamService;
 import com.ras.searchParam.SearchParam;

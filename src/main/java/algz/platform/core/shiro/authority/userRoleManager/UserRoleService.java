@@ -17,4 +17,6 @@ public interface UserRoleService {
 
 public List<Role> findRoleByUserID(String userID);
 
+public List<User> findUserByRoleName(String roleName);
+
 }

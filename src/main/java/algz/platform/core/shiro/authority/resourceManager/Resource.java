@@ -85,6 +85,14 @@ public class Resource {
 	@Column(name = "ISPUBLIC")
 	private String isPublic;
 
+	
+	// private ResourceType type = ResourceType.menu; //资源类型
+	/**
+	 * 资源类型
+	 */
+	@Column(name = "RESOURCETYPE")
+	private String resourceType;
+	
 	/**
 	 * 是否当前菜单
 	 */
@@ -193,6 +201,16 @@ public class Resource {
 		this.isPublic = isPublic;
 	}
 
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	
+	
 	// public static enum ResourceType {
 	// menu("菜单"), button("按钮");
 	//

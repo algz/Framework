@@ -15,5 +15,10 @@ public interface RoleDao {
     public List<User> findUsernameByRoleName(String... roleName);
     
     public List<Role> findAll(Role role,Integer start,Integer length);
+    
     public Integer countAll(Role role);
+    
+    public void saveRole(Role role);
+    
+    public void delRole(String roleID);
 }

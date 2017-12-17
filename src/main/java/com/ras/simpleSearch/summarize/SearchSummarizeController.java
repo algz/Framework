@@ -15,8 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ras.documnet.data.DataService;
-import com.ras.documnet.data.DataVo;
+import com.ras.documnet.dataManager.DataService;
+import com.ras.documnet.dataManager.DataVo;
+import com.ras.documnet.dataManager.productData.ProductManagerService;
 import com.ras.index.Page;
 import com.ras.searchParam.SearchParamService;
 import com.ras.searchParam.searchCriteria.SearchCriteriaService;
@@ -43,6 +44,9 @@ public class SearchSummarizeController {
 	
 	@Autowired
 	private DataService dataService;
+	
+	@Autowired
+	private ProductManagerService productManagerService;
   
     /**
      * 查询关键字
@@ -70,6 +74,10 @@ public class SearchSummarizeController {
         	page.setHeader_h1("查询");
         	page.setHeader_small(jo.getString("modelName")+"("+jo.getString("dataSource")+")");
         	map.put("page", page);
+        	
+        	//成品库
+        	map.put("productParamValue", productManagerService.findProductInform(vo.getOverviewID()));
+
         	
 //        	String test="[{url:'/upload/photo/Chrysanthemum.jpg',title:'整体图1'},{url:'/upload/photo/Desert.jpg'},{url:'/upload/photo/Hydrangeas.jpg'}]";
         	map.put("integralGraph",dataService.findModelImageParam("整体图",vo.getOverviewID()));

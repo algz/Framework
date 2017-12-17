@@ -8,18 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ras.documnet.data.DataVo;
+import com.ras.documnet.dataManager.DataVo;
 import com.ras.index.Page;
 import com.ras.tool.CommonTool;
 import com.ras.ws.client.CXFClientUtil;
 
-import algz.platform.core.shiro.authority.userManager.User;
-import algz.platform.core.shiro.authority.userManager.UserService;
-import algz.platform.util.xml.StAXUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -30,8 +28,8 @@ public class ApprovalController {
 	@Autowired
 	private ApprovalService service;
 	
-	@Autowired
-	private UserService userService;
+	@Value("${Local_webservice}")
+	private String Local_webservice;
 	
 	@RequestMapping({"","/"})
 	public ModelAndView DocumentIndex(){
@@ -73,8 +71,29 @@ public class ApprovalController {
 		if(approval.getDataID()!=null&&!approval.getDataID().equals("")
 				&&approval.getPermissionLevel()!=null&&!approval.getPermissionLevel().equals("")){ 
 			try {
+				String msg=service.submitApproval(approval);
 				
-				CommonTool.writeJSONToPage(response,service.submitApproval(approval) );
+				if(msg.equals("")){
+					//如果是数据管理员,则直接审批通过
+					if(CommonTool.isDataManager()){
+//						approval.setApprovalStatus("2");//审批状态:0或空未审批,1审批中,2审批完成
+//						approval.setApprovalResult("1"); //审批结果:1同意;0不同意
+//						String msg=dao.saveApproval(approval);
+						
+						String[] param=new String[]{approval.getApprovalID(),"","1",""};
+						Object[] s=CXFClientUtil.invoke(Local_webservice, "endApproval", param);
+						if(s==null){
+							//返回异常
+							msg= "审批异常.";
+						}
+						
+						msg= "数据管理员直接审批通过!";
+					}else{
+						msg=service.submitToP2M(approval);
+					}
+				}
+				
+				CommonTool.writeJSONToPage(response,msg);
 			} catch (Exception e) {
 				System.out.println(e.getLocalizedMessage());
 			}
@@ -91,22 +110,12 @@ public class ApprovalController {
      */
 	@RequestMapping(value={"/getuserall"})
 	public void getUserAll(HttpServletRequest request,HttpServletResponse response){
-		List<User> userList=userService.findAll(null,0,null);
 		JSONArray ja=new JSONArray();
-		for(User u:userList){
-			if(u.getCname()!=null){
-				JSONObject jo=new JSONObject();
-				jo.put("userid", u.getUserid());
-				jo.put("cname", u.getCname());
-				ja.add(jo);
-			}
-		}
-		if(userList.size()!=0){ 
-			try {
-				CommonTool.writeJSONToPage(response,ja);
-			} catch (Exception e) {
-				System.out.println(e.getLocalizedMessage());
-			}
+		ja.add(service.getAllUser());
+		try {
+			CommonTool.writeJSONToPage(response,ja);
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
 		}
 	}
 	

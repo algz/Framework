@@ -6,6 +6,8 @@ package algz.platform.core.shiro.authority.roleManager;
 import java.util.List;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,4 +39,18 @@ public class RoleServiceImpl implements RoleService {
 		return dao.countAll(role);
 	}
 
+	@Transactional
+	@Override
+	public void saveRole(Role role) {
+		dao.saveRole(role);
+	}
+
+	@Transactional
+	@Override
+	public void delRole(String roleID) {
+		dao.delRole(roleID);
+	}
+
+	
+	
 }

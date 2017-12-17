@@ -40,7 +40,7 @@ public class ApprovalDaoImpl implements ApprovalDao {
 					for (String userid : approval.getPermissionUserRange().split(",")) {
 						ApprovalRange ar = new ApprovalRange();
 						ar.setApprovalID(approval.getApprovalID());
-						ar.setOverviewID(approval.getDataID());
+						ar.setDataID(approval.getDataID());
 						ar.setUserID(userid);
 						if (approval.getApprovalStatus().equals("2") && approval.getApprovalResult().equals("1")) {
 							ar.setValid("1");
@@ -53,23 +53,34 @@ public class ApprovalDaoImpl implements ApprovalDao {
 			} else {
 				// 更新
 				// sf.getCurrentSession().saveOrUpdate(approval);
-				Approval data = (Approval) sf.getCurrentSession().get(Approval.class, approval.getApprovalID());
-				data.setApprovalResult(approval.getApprovalResult());
+				String result=approval.getApprovalResult();
+				String status=approval.getApprovalStatus();
+				Approval data= (Approval) sf.getCurrentSession().get(Approval.class, approval.getApprovalID());
+//				approval=CommonTool.copyObject(data);
+				//approval.setPermissionLevel(data.getPermissionLevel());
+				data.setApprovalResult(result);
 				data.setApprovalDate(new Date());
-				data.setApprovalStatus(approval.getApprovalStatus());
+				data.setApprovalStatus(status);
 				sf.getCurrentSession().saveOrUpdate(data);
+				approval.setPermissionLevel(data.getPermissionLevel());
+				approval.setDataID(data.getDataID());
+				approval.setDataTable(data.getDataTable());
 			}
-			// 1审批同意
+			
+			
 			if (approval.getDataTable() != null && approval.getApprovalResult() != null
 					&& approval.getApprovalResult().equals("1")) {
+				// 1审批同意,变更数据的可视权限
 				String sql = "update RAS_AIRCRAFT_" + approval.getDataTable() + " set PERMISSION_LEVEL='"
 						+ approval.getPermissionLevel() + "' " + " where id='" + approval.getDataID() + "'";
 				sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
 			}
+			
 		} catch (Exception e) {
 			return e.getLocalizedMessage();
 		}
-		return null;
+//		sf.getCurrentSession().getTransaction().commit();
+		return "";
 	}
 
 	@Override
@@ -109,6 +120,12 @@ public class ApprovalDaoImpl implements ApprovalDao {
 	public Approval findOne(Approval approval) {
 		StringBuilder sql=new StringBuilder("select distinct * from RAS_APPROVAL where 1=1 ");
 		return CommonTool.<Approval>findEntitiesByProperty(sf, sql, approval, null, null, null).get(0);
+	}
+
+	@Override
+	public List<Object[]> getAllUserAndRole() {
+		String sql="select * from USER_ROLE_VIEW";
+		return sf.getCurrentSession().createSQLQuery(sql).list();
 	}
 	
 

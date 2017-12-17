@@ -2,28 +2,28 @@ $(function() {
 
 	// 是否隐藏个人数据
 	$("#showPersonDataBtn").on('click', function() {
-				if ($(this).attr("checked") == null) {
-					// 打开
-					$(this).attr("checked", "checked");
-					dataTable.settings()[0].ajax.data.showPerson = '0';
+		if ($(this).attr("checked") == null) {
+			// 打开
+			$(this).attr("checked", "checked");
+			dataTable.settings()[0].ajax.data.showPerson = '0';
 
-					/*
-					 * dataTable.rows().data().each( function (data,index,meta) {
-					 * var flag=true; for(var i=1;i<data.length;i++){
-					 * if(data[i]!=null){ flag=false; break; } } if(flag){
-					 * dataTable.row(index).child.hide();
-					 * $(dataTable.row(index).node()).addClass("hidden"); } });
-					 */
-				} else {
-					// 关闭
-					$(this).removeAttr("checked");
-					dataTable.settings()[0].ajax.data.showPerson = '1';
+			/*
+			 * dataTable.rows().data().each( function (data,index,meta) {
+			 * var flag=true; for(var i=1;i<data.length;i++){
+			 * if(data[i]!=null){ flag=false; break; } } if(flag){
+			 * dataTable.row(index).child.hide();
+			 * $(dataTable.row(index).node()).addClass("hidden"); } });
+			 */
+		} else {
+			// 关闭
+			$(this).removeAttr("checked");
+			dataTable.settings()[0].ajax.data.showPerson = '1';
 
-					/* dataTable.$('tr').removeClass("hidden"); */
-				}
-				dataTable.ajax.reload(); // 必须用
-			})		
-			
+			/* dataTable.$('tr').removeClass("hidden"); */
+		}
+		dataTable.ajax.reload(); // 必须用
+	})
+
 	function loadModelGridByNodes() {
 		var m = {};
 		var cNodes = $('#tree').treeview('getChecked');// 获取所有选中的结点
@@ -33,7 +33,7 @@ $(function() {
 				continue;
 			}
 
-			var pnode = $('#tree').treeview('getParent', cNodes[i]);
+			var pnode = $('#tree').treeview('getParents', cNodes[i])[0];
 			if (m[pnode.tags] != null) {
 				m[pnode.tags] += "," + cNodes[i].text;
 			} else {
@@ -47,7 +47,8 @@ $(function() {
 		dataTable.ajax.reload(); // 必须用
 	}
 
-	function getTree() {
+	//自动加载Tree.
+	!(function(){
 		$.ajax({
 			data : '',
 			method : "POST",
@@ -60,25 +61,31 @@ $(function() {
 							showIcon : false,
 							showCheckbox : true,
 							onNodeChecked : function(event, node) {
-								var nIds = [];
+								
+//								var nodes = $.grep($('#tree').treeview('getNodes', nodes), function (n) {
+//									return node.nodeId=== n.nodeId;
+//								});
+								var nodes=[];
 								if (node.nodes !== undefined) {
 									for (var i = 0; i < node.nodes.length; i++) {
-										nIds.push(node.nodes[i].nodeId);
+										nodes.push(node.nodes[i]);
 									}
 								} else {
-									nIds.push(node);
+									nodes.push(node);
 								}
-								$('#tree').treeview("checkNode", [nIds, {
+//								var ns=$('#tree').treeview('getNodes');
+								
+								$('#tree').treeview("checkNode", [nodes,{
 													silent : true
 												}]);
-
+								var cNodes = $('#tree').treeview('getChecked');// 获取所有选中的结点
 								loadModelGridByNodes();
 							},
 							onNodeUnchecked : function(event, node) {
 								var nIds = [];
 								if (node.nodes !== undefined) {
 									for (var i = 0; i < node.nodes.length; i++) {
-										nIds.push(node.nodes[i].nodeId);
+										nIds.push(node.nodes[i]);
 									}
 								}
 								$('#tree').treeview("uncheckNode", [nIds, {
@@ -90,9 +97,8 @@ $(function() {
 						});
 			}
 		})
-	}
+	})();
 
-	getTree();
 	// $('#tree').treeview({data: getTree()});
 
 	function stringToJson(data) {
@@ -116,27 +122,27 @@ $(function() {
 		return o;
 	}
 
-	$('#submitBtn').click(function() {
-		var data = $('#tagForm').serializeArray();
-		var o = stringToJson(data);
-		// ///////////////
-		var params = $('#tagForm').serialize();
-		// params=decodeURIComponent(params,true);
-		dataTable.settings()[0].ajax.data = {
-			data : params
-		};
-		dataTable.ajax.reload(); // 必须用
+//	$('#submitBtn').click(function() {
+//		var data = $('#tagForm').serializeArray();
+//		var o = stringToJson(data);
+//		// ///////////////
+//		var params = $('#tagForm').serialize();
+//		// params=decodeURIComponent(params,true);
+//		dataTable.settings()[0].ajax.data = {
+//			data : params
+//		};
+//		dataTable.ajax.reload(); // 必须用
+//
+//			// $('#selectModelName').val("");
+//			// $('#selectOverviewID').val("");
+//		})
 
-			// $('#selectModelName').val("");
-			// $('#selectOverviewID').val("");
-		})
-
-	$('#clearModelSelectBtn').on('click', function() {
-				$('#selectModelName').val("");
-				$('#selectOverviewID').val("");
-
-				$("#searchTable :checked").removeAttr("checked")
-			})
+//	$('#clearModelSelectBtn').on('click', function() {
+//				$('#selectModelName').val("");
+//				$('#selectOverviewID').val("");
+//
+//				$("#searchTable :checked").removeAttr("checked")
+//			})
 
 	// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
 	var dataTable = $('#searchTable')
@@ -148,7 +154,7 @@ $(function() {
 				// //是否隐藏每页显示数量框(css).true,默认不隐藏;false,隐藏.
 				"lengthMenu" : [[10, 25, 50, 100, 200, -1],
 						[10, 25, 50, 100, 200, "All"]], // 定义每页显示数据数量,与"lengthChange":
-														// true 一起使用.
+				// true 一起使用.
 				"ordering" : false, // 是否允许Datatables开启排序
 				// "info": false, //控制是否显示表格左下角的信息
 				"searching" : false, // 开启、关闭Datatables的搜索功能
@@ -162,12 +168,12 @@ $(function() {
 				deferLoading : 0, // 延迟加载(值为0,即不加载;不设置为默认自动加载)，它的参数为整型,默认值为null,值为要加载条目的数目，通常与bServerSide，sAjaxSource等配合使用
 				"columns" : [/*
 								 * { data:null, class : "center", width:50, //
-								 * "defaultContent": '', 
-								 * render: function(data,type, row, meta){ 
-								 * //icon expand-icon glyphicon glyphicon-minus - 
-								 * //icon expand-icon glyphicon glyphicon-plus 
-									return '<i class="icon expand-icon glyphicon glyphicon-plus "></i>'; 
-								 * } },
+								 * "defaultContent": '', render:
+								 * function(data,type, row, meta){ //icon
+								 * expand-icon glyphicon glyphicon-minus -
+								 * //icon expand-icon glyphicon glyphicon-plus
+								 * return '<i class="icon expand-icon glyphicon
+								 * glyphicon-plus "></i>'; } },
 								 */{
 					class : "center",
 					width : 50,
@@ -199,14 +205,13 @@ $(function() {
 						// return data;
 						// "<a target='_blank'
 						// href='./searchsummarize?overviewID="+row.overviewID+"&basicID="+row.basicID+"&option=load'>"+data+"</a>";
-						var el="";
-						if(row.subModelTotal!=0){
-							el= '<i class="icon expand-icon glyphicon glyphicon-plus "></i>';
+						var el = "";
+						if (row.subModelTotal != 0) {
+							el = '<i class="icon expand-icon glyphicon glyphicon-plus "></i>';
 						}
-						return el+ "<a target='_blank' href='./searchsummarize?overviewID="
-								+ row.overviewID
-								+ "&option=load'>"
-								+ data
+						return el
+								+ "<a target='_blank' href='./searchsummarize?overviewID="
+								+ row.overviewID + "&option=load'>" + data
 								+ "</a>";
 					}
 				}, {
@@ -233,9 +238,9 @@ $(function() {
 							return "未知";
 						}
 					}
-				},{
-					title:'子机型总数',
-					data:'subModelTotal',
+				}, {
+					title : '子机型总数',
+					data : 'subModelTotal',
 					class : "center",
 					width : 100
 				}],
@@ -259,10 +264,9 @@ $(function() {
 
 	// 2.多选(必须放到 Dtable配置后下面);所有 table 有效,需放在所有 dataTable 后面
 	$('#searchTable tbody').on('click', 'tr', function(event) {
-		if (event.target.tagName == 'A'
-		||event.target.tagName == "I"
-		||$(event.target).children('.subTable').length==1
-		||$(event.target).closest('.subTable').length==1) {
+		if (event.target.tagName == 'A' || event.target.tagName == "I"
+				|| $(event.target).children('.subTable').length == 1
+				|| $(event.target).closest('.subTable').length == 1) {
 			return;
 		}
 		event.preventDefault(); // 阻止默认事件触发(即执行二次)
@@ -306,23 +310,23 @@ $(function() {
 
 	})
 
-	 function template(data) {
+	function template(data) {
 		var template = '<table class="subTable table table-striped table-bordered table-hover" ><tbody>';
 		for (var i = 0; i < data.length; i++) {
-			var permissionLevel="";
-			switch(data[i].permissionLevel){
-				case "":
-				case "1":
-					permissionLevel	="个人可视"
+			var permissionLevel = "";
+			switch (data[i].permissionLevel) {
+				case "" :
+				case "1" :
+					permissionLevel = "个人可视"
 					break;
-				case "2":
-					permissionLevel	="部门可视"
+				case "2" :
+					permissionLevel = "部门可视"
 					break;
-				case "3":
-					permissionLevel	="所内可视"
+				case "3" :
+					permissionLevel = "所内可视"
 					break;
-				case "4":
-					permissionLevel	="范围可视"
+				case "4" :
+					permissionLevel = "范围可视"
 					break;
 			}
 			if (data == "" || data == '1') {
@@ -336,21 +340,25 @@ $(function() {
 			}
 			template += '<tr>'
 					+ '<td width="50">'
-					+ '<label class="pos-rel"><input class="ace" type="checkbox" value="'+data[i].overviewID+ '"><span class="lbl"></span></label>'
-					+'</td>'
-					+"<td width=50>"+(i+1)+"</td>"
-					+ '<td>'
-					+ "<a target='_blank' href='../simplesearch/searchsummarize?overviewID="+data[i].overviewID + "&option=load'>" + data[i].modelName + "</a>" 
+					+ '<label class="pos-rel"><input class="ace" type="checkbox" value="'
+					+ data[i].overviewID
+					+ '"><span class="lbl"></span></label>'
 					+ '</td>'
-					+"<td>"+data[i].modelCname+"</td>"
-					+"<td>"+data[i].modelEname+"</td>"+"<td width=100>"+permissionLevel+"</td>"
-					+'</tr>';
+					+ "<td width=50>"
+					+ (i + 1)
+					+ "</td>"
+					+ '<td>'
+					+ "<a target='_blank' href='../simplesearch/searchsummarize?overviewID="
+					+ data[i].overviewID + "&option=load'>" + data[i].modelName
+					+ "</a>" + '</td>' + "<td>" + data[i].modelCname + "</td>"
+					+ "<td>" + data[i].modelEname + "</td>" + "<td width=100>"
+					+ permissionLevel + "</td>" + '</tr>';
 		}
 		template += '</tbody></table>';
 		return template;
 	}
 
-	 $('#searchTable').on('click', '.subTable :checkbox', function() {
+	$('#searchTable').on('click', '.subTable :checkbox', function() {
 		var modelName = $($(this).closest('.subTable').closest('tr').prev('tr')
 				.children('td')[2]).text();
 		var org_text = $('#selectModelName').val();
@@ -382,59 +390,38 @@ $(function() {
 		}
 	})
 
-	 /**子表格展开.
-	 * 
+	/** 子表格展开.
 	 */
-	 $('#searchTable tbody').on('click', 'td .expand-icon', function(e) {
-			var tr = $(this).closest('tr');
-			var row = dataTable.row(tr);
+	$('#searchTable tbody').on('click', 'td .expand-icon', function(e) {
+				var tr = $(this).closest('tr');
+				var row = dataTable.row(tr);
 
-			if (row.child.isShown()) { // This row is already open - close
-										// it
-				row.child.hide();
-				$(this).removeClass('glyphicon-minus');
+				if (row.child.isShown()) { // This row is already open - close
+					// it
+					row.child.hide();
+					$(this).removeClass('glyphicon-minus');
 
-			} else { // Open this row
-				if (row.child() == null) {
-					$.ajax({
-						method : 'Post',
-						url : './searchsubmodelgrid',
-						data : {
-							overviewID : row.data().overviewID
-						},
-						success : function(data) {
-							row.child(template(data.data)).show();
-						}
-					})
-				} else {
-					row.child.show();
+				} else { // Open this row
+					if (row.child() == null) {
+						$.ajax({
+									method : 'Post',
+									url : './searchsubmodelgrid',
+									data : {
+										overviewID : row.data().overviewID
+									},
+									success : function(data) {
+										row.child(template(data.data)).show();
+									}
+								})
+					} else {
+						row.child.show();
+					}
+
+					$(this).addClass('glyphicon-minus');
 				}
+			});
 
-				$(this).addClass('glyphicon-minus');
-			}
-		});
-	 
-
-	// $('#searchTable tbody').on('click', 'tr', function () {
-	// var curCheckbox=$(this).find(":checkbox")[0];
-	// if(curCheckbox==null){
-	// return;
-	// }
-	//				 
-	// if (curCheckbox.checked ) {
-	// //取消
-	// curCheckbox.checked=false;
-	// $(this).removeClass('selected');
-	// }
-	// else {
-	// //选中
-	// curCheckbox.checked=true;
-	// //selectModelParamRowData=tablemodelparam.rows(this).data()[0];
-	// $(this).addClass('selected');
-	// }
-	// });
-	/**
-	 * 对比
+	/** 对比
 	 */
 	$("#comparisonModelparamBtn").on('click', function() {
 		var datas = dataTable.rows('.selected').data();
@@ -463,26 +450,9 @@ $(function() {
 			// //window.location='/algz/ras/comparison/comparisondetail';
 		})
 
-	function StandardPost(url, args) {
-		var form = $("<form method='post' target='_blank'></form>"), input;
-		form.attr({
-					"action" : url
-				});
-		$.each(args, function(key, value) {
-					input = $("<input type='hidden'>");
-					input.attr({
-								"name" : key
-							});
-					input.val(value);
-					form.append(input);
-				});
-		form.appendTo(document.body);
-		form.submit();
-		document.body.removeChild(form[0]);
-	}
-
-	// //////////图表////////////////////////
-
+	/**
+	 * 分析
+	 */
 	$(".chosen-select").chosen({
 				allow_single_deselect : true,
 				// disable_search:true,
@@ -491,7 +461,7 @@ $(function() {
 				width : '40%'
 			});
 
-	var chart = null;
+		var chart = null;
 
 	// 坐标轴
 	$("#xAxisBtn").on('change', clickBtn);
@@ -574,34 +544,52 @@ $(function() {
 				})
 	}
 
-	/**
-	 * 分析
-	 */
+		
 	$("#analyzeModelparamBtn").on('click', function() {
-				var datas = dataTable.rows('.selected').data();
-				if (datas.length == 0) {
-					return;
-				}
-				//				
-				// var arr=[];
-				// $.each(datas,function(i,obj){
-				// arr.push(obj.modelName);
-				// })
-				//				
-				// $("#modelName").val(arr);
-				$("#modelName").val($('#selectModelName').val());
+		var datas = dataTable.rows('.selected').data();
+		if (datas.length == 0) {
+			return;
+		}
+		//				
+		// var arr=[];
+		// $.each(datas,function(i,obj){
+		// arr.push(obj.modelName);
+		// })
+		//				
+		// $("#modelName").val(arr);
+		$("#modelName").val($('#selectModelName').val());
 
-				$('#modal-analyzeChart').on('show.bs.modal', function() {
-							$("#xAxisBtn").val("");
-							$("#xAxisBtn").trigger("chosen:updated");
-							$("#yAxisBtn").val("");
-							$("#yAxisBtn").trigger("chosen:updated");
-							if (chart != null) {
-								chart.destroy();
-								chart = null;
-								// chart.destroy();
-							}
-						}).modal();
-			})
+		$('#modal-analyzeChart').on('show.bs.modal', function() {
+					$("#xAxisBtn").val("");
+					$("#xAxisBtn").trigger("chosen:updated");
+					$("#yAxisBtn").val("");
+					$("#yAxisBtn").trigger("chosen:updated");
+					if (chart != null) {
+						chart.destroy();
+						chart = null;
+						// chart.destroy();
+					}
+				}).modal();
+	})	
+	
+	/** 动态创建表单进行提交
+	 */
+	function StandardPost(url, args) {
+		var form = $("<form method='post' target='_blank'></form>"), input;
+		form.attr({
+					"action" : url
+				});
+		$.each(args, function(key, value) {
+					input = $("<input type='hidden'>");
+					input.attr({
+								"name" : key
+							});
+					input.val(value);
+					form.append(input);
+				});
+		form.appendTo(document.body);
+		form.submit();
+		document.body.removeChild(form[0]);
+	}
 
 })

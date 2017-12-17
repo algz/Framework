@@ -256,7 +256,7 @@
 						
 						<span class="user-info">
 							<small>欢迎,</small>
-							${user.username}
+							${user.cname}
 						</span>
 
 						<i class="ace-icon fa fa-caret-down"></i>

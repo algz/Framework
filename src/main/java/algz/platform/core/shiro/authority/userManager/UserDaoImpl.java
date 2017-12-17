@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import algz.platform.core.shiro.authority.roleManager.Role;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -26,11 +28,28 @@ public class UserDaoImpl implements UserDao {
 	@Autowired
 	private SessionFactory sf;
     
-    public User createUser(final User user) {
-    	sf.getCurrentSession().save(user);
+	@Override
+    public void saveUser(User user) {
+    	if(user.getUserid()!=null&&!user.getUserid().equals("")){
+    		User entity=(User)sf.getCurrentSession().get(User.class, user.getUserid());
+    		if(user.getUsername()!=null){
+    			entity.setUsername(user.getUsername());
+    		}
+    		if(user.getCname()!=null){
+    			entity.setCname(user.getCname());
+    		}
+    		if(user.getPassword()!=null){
+    			entity.setPassword(user.getPassword());
+    		}
+    		if(user.getDepartment()!=null){
+    			entity.setDepartment(user.getDepartment());
+    		}
+    	}else{
+    		sf.getCurrentSession().save(user);
+    	}
 //        final String sql = "insert into sys_user(organization_id, username, password, salt, role_ids, locked) values(?,?,?,?,?,?)";
 
-        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+//        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 //        jdbcTemplate.update(new PreparedStatementCreator() {
 //            @Override
 //            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -46,19 +65,20 @@ public class UserDaoImpl implements UserDao {
 //            }
 //        }, keyHolder);
 //        user.setUserid(keyHolder.getKey().longValue()+"");
-        return user;
+//        return user;
     }
 
-    public User updateUser(User user) {
-        String sql = "update sys_user set organization_id=?,username=?, password=?, salt=?, role_ids=?, locked=? where id=?";
-//        jdbcTemplate.update(
-//                sql,
-//                user.getOrganizationId(), user.getUsername(), user.getPassword(), user.getSalt(), user.getRoleIdsStr(), user.getLocked(), user.getId());
-        return user;
-    }
+//    public User updateUser(User user) {
+//        String sql = "update ALGZ_USER set organization_id=?,username=?, password=?, salt=?, role_ids=?, locked=? where id=?";
+////        jdbcTemplate.update(
+////                sql,
+////                user.getOrganizationId(), user.getUsername(), user.getPassword(), user.getSalt(), user.getRoleIdsStr(), user.getLocked(), user.getId());
+//        return user;
+//    }
 
+	@Override
     public void deleteUser(String userId) {
-        String sql = "delete from sys_user where id=?";
+        String sql = "delete from ALGZ_USER where id='"+userId+"'";
         sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
 //        jdbcTemplate.update(sql, userId);
     }
@@ -77,6 +97,7 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> findAll(User user,Integer start, Integer limit) {
+		
     	String hql="from User";
     	Query query= sf.getCurrentSession().createQuery(hql);
     	if(start!=null){
@@ -100,6 +121,13 @@ public class UserDaoImpl implements UserDao {
         		.setMaxResults(1).uniqueResult();
         		//jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class), username);
     }
+
+	@Override
+	public void updateAUser(User user) {
+		Role role=new Role();
+		role.setRolecname("++++");
+		sf.getCurrentSession().saveOrUpdate(role);
+	}
 
 
 

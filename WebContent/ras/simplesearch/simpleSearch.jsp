@@ -38,18 +38,6 @@
 						<input type="hidden" class="width-100" id="selectModelName" placeholder="选择的机型"  disabled>
 						<input type="hidden" id="selectOverviewID">
 					</div>
-					<!-- <div class="dataTables_borderWrap"> 
-					<div class="btn-group">
-						<button id="comparisonModelparamBtn" class="btn btn-purple btn-sm" type="button">对比</button>
-						<button id="analyzeModelparamBtn" class="btn btn-purple btn-sm" type="button">分析</button>
-						
-						<span class="input-icon" style="width:500px;">
-							<input type="text" class="width-100" id="selectModelName" placeholder="选择的机型"  disabled>
-							<input type="hidden" id="selectOverviewID">
-							<i class="ace-icon fa fa-fighter-jet  blue"></i>
-						</span>
-						<button id="clearModelSelectBtn" class="btn btn-sm btn-default" type="button">清空</button>
-					</div>-->
 				</div>
 				
 				<div class="widget-body">
@@ -63,12 +51,8 @@
 							<div class="col-xs-8">
 								<!-- <h3 class="header smaller lighter blue"></h3> -->
 								<div class="table-header">
-									
 								</div>
 			
-								<!-- <div class="table-responsive"> -->
-			
-								<!-- <div class="dataTables_borderWrap"> -->
 								<div class="btn-group">
 									<button id="comparisonModelparamBtn" class="btn btn-purple btn-sm" type="button">对比</button>
 									<button id="analyzeModelparamBtn" class="btn btn-purple btn-sm" type="button">分析</button>
@@ -212,8 +196,6 @@
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 		</plugin_js>
 		
-		<script type="text/javascript" src="tree.js"></script>	
-		
 		<!-- bootstrap-treeview.js -->
 		<script src="<%=basePath%>ras/common/js/treeview/bootstrap-treeview.js"></script>
 		
@@ -221,3 +203,4 @@
 
 	</body>
 </html>
+

@@ -1,6 +1,8 @@
 package algz.platform.core.shiro.realm;
 
 
+import javax.annotation.Resource;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.ras.relationTable.sysware.user.SyswareUserDao;
 
+import algz.platform.core.shiro.authority.userManager.AUserService;
 import algz.platform.core.shiro.authority.userManager.User;
 import algz.platform.core.shiro.authority.userManager.UserService;
 
@@ -41,8 +44,11 @@ import algz.platform.core.shiro.authority.userManager.UserService;
 @Service  
 public class SSOAuthoryRealm extends AuthorizingRealm {
 
-    @Autowired
+	@Resource
     private UserService userService;
+    
+//	  @Autowired
+//	  private AUserService userService;
     
     @Autowired
     private SyswareUserDao syswareUserDao;

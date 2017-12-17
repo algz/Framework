@@ -27,10 +27,12 @@ import org.springframework.stereotype.Service;
 import com.ras.tool.CommonTool;
 import com.ras.ws.client.CXFClientUtil;
 
-import algz.platform.core.shiro.authority.roleManager.Role;
 import algz.platform.core.shiro.authority.roleManager.RoleService;
 import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.core.shiro.authority.userManager.UserService;
 import algz.platform.util.Common;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
@@ -41,6 +43,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Autowired
 	private RoleService roleservice;
 	
+	@Autowired
+	private UserService userService;
 	
 	@Value("${P2M_webservice}")
 	private String P2M_webservice;
@@ -54,6 +58,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Value("${P2M_dataApprovalURL}")
 	private String P2M_dataApprovalURL;
 	
+
+	
 	/**
 	 * 提交审批
 	 * @param approval
@@ -62,28 +68,13 @@ public class ApprovalServiceImpl implements ApprovalService {
 	 */
 	@Transactional
 	@Override
-	public String submitApproval(Approval approval) throws Exception {
-		
+	public String submitApproval(Approval approval)  {
 		approval.setSubmitter(Common.getLoginUser().getUserid()); //提交人
+		approval.setApprovalStatus("1");
+		return dao.saveApproval(approval);
+	}
 
-		//如果是数据管理员,则直接审批通过
-		if(CommonTool.isDataManager()){
-			approval.setApprovalStatus("2");//审批状态:0或空未审批,1审批中,2审批完成
-			approval.setApprovalResult("1"); //审批结果:1同意;0不同意
-			String msg=dao.saveApproval(approval);
-			if(msg!=null){
-				return msg;
-			}
-			return "数据管理员直接审批通过!";
-		}else{
-			approval.setApprovalStatus("1");
-			String msg=dao.saveApproval(approval);
-			if(msg!=null){
-				return msg;
-			}
-		}
-		
-		
+	public String submitToP2M(Approval approval)throws Exception{
 		//准备提交其它系统的webservice数据
 		Map<String,String> m=new LinkedHashMap<String,String>();
 		m.put("paramToken_ras", approval.getApprovalID());
@@ -95,9 +86,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 		m.put("startUserId", Common.getLoginUser().getUsername());//发起人id,p2m login_name
 		
 		//数据校验员,数据审核员
-		List<User> users=roleservice.findUsernameByRoleNames("dataCheck","dataApproval");
-		String username1=users.get(0).getUsername();//数据校验员
-		String username2=users.get(1).getUsername();//数据审核员
+		//List<User> users=roleservice.findUsernameByRoleNames("dataCheck","dataApproval");
+		String username1=approval.getDataCheck();//users.get(0).getUsername();//数据校验员
+		String username2=approval.getDataApproval();//users.get(1).getUsername();//数据审核员
 		m.put("approvalUserIds", username1+","+username2); //审批人id=其它系统loginname
 		
 		String param=writeToXmlString(m);
@@ -109,9 +100,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 			throw new Exception(retMap.get("errorInfo"));
 		}
 		return retMap.get("errorInfo");
-		
 	}
-
 	
 	private static String writeToXmlString(Map<String,String> m){
     	XMLOutputFactory factory = XMLOutputFactory.newInstance();  
@@ -143,7 +132,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 		} catch (XMLStreamException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
         
@@ -202,5 +190,46 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public Approval findOne(Approval approval) {
 		return dao.findOne(approval);
+	}
+
+
+	@Override
+	public JSONObject getAllUser() {
+		JSONObject jo=new JSONObject();
+		List<User> userList=userService.findAll(null,0,null);
+		jo.put("user", userListToJSONArray(userList));
+		//数据校验员,
+		userList=roleservice.findUsernameByRoleNames("dataCheck");
+		jo.put("dataCheck", userListToJSONArray(userList));
+		//数据审核员
+		userList=roleservice.findUsernameByRoleNames("dataApproval");
+		jo.put("dataApproval", userListToJSONArray(userList));
+		return jo;
+	}
+
+
+	@Override
+	public JSONObject getUserRole() {
+		JSONObject jo=new JSONObject();
+		//数据校验员,
+		List<User> userList=roleservice.findUsernameByRoleNames("dataCheck");
+		jo.put("dataCheck", userListToJSONArray(userList));
+		//数据审核员
+		userList=roleservice.findUsernameByRoleNames("dataApproval");
+		jo.put("dataApproval", userListToJSONArray(userList));
+		return jo;
+	}
+	
+	private JSONArray userListToJSONArray(List<User> userList){
+		JSONArray ja=new JSONArray();
+		for(User u:userList){
+			if(u.getCname()!=null){
+				JSONObject jo=new JSONObject();
+				jo.put("userid", u.getUserid());
+				jo.put("cname", u.getCname());
+				ja.add(jo);
+			}
+		}
+		return ja;
 	}
 }

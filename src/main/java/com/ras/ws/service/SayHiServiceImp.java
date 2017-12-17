@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 /**
  * @author algz
  *
@@ -17,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.ras.documnet.data.DataService;
+import com.ras.documnet.dataManager.DataService;
 
 /**
  * 作为测试的WebService实现类

@@ -1,0 +1,21 @@
+
+<span class="input-icon">
+	<input type="text" id="modelNameTxt" placeholder="机型名">
+</span>
+
+<plugin_js>
+	<!-- 文本框扩展查询 -->
+	<script src="<%=basePath%>ras/common/js/typeahead.jquery.js"></script>			
+</plugin_js>
+
+<script>
+$('#modelNameTxt').typeahead(null,{
+	   source:function(query,process,aysprocess) {
+	   		var objs=$.get("../../analyze/findmodelfortypeahead",{modelName:query},function(data){
+//	       		var data=['name1','name2'];
+	   			aysprocess(eval(data)); //异步加载
+	   			//process(eval(data)); //同步加载
+	   		});//['name1','name2']
+	    	}
+});
+</script>

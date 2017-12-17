@@ -12,9 +12,8 @@ public class Main {
      */
     public static void main(String[] args) {
         EndpointImpl endpoint = new EndpointImpl(new SpringBus(), new SayHiServiceImp());
-        endpoint.publish("/java-users");
-        
-        Endpoint.publish("http://localhost:8080/testjws/service/sayHi", new SayHiServiceImp());
+        //endpoint.publish("/java-users");
+        endpoint.publish("http://localhost:8080/algz/ras/ws/sayHi", new SayHiServiceImp());
     }
 
 }

@@ -24,5 +24,10 @@ public interface RoleService {
     public List<User> findUsernameByRoleNames(String... roleName);
     
     public List<Role> findAll(Role role,Integer start,Integer length);
+    
     public Integer countAll(Role role);
+    
+    public void saveRole(Role role);
+    
+    public void delRole(String roleID);
 }

@@ -31,24 +31,31 @@ import javax.persistence.Transient;
 public class Role implements Serializable {
 	
 	@Id
+	@Column(name = "ID")
 	@GenericGenerator(name = "ALGZGenerator", strategy = "guid")
 	@GeneratedValue(generator="ALGZGenerator")
-    private String id; //编号
+    private String roleid; //编号
 	
 	@Column(name="ROLENAME")
     private String rolename; //角色标识 程序中判断使用,如"admin"
 	
+	@Column(name="ROLECNAME")
+    private String rolecname; //角色标识 程序中判断使用,如"admin"
+	
 	@Column(name="DESCRIPTION")
     private String description; //角色描述,UI界面显示使用
 	
+	/**
+	 * 角色类别:0普通角色;1系统角色
+	 */
 	@Column(name="ROLECATEGORY")
-	private String roleCategory;
+	private String rolecategory;
 	
 	// 不能设置FetchType.LAZY,因为user保存到session(登陆)后,再使用关联查询(此时原会话关闭,启动的是新会话),会报异常could not initialize proxy - no Session
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
 	@JoinTable(name="ALGZ_ROLE_RESOURCE",
-		joinColumns={@JoinColumn(name="ROLEID")},
-		inverseJoinColumns={@JoinColumn(name="RESOURCEID")})
+		joinColumns={@JoinColumn(name="ROLEID", nullable = false, updatable = false)},
+		inverseJoinColumns={@JoinColumn(name="RESOURCEID", nullable = false, updatable = false)})
 	private List<Resource> resources;
 	
 	@Transient
@@ -62,12 +69,12 @@ public class Role implements Serializable {
 
 
 
-    public String getId() {
-		return id;
+    public String getRoleid() {
+		return roleid;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setRoleid(String id) {
+		this.roleid = id;
 	}
 
 
@@ -78,9 +85,23 @@ public class Role implements Serializable {
 
 
 
-	public void setRolename(String rolename) {
-		this.rolename = rolename;
+	public void setRolename(String roleName) {
+		this.rolename = roleName;
 	}
+
+	
+	
+	public String getRolecname() {
+		return rolecname;
+	}
+
+
+
+	public void setRolecname(String roleCname) {
+		this.rolecname = roleCname;
+	}
+
+
 
 	public String getDescription() {
         return description;
@@ -92,14 +113,14 @@ public class Role implements Serializable {
 
     
     
-    public String getRoleCategory() {
-		return roleCategory;
+    public String getRolecategory() {
+		return rolecategory;
 	}
 
 
 
-	public void setRoleCategory(String roleCategory) {
-		this.roleCategory = roleCategory;
+	public void setRolecategory(String roleCategory) {
+		this.rolecategory = roleCategory;
 	}
 
 
@@ -155,7 +176,7 @@ public class Role implements Serializable {
 
         Role role = (Role) o;
 
-        if (id != null ? !id.equals(role.id) : role.id != null) return false;
+        if (roleid != null ? !roleid.equals(role.roleid) : role.roleid != null) return false;
 
         return true;
     }

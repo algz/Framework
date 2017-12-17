@@ -78,9 +78,9 @@ public class Approval {
 	private String submitter;
 	
 	/**
-	 * 创建日期(只读属性,数据库自动填写
+	 * 创建日期(只读属性,数据库自动填写)
 	 */
-	@Column(name="CREATE_DATE")
+	@Column(name="CREATE_DATE",insertable=false,updatable=false)
 	private Date createDate;
 	
 	/**
@@ -106,6 +106,12 @@ public class Approval {
 	 */
 	@Column(name="RETURNREASON")
 	private String returnReason;
+	
+	@Transient
+	private String dataCheck;
+	
+	@Transient
+	private String dataApproval;
 	
 	public String getApprovalID() {
 		return approvalID;
@@ -217,6 +223,22 @@ public class Approval {
 
 	public void setPermissionUserRange(String permissionUserRange) {
 		this.permissionUserRange = permissionUserRange;
+	}
+
+	public String getDataCheck() {
+		return dataCheck;
+	}
+
+	public void setDataCheck(String dataCheck) {
+		this.dataCheck = dataCheck;
+	}
+
+	public String getDataApproval() {
+		return dataApproval;
+	}
+
+	public void setDataApproval(String dataApproval) {
+		this.dataApproval = dataApproval;
 	}
 
 

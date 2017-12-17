@@ -1,6 +1,9 @@
 package algz.platform.core.shiro.realm;
 
 
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -16,7 +19,9 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import algz.platform.core.shiro.authority.userManager.AUserService;
 import algz.platform.core.shiro.authority.userManager.User;
+import algz.platform.core.shiro.authority.userManager.UserDao;
 import algz.platform.core.shiro.authority.userManager.UserService;
 
 /**
@@ -39,21 +44,27 @@ import algz.platform.core.shiro.authority.userManager.UserService;
 @Service  
 public class AuthoryRealm extends AuthorizingRealm {
 
-    @Autowired
+	@Resource 
     private UserService userService;
 
-
+//    @Autowired
+//    private AUserService auserService;
+    
+    @Autowired
+    private UserDao userDao;
+    
 	/**
 	 * 登录认证
 	 */
 	@Override
+	@Transactional
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
 //      //UsernamePasswordToken对象用来存放提交的登录信息  
 //      UsernamePasswordToken token=(UsernamePasswordToken) authenticationToken;  
 		String username = (String)token.getPrincipal();
-        User user = userService.findByUsername(username);
-
+        User user = userDao.findByUsername(username);
+        
 //        user.getRoles().size();
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号

@@ -41,7 +41,7 @@ public class CXFConfiguration {
     private RASWebservice rasWebservice;
     
     /**
-     * url: http://localhost:8080/algz/webservice/hello?wsdl
+     * url: http://localhost:8080/algz/ras/ws/hello?wsdl
      * 说明:http://localhost:8080/{项目名}/{servletURL}/{endpoint}?wsdl
      * 
      * @return
@@ -56,8 +56,10 @@ public class CXFConfiguration {
     }
 	
     /**
-     * url: http://localhost:8080/algz/webservice/hello?wsdl
+     * url: http://localhost:8080/algz/ras/ws/endApproval?wsdl
      * 说明:http://localhost:8080/{项目名}/{servletURL}/{endpoint}?wsdl
+     * 
+     * servletURL 在 AppInitializer.java 中CXF配置.
      * 
      * @return
      */

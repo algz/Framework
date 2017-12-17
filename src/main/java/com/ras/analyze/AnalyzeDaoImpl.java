@@ -150,10 +150,11 @@ public class AnalyzeDaoImpl implements AnalyzeDao {
 			sql+=" and (ao.PARENT_ID='0' or ao.PARENT_ID is null) ";
 		}
 		//权限控制
-		if(!CommonTool.isDataManager()){
-			User curUser=Common.getLoginUser();
-			sql+=" and (ao.editor='"+curUser.getUserid()+"' and ao.PERMISSION_LEVEL='1') or ao.PERMISSION_LEVEL in ('2','3') ";
-		}
+		sql+=CommonTool.getAuthoritySQL(Common.getLoginUser().getUserid());
+//		if(!CommonTool.isDataManager()){
+//			User curUser=Common.getLoginUser();
+//			sql+=" and (ao.editor='"+curUser.getUserid()+"') or ao.PERMISSION_LEVEL in ('2','3') ";
+//		}
 		
 		return sf.getCurrentSession().createSQLQuery(sql+" order by ao.modelname").addEntity(AircraftOverview.class).list();
 	}

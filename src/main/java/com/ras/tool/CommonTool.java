@@ -15,10 +15,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,10 +30,12 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -42,8 +46,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sun.org.apache.xml.internal.security.encryption.Serializer;
 
 import algz.platform.core.shiro.authority.roleManager.Role;
+import algz.platform.core.shiro.authority.userManager.User;
 import algz.platform.util.Common;
 import javafx.util.Callback;
 import net.sf.json.JSONArray;
@@ -354,7 +360,6 @@ public class  CommonTool{
             	//解决文件名为中文时的乱码问题,需要将文件名编码成ISO8859-1.
 				response.addHeader("Content-Disposition","attachment;fileName=" +new String(displayName.getBytes("gbk"),"iso-8859-1") );
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}// 设置文件名
             
@@ -400,13 +405,23 @@ public class  CommonTool{
 		List<Role> roles=Common.getLoginUser().getRoles();
 		if(roles!=null){
 			for(Role role:roles){
-				if(role.getId().equals("2")){
+				if(role.getRoleid().equals("2")){
 					return true;
 				}
 			}
 		}
-
 		return false;
+	}
+	
+	public static String getAuthoritySQL(String userid){
+		String sql="";
+		//权限控制
+		if(!CommonTool.isDataManager()){
+			sql+=" and ((ao.editor='"+userid+"' and ao.PERMISSION_LEVEL='1') "
+					+ "or ao.PERMISSION_LEVEL in ('2','3') "
+					+ "or (ao.PERMISSION_LEVEL='4' and ao.editor in (select udp.userid from RAS_USER_DATA_PRIVILIDGE udp where udp.dataid=ao.id)))";
+		}
+		return sql;
 	}
 
 	/**
@@ -444,7 +459,6 @@ public class  CommonTool{
 					}else{
 						Column col=f.getAnnotation(Column.class);
 						sql.append(" and LOWER("+col.name()+") = '"+val.toString().toLowerCase()+"'");
-						
 					}
 					
 				}
@@ -464,6 +478,120 @@ public class  CommonTool{
 		return query.list();
 	}
 	
+	public static void saveSingleEntityForProperty(SessionFactory sf,Object example) {
+		
+		
+		//set t.paramvalue='' where t.paramid='' and t.overviewid='' select distinct * from "+tableName+" where 1=1 
+		
+		String colSql="";
+		String valSql="";
+		
+		Field[] fs = example.getClass().getDeclaredFields();
+		try {
+			for (Field f : fs) {
+				f.setAccessible(true); 
+				Object val = f.get(example);
+				if(val!=null&&!val.equals("")){
+					Column col=f.getAnnotation(Column.class);
+					
+					if(!colSql.equals("")){
+						colSql+=",";
+						valSql+=",";
+					}
+					
+					//列
+					colSql+=col.name();
+					
+					//值
+					if(f.getAnnotation(Id.class)!=null){
+						valSql+="'"+CommonTool.getGUID(sf.getCurrentSession())+"'";
+					}else{
+						valSql+="'"+val+"'";
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String tableName=example.getClass().getAnnotation(Table.class).name();
+		sf.getCurrentSession().createSQLQuery("insert into "+tableName+"("+valSql+") values ("+colSql+")").executeUpdate();
+	}
+	
+	public static void updateSingleEntityForProperty(SessionFactory sf,Object example) {
+		
+		String tableName=example.getClass().getAnnotation(Table.class).name();
+		StringBuilder sql=new StringBuilder(" update "+tableName+" set ");
+		//set t.paramvalue='' where t.paramid='' and t.overviewid='' select distinct * from "+tableName+" where 1=1 
+		
+		String valueSql="";
+		String whereSql="";
+		
+		Field[] fs = example.getClass().getDeclaredFields();
+		try {
+			for (Field f : fs) {
+				f.setAccessible(true); 
+				Object val = f.get(example);
+				Column col=f.getAnnotation(Column.class);
+				if(val!=null&&col!=null){
+					if(f.getAnnotation(Id.class)!=null){
+						whereSql+=" where "+col.name()+"='"+val+"'";
+					}else{
+						if(!valueSql.equals("")){
+							valueSql+=",";
+						}
+						valueSql+=col.name()+"='"+val+"'";
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		sf.getCurrentSession().createSQLQuery(sql.toString()+valueSql+whereSql).executeUpdate();
+	}
+	
+	public static BigDecimal countEntitiesByProperty(SessionFactory sf,StringBuilder sql,Object example) {
+//		StringBuilder sql=new StringBuilder("select count(*) from "+tableName+" where 1=1 ");
+		
+		Field[] fs = example.getClass().getDeclaredFields();
+		try {
+			for (Field f : fs) {
+				f.setAccessible(true); 
+				Object val = f.get(example);
+				if(val!=null&&!val.equals("")){
+					Column col=f.getAnnotation(Column.class);
+					sql.append(" and LOWER("+col.name()+") = '"+val.toString().toLowerCase()+"'");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return (BigDecimal)sf.getCurrentSession().createSQLQuery(sql.toString()).uniqueResult();
+	}
+	
+	public static BigDecimal countEntitiesByProperty(SessionFactory sf,Object example) {
+		String tableName=example.getClass().getAnnotation(Table.class).name();
+		StringBuilder sql=new StringBuilder("select count(*) from "+tableName+" where 1=1 ");
+		
+		Field[] fs = example.getClass().getDeclaredFields();
+		try {
+			for (Field f : fs) {
+				f.setAccessible(true); 
+				Object val = f.get(example);
+				if(val!=null&&!val.equals("")){
+					Column col=f.getAnnotation(Column.class);
+					sql.append(" and LOWER("+col.name()+") = '"+val.toString().toLowerCase()+"'");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return (BigDecimal)sf.getCurrentSession().createSQLQuery(sql.toString()).uniqueResult();
+	}
+	
 	/**
 	 * 复制对象
 	 * @param example
@@ -477,6 +605,15 @@ public class  CommonTool{
 			T newObje=null;
 			try {
 				newObje=(T)example.getClass().newInstance();
+//				ConvertUtils.register(converter, clazz);
+				// 注册sql.date的转换器，即允许BeanUtils.copyProperties时的源目标的sql类型的值允许为空 
+				ConvertUtils.register(new org.apache.commons.beanutils.converters.SqlDateConverter(null), java.sql.Date.class); 
+				ConvertUtils.register(new org.apache.commons.beanutils.converters.SqlDateConverter(null), java.util.Date.class);  
+				ConvertUtils.register(new org.apache.commons.beanutils.converters.SqlTimestampConverter(null), java.sql.Timestamp.class); 
+				// 注册util.date的转换器，即允许BeanUtils.copyProperties时的源目标的util类型的值允许为空 
+				
+				ConvertUtils.register(new org.apache.commons.beanutils.converters.BigDecimalConverter(null), java.math.BigDecimal.class); 
+				
 				BeanUtils.copyProperties(newObje, example);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

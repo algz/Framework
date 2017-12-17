@@ -2,6 +2,7 @@
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="page" tagdir="/WEB-INF/tags/uiframe/page" %> 
+<%@taglib prefix="form" tagdir="/WEB-INF/tags/uiframe/form" %>
 <%
 
 	String path = request.getContextPath();
@@ -36,14 +37,14 @@ authority  [ə'θɔːrəti] n. 权力；官方；当局；职权；权威-->
 			<div class="row">
 				<div class="col-xs-6">
 					<div class="table-header">
-						权限管理
+						角色管理
 					</div>
 
 					<!-- <div class="table-responsive"> -->
 					<div class="btn-group">
-						<button class="btn btn-sm" type="button">添加</button>
-						<button class="btn btn-sm" type="button">修改</button>
-						<button class="btn btn-sm" type="button">删除</button>
+						<button id='addRoleBtn' class="btn btn-sm" type="button">添加</button>
+						<button id='modifyRoleBtn' class="btn btn-sm" type="button">修改</button>
+						<button id='delRoleBtn' class="btn btn-sm" type="button">删除</button>
 					</div>
 					<!-- <div class="dataTables_borderWrap"> -->
 					<div>
@@ -55,15 +56,7 @@ authority  [ə'θɔːrəti] n. 权力；官方；当局；职权；权威-->
 				<div class="col-xs-6" disable="disable">
 					
 					<div class="table-header"  >
-						资源管理
-					</div>
-
-					<!-- <div class="table-responsive"> -->
-					<div class="btn-group">
-						<!-- <button class="btn btn-sm" type="button">添加</button>
-						<button class="btn btn-sm" type="button">修改</button>
-						<button class="btn btn-sm" type="button">删除</button>-->
-						<button class="btn btn-sm" disabled type="button">授权</button> 
+						资源信息
 					</div>
 					<label class="btn btn-sm  inline">
 						<small class="muted smaller-90">隐藏公共资源:</small>
@@ -80,12 +73,52 @@ authority  [ə'θɔːrəti] n. 权力；官方；当局；职权；权威-->
 			
 			</div>
 			
-
+			<div id="modal-Role" class="modal fade" tabindex="-1">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			            	<span aria-hidden="true">&times;</span></button>
+			        		<h4 class="modal-title">角色管理</h4>
+			            </div>
+			            <div class="modal-body">
+				            <form class="form-horizontal">
+				            	<input id='roleid' type="hidden">
+				            	<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色名称 </label>
+									<div class="col-sm-9">
+										<input type="text" id="rolename" placeholder="角色名称" class="col-xs-10 col-sm-5">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 中文名称 </label>
+									<div class="col-sm-9">
+										<input type="text" id="rolecname" placeholder="中文名称" class="col-xs-10 col-sm-5">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色描述 </label>
+									<div class="col-sm-9">
+										<input type="text" id="description" placeholder="角色描述" class="col-xs-10 col-sm-5">
+									</div>
+								</div>
+							</form>
+			            </div>
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			    			<button id="role-confirmBtn" type="button" class="btn btn-primary">确定</button>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
 			<!-- PAGE CONTENT ENDS -->
 		</page:page>
 		
-		
 		<plugin_js>
+			<!-- 提示框 -->
+			<script src="<%=basePath%>ras/common/js/bootbox.js"></script>
+		
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.bootstrap.js"></script>
 		</plugin_js>

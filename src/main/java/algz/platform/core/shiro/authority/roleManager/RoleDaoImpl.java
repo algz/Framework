@@ -9,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ras.tool.CommonTool;
+
 import algz.platform.core.shiro.authority.resourceManager.Resource;
 import algz.platform.core.shiro.authority.userManager.User;
 
@@ -43,7 +45,7 @@ public class RoleDaoImpl implements RoleDao {
 
 		}
 
-		Query query=sf.getCurrentSession().createQuery(hql.toString());
+		Query query=sf.getCurrentSession().createQuery(hql.toString()+" order by rolecategory");
 		if(start!=null){
 			query.setFirstResult(start).setMaxResults(length);
 		}
@@ -54,6 +56,35 @@ public class RoleDaoImpl implements RoleDao {
 	public Integer countAll(Role role) {
 		String hql="select count(1) from Role";
 		return ((Long)sf.getCurrentSession().createQuery(hql).uniqueResult()).intValue();
+	}
+
+	@Override
+	public void saveRole(Role role) {
+		role.setRolecategory("0");
+		if(role.getRoleid()!=null&&!role.getRoleid().equals("")){
+			Role entity=(Role)sf.getCurrentSession().get(Role.class, role.getRoleid());
+			if(role.getRolename()!=null){
+				entity.setRolename(role.getRolename());
+			}
+			if(role.getRolecname()!=null){
+				entity.setRolecname(role.getRolecname());
+			}
+			if(role.getDescription()!=null){
+				entity.setDescription(role.getDescription());
+			}
+			//update,saveOrupdate 跨Session时才用到.比如get()后离开session当作VO使用,再然后把VO放到session保存.
+//			sf.getCurrentSession().update(role);
+//			CommonTool.updateSingleEntityForProperty(sf, role);
+		}else{
+			sf.getCurrentSession().save(role);
+		}
+		
+	}
+
+	@Override
+	public void delRole(String roleID) {
+        String sql = "delete from ALGZ_ROLE where id='"+roleID+"'";
+        sf.getCurrentSession().createSQLQuery(sql).executeUpdate();
 	}
 
 

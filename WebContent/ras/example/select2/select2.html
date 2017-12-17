@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="../assets/css/select2.css" />
+
+<script src="../assets/js/select2.js"></script>
+
+<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-3 no-padding-right"> Select2 </label>
+
+	<div class="col-xs-12 col-sm-9">
+		<select multiple="" id="state" name="state" class="select2" data-placeholder="Click to Choose...">
+			<option value="">&nbsp;</option>
+			<option value="AL">Alabama</option>
+			<option value="AK">Alaska</option>
+			<option value="AZ">Arizona</option>
+		</select>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+//select2
+$('.select2').css('width','200px').select2({allowClear:true})
+$('#select2-multiple-style .btn').on('click', function(e){
+	var target = $(this).find('input[type=radio]');
+	var which = parseInt(target.val());
+	if(which == 2) $('.select2').addClass('tag-input-style');
+	 else $('.select2').removeClass('tag-input-style');
+});
+
+</script>

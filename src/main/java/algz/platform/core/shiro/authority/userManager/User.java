@@ -3,8 +3,6 @@ package algz.platform.core.shiro.authority.userManager;
 
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import algz.platform.core.shiro.authority.roleManager.Role;
 
@@ -17,13 +15,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
 
 /**
  * <p>User: algz
@@ -46,6 +43,9 @@ public class User implements Serializable {
 	@Column(name="PASSWORD")
     private String password; //密码
 	
+	/**
+	 * 部门
+	 */
 	@Column(name="DEPARTMENT")
 	private String department;
 	
@@ -56,7 +56,7 @@ public class User implements Serializable {
 	private String cname;
     
 	// 不能设置FetchType.LAZY,因为user保存到session(登陆)后,再使用关联查询(此时原会话关闭,启动的是新会话),会报异常could not initialize proxy - no Session
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
 	@JoinTable(name="ALGZ_USER_ROLE",
 		joinColumns={@JoinColumn(name="USERID")},
 		inverseJoinColumns={@JoinColumn(name="ROLEID")})
@@ -67,7 +67,7 @@ public class User implements Serializable {
     private Long organizationId; //所属公司
 
 
-	
+	@Transient
     private String salt; //加密密码的盐
     
     
@@ -91,7 +91,7 @@ public class User implements Serializable {
 		List<String> list=new ArrayList<String>();
 		if(this.roles!=null){
 			for(Role role:this.roles){
-				list.add(role.getId());
+				list.add(role.getRoleid());
 			}
 		}
 		return list;
@@ -112,9 +112,6 @@ public class User implements Serializable {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-
-
-
 
 	public Long getOrganizationId() {
         return organizationId;

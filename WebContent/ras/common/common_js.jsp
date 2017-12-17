@@ -33,7 +33,19 @@
 <![endif]-->
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='<%=basePath%>ras/common/js/jquery.mobile.custom.js'>"+"<"+"/script>");
+		
+			$(function(){
+				//$.ajax全局设置
+				$(document).ajaxComplete(function(event,xhr,options){
+					//alert(xhr)
+				    var str_timeout = xhr.responseText;
+				    if ("session_timeout" === str_timeout) {
+				        window.top.location = rootPath + "/system/login/login.jsp";
+				    } 
+				});
+			})	
 		</script>
+		
 		<script src="<%=basePath%>ras/common/js/bootstrap.js"></script>
 
 		<!-- page specific plugin scripts -->

@@ -1,15 +1,85 @@
 $(function() {
 
+	//设置为中文
+	bootbox.setDefaults("locale","zh_CN"); 
 	
-			
-			$('#submitBtn').click(function() {
-						userTable.api().ajax.reload(); //必须用   
+	///////////////////用户管理/////////////////////////
+	
+	//添加用户
+	$('#addUserBtn').on('click',function(){
+		$('#modal-userform').on('show.bs.modal',function(){
+			$('#modal-userform form input').val('');
+		}).modal();
+	})
+	
+	//修改用户
+	$('#modifyUserBtn').on('click',function(){
+		var datas=userTable.rows('.selected').data();
+		if(datas.length>0){
+			$('#modal-userform').on('show.bs.modal',function(){
+				$('#userid').val(datas[0].userid);
+				$('#username').val(datas[0].username);
+				$('#password').val(datas[0].password);
+				$('#cname').val(datas[0].cname);
+				$('#department').val(datas[0].department);
+			}).modal();
+		}
+		
+	})
+	
+	//用户管理弹窗-保存
+	$('#user-confirmBtn').on('click',function(){
+		var username=$('#username').val();
+		if(username!=""){
+			$.ajax({
+				url:'./saveuser?d='+new Date(),
+				data:{
+					userid:$('#userid').val(),
+					username:$('#username').val(),
+					cname:$('#cname').val(),
+					password:$('#password').val(),
+					department:$('#department').val()
+				},
+				success:function(){
+					userTable.ajax.reload();
+					bootbox.alert('保存成功!');
+					$('#modal-userform').modal('hide');
+				}
+			})
+		}
+	})
+	
+	//删除用户
+	$('#delUserBtn').on('click',function(){
+		var data=userTable.rows('.selected').data();
+		var username=$('#username').val();
+		if(data.length!=0){
+			bootbox.confirm('是否删除数据',function(result){
+				if(result){
+					$.ajax({
+						url:'./deluser',
+						data:{
+							userid:data[0].userid
+						},
+						success:function(){
+							userTable.ajax.reload();
+							bootbox.alert('删除成功!')
+						}
+					})
+				}
+			})
+
+		}
+	})
+	
+	$('#submitBtn').click(function() {
+		userTable.api().ajax.reload(); //必须用   
 //						dataTable.api().ajax.reload(function(json) {
 //							// 这里的json返回的是服务器的数据
 //							alert(json)
 //								// $('#myInput').val( json.lastInput );
 //							});
-					})
+	})
 
 			// 没有采用官方jquery.dataTables.css 文件,CSS封装到ace.css中.
 			var userTable = $('#table-user')
@@ -110,8 +180,7 @@ $(function() {
 
 			////////////////////////////////////
 						
-			/**
-			 * 角色管理
+			/** 角色管理
 			 */
 			var roleTable = $('#table-role')
 					// .wrap("<div class='dataTables_borderWrap' />") 
@@ -151,10 +220,35 @@ $(function() {
 									data:'rolename', 
 									sorting : false
 								}, {
+									"title" : "角色中文名称",
+									data:'rolecname', 
+									sorting : false
+								},{
 									"title" : "角色描述",
 									data:'description', 
 									width:160,
 									sorting : false
+								},{
+									"title" : "系统角色",
+									data:'rolecategory', 
+									width:160,
+									render:function(data, type, row, meta){
+									    //个人理解  --以及参数的应用场景
+									    //data:当前cell的值  --主要是操作这个参数来做渲染
+									    //type:数据类型,枚举类型dt内置定义的  --用处不大
+									    //row:当前行的所有数据  --可以做来用级联(没办法更改其他cell的渲染)
+									    //meta:它下面有三个参数
+									    //row,col 是当前cell的横纵坐标(相对于左上角) --可以结合上个参数row做更加复杂的级联
+									    //settings:dt的api实例,动态所有的参数信息都在里面  --这个很强大,获取参数信息就好,新手不要随便更改里面的参数信息
+									    if(data=='0'){
+									    	return '否';
+									    }else if(data=='1'){
+									    	return '是';
+									    }else{
+									    	return data;
+									    }
+									    
+									}
 								}],
 						"language" : {
 							"lengthMenu" : "每页显示 _MENU_ 条记录",
@@ -213,8 +307,6 @@ $(function() {
 				   }
 				})
 			})
-					
-			
 		})
 		
 		

@@ -15,6 +15,7 @@ import algz.platform.core.shiro.authority.resourceManager.Resource;
 import algz.platform.core.shiro.authority.resourceManager.ResourceService;
 import algz.platform.core.shiro.authority.roleManager.Role;
 import algz.platform.core.shiro.authority.roleManager.RoleService;
+import algz.platform.core.shiro.authority.userManager.AUserService;
 import net.sf.json.JSONObject;
 
 /**
@@ -43,12 +44,14 @@ public class RASRoleServiceImpl implements RASRoleService {
 		List<Map<String,String>> list=new ArrayList<Map<String,String>>();
 		for(Role role:roleList){
 			Map<String,String> m=new HashMap<String,String>();
-			m.put("roleid", role.getId());
+			m.put("roleid", role.getRoleid());
 			m.put("rolename", role.getRolename());
+			m.put("rolecname", role.getRolecname());
 			m.put("description", role.getDescription());
+			m.put("rolecategory", role.getRolecategory());
 			String checked="0";
 			for(String roleid:userList){
-				if(role.getId().equals(roleid)){
+				if(role.getRoleid().equals(roleid)){
 					checked="1";
 					break;
 				}
@@ -59,6 +62,21 @@ public class RASRoleServiceImpl implements RASRoleService {
 		
 		
 		vo.setData(list);
+	}
+
+	@Override
+	public void saveRole(RASRoleVo vo) {
+		Role role=new Role();
+		role.setRoleid(vo.getRoleid());
+		role.setRolename(vo.getRolename());
+		role.setRolecname(vo.getRolecname());
+		role.setDescription(vo.getDescription());
+		roleService.saveRole(role);
+	}
+
+	@Override
+	public void delRole(String roleid) {
+		roleService.delRole(roleid);
 	}
 
 

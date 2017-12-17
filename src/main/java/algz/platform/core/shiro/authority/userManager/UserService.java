@@ -5,21 +5,19 @@ package algz.platform.core.shiro.authority.userManager;
 import java.util.List;
 import java.util.Set;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
-public interface UserService {
 
+public interface UserService {
+	
     /**
-     * 创建用户
+     * 保存用户
      * @param user
      */
-    public User createUser(User user);
+    public void saveUser(User user);
 
-    public User updateUser(User user);
-
+    /**
+     * 删除用户
+     * @param userId
+     */
     public void deleteUser(String userId);
 
     /**
@@ -35,6 +33,7 @@ public interface UserService {
     public List<User> findAll();
     
     public List<User> findAll(User user,Integer start, Integer limit);
+    
     public Integer countAll(User user);
     /**
      * 根据用户名查找用户
