@@ -38,7 +38,7 @@ public class RASResourceDaoImpl implements RASResourceDao {
 		BigDecimal count=(BigDecimal)sf.getCurrentSession().createSQLQuery("select count(1) "+sql.toString()).uniqueResult();
 		vo.setRecordsTotal(count.intValue());
 		
-		List list=sf.getCurrentSession().createSQLQuery("select res.* "+sql.toString()+" order by ispublic ")
+		List list=sf.getCurrentSession().createSQLQuery("select res.* "+sql.toString()+" order by parent_id,sequence,ispublic ")
 				.addEntity(Resource.class)
 			    .setFirstResult(vo.getStart())
 			    .setMaxResults(vo.getLength())

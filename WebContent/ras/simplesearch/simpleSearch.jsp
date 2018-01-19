@@ -188,8 +188,8 @@
 			<!-- highcharts.js 图表-->
 			<script src="<%=basePath%>ras/common/js/highcharts/highcharts.js"></script>
 			<script src="<%=basePath%>ras/common/js/highcharts/modules/exporting.js"></script>
+			<script src="<%=basePath%>ras/common/js/highcharts/modules/offline-exporting.js"></script>
 			<script src="<%=basePath%>ras/common/js/highcharts/plugins/highcharts-zh_CN.js"></script>
-		
 
 		
 			<script src="<%=basePath%>ras/common/js/dataTables/jquery.dataTables.js"></script>

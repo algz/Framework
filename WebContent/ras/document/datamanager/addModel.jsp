@@ -41,7 +41,7 @@
 								<form:form-group id="modelEname" label="英文名称" value="${model.modelEname }"/>
 								<form:form-group id="tag" label="标签名称" value="${model.tag }"/>
 								<form:form-group id="category" label="分类名称" value="${model.category }"/>
-								<div class="form-group">
+								<div class="form-group hidden">
 									<label class="col-sm-3 control-label no-padding-right" > 上传图片 </label>
 									<div class="col-xs-10 col-sm-5">
 										<span class="block input-icon input-icon-right">

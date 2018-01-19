@@ -126,7 +126,7 @@ public class DataController{
     	}
     	
     	
-    	return new ModelAndView("/ras/document/data/addModel",map);
+    	return new ModelAndView("/ras/document/datamanager/addModel",map);
 	}
 
 	/**

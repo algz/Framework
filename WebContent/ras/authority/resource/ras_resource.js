@@ -271,7 +271,8 @@ $(function() {
 			
 	//1.多选.首先获取datatable对象(注意大小写`DataTable()`)：
 	//resourceTable
-	$('#table-resource tbody').on('click', 'tr', function () {
+	$('#table-resource tbody').on('click', 'tr', function (event) {
+		event.preventDefault(); // 阻止默认事件触发(即执行二次)
 		if(roleTable.rows('.selected').data().length==0){
 			resourceTable.$(':checkbox').attr("disabled","disabled");
 			return;
@@ -301,7 +302,7 @@ $(function() {
 		     operate:operate
 		   },
 		   success: function(msg){
-		     resourceTable.ajax.reload();
+		     resourceTable.ajax.reload(null,false);
 		   }
 		})
 	})

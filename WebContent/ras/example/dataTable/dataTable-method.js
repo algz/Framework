@@ -5,8 +5,13 @@
 //所有dataTable 相关的事件都必须放到配置函数后,不然无法执行.
 var Dtable = $('#table').DataTable();
 
+//如果在表格行中定义checkbox或其它元素并单击,会触发二次单击,所以必须阻止默认事件触发.
+//event.preventDefault(); // 阻止默认事件触发(即执行二次)
+
 //1.单选.首先获取datatable对象(注意大小写`DataTable()`)：所有 table 有效,需放在所有 dataTable 后面
-$('table tbody').on('click', 'tr', function () {
+$('table tbody').on('click', 'tr', function (event) {
+	event.preventDefault(); // 阻止默认事件触发(即执行二次)
+	
 	/*选中框
 	var curCheckbox=$(this).find(':checkbox')[0];
 	var curCheckVal=curCheckbox.checked
@@ -30,7 +35,9 @@ $('table tbody').on('click', 'tr', function () {
 
 
 //2.多选(必须放到 Dtable配置后下面);所有 table 有效,需放在所有 dataTable 后面
-$('table tbody').on('click', 'tr', function () {
+$('table tbody').on('click', 'tr', function (event) {
+	
+	
 	/*多选框的多选
 	var curCheckbox=$(this).find(':checkbox')[0];
     if(curCheckbox==null){
@@ -56,6 +63,8 @@ Dtable.rows('.selected').remove().draw(false);
 //5.刷新Grid
 Dtable.settings()[0].ajax.data={key:val};
 Dtable.ajax.reload(); //如果Dtable = $('#table').dataTable(); 刷新代码为 Dtable.api().ajax.reload();
+//ajax.reload( callback, resetPaging)
+//resetPaging:重置（默认或者设置为true）或者保持分页信息（设置为false）;
 
 /**6.序号
 {
@@ -88,7 +97,9 @@ Dtable.ajax.reload(); //如果Dtable = $('#table').dataTable(); 刷新代码为 
  */
 
 //8.表格一行中按钮点击函数
-$('#table-model tbody').on('click','tr button',function(){
+$('#table-model tbody').on('click','tr button',function(event){
+	event.preventDefault(); // 阻止默认事件触发(即执行二次)
+	
 	var data = $('#table-model').DataTable().row($(this).parents('tr')).data();
     alert("查看修改："+data.modelCname +","+ data.modelName );
 })	
