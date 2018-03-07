@@ -94,3 +94,8 @@ $('.chosen-select').on('chosen:ready',function(e, params){
 	placeholder_text_multiple:'请选择一项'
 	//disable_search:true //关闭搜索框,默认为false.
 })
+
+//11.获得当前文本输入框(text)的数据=chosen.search_field.val()
+$('.chosen-select').on('chosen:no_results', function(e, params) { //params参数下chosen属性指向当前对象
+	var v=params.chosen.search_field.val(); 
+})

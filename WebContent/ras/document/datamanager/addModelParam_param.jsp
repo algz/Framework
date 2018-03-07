@@ -86,6 +86,7 @@
 		
 		$("#modelParamForm").submit(function(){
 			alert("提交成功!");
+			return "";
 		    //window.close();  
 		}); 
 		
@@ -93,7 +94,12 @@
 			allow_single_deselect : true,
 			width : '100%',
 			disable_search:true //关闭搜索框,默认为false.
+		}).on('chosen:no_results', function(e, params) {
+			var v=params.chosen.search_field.val(); 
+			//alert(1);
 		});
+		
+		
 		
 		/*$("select[extCheckbox]").each(function(index,element){
 			$.ajax({
