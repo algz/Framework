@@ -50,8 +50,9 @@ public class AppInitializer implements WebApplicationInitializer {
 	      rootContext.register(WebConfig.class);
 	      servletContext.addListener(new ContextLoaderListener(rootContext)); // 注册监听器
 	      
-		/** CXF webservice配置 */
+		/** CXF webservice配置 指定了CXF的拦截 */
 		ServletRegistration.Dynamic cxfServlet = servletContext.addServlet("CXFServlet", new org.apache.cxf.transport.servlet.CXFServlet());
+		cxfServlet.addMapping("/ws/*");
 		cxfServlet.addMapping("/ras/ws/*");
 		cxfServlet.setLoadOnStartup(2);
 	      
